@@ -1,42 +1,83 @@
 "Suitability function definitions"
 
-from typing import Optional, Callable
-
+from typing import Optional, Callable, Any
 import matplotlib.pyplot as plt
 import numpy as np
+import xarray as xr
 from scipy.optimize import curve_fit
 
-# from ...functions import logistic...
 
 class SuitabilityFunction:
 
     def __init__(
             self,
             func: Optional[Callable] = None,
-            func_name: Optional[str] = None,
-            func_params: Optional[dict[str, int | float]] = None
+            func_method: Optional[str] = None,
+            func_params: Optional[dict[str, Any]] = None
     ):
-        if func is not None or func_name is not None:
+        if func is not None or func_method is not None:
             if func_params is None:
-                raise ValueError("If 'func' or 'func_name' is provided, 'func_params' must also be provided.")
+                raise ValueError("If 'func' or 'func_method' is provided, 'func_params' must also be provided.")
         
         if func_params is not None:
-            if func is None and func_name is None:
-                raise ValueError("If 'func_params' is provided, 'func' or 'func_name' must also be provided.")
+            if func is None and func_method is None:
+                raise ValueError("If 'func_params' is provided, 'func' or 'func_method' must also be provided.")
 
         self.func = func
-        self.func_name = func_name
-        self.func_params = func_params
-        if func is None and func_name is not None:
-            self.func = _get_function_from_name(func_name)
+        self._func_method = func_method
+        self._func_params = func_params
+        if func is None and func_method is not None:
+            self.func = _get_function_from_name(func_method)
+    
+    def __str__(self):
+        params_str = ', '.join([f'{k}={v}' for k, v in self.func_params.items()])
+        return f'{self.func_method}(x, {params_str})'
+    
+    def __repr__(self):
+        return f"SuitabilityFunction(func={self.func}, func_method='{self.func_method}', func_params={self.func_params})"
         
     def __call__(self, x):
         if self.func is None:
             raise ValueError("No function has been provided.")
+        
         return self.func(x, **self.func_params)
     
-    def map(self, x):
+    def map(self, x: xr.DataArray | xr.Dataset ) -> xr.DataArray:
         return self.__call__(x)
+    
+    @property
+    def func_method(self):
+        if self._func_method is None:
+            return ''
+        return self._func_method
+    
+    @func_method.setter
+    def func_method(self, value: str):
+        self._func_method = value if value else None
+
+    @property
+    def func_params(self):
+        if self._func_params is None:
+            return {}
+        return self._func_params
+    
+    @func_params.setter
+    def func_params(self, value: dict[str, Any]):
+        self._func_params = value if value else None
+
+    @property
+    def attrs(self):
+        if self.func_method == '' and self.func_params == {}:
+            return {}
+        return {'func_method': self.func_method, 'func_params': self.func_params}
+    
+    @attrs.setter
+    def attrs(self, value: dict[str, Any]):
+        self.func_method = value.get('func_method', '')
+        self.func_params = value.get('func_params', {})
+
+
+    # TODO: Implement a method to plot the function
 
 # ---------------------------------------------------------------------------- #
 # ------------------------ Membership functions ------------------------------ #
@@ -53,10 +94,10 @@ class MembershipSuitFunction(SuitabilityFunction):
     def __init__(
             self,
             func: Optional[Callable] = None,
-            func_name: Optional[str] = None,
+            func_method: Optional[str] = None,
             func_params: Optional[dict[str, int | float]] = None
     ):
-        super().__init__(func, func_name, func_params)
+        super().__init__(func, func_method, func_params)
 
 
     @staticmethod
@@ -138,31 +179,13 @@ class DiscreteSuitFunction(SuitabilityFunction):
     def __init__(
             self,
             func: Optional[Callable] = None,
-            func_name: Optional[str] = None,
+            func_method: Optional[str] = None,
             func_params: Optional[dict[str, int | float]] = None
     ):
-        super().__init__(func, func_name, func_params)
+        super().__init__(func, func_method, func_params)
 
 
 def discrete(rules: dict, x: int) -> float:
-    """
-    Returns a function that maps keys to values in a given dictionary.
-
-    Args:
-        dict_ruleset (dict): A dictionary containing the mapping rules.
-
-    Returns:
-        function: A function that takes a key as an argument and returns the corresponding value
-        from the dictionary, or None if the key is not found.
-
-    Examples:
-        >>> rules = {'a': 1, 'b': 2, 'c': 3}
-        >>> map_func = discrete(rules)
-        >>> map_func('b')
-        2
-        >>> map_func('d')
-        None
-    """
     return lambda x: rules.get(x)
 
 def _get_discrete_function_from_name(name: str) -> Callable:
@@ -201,4 +224,3 @@ RMSE: {rmse[best_fit]:.5f}
 Params: a={params[best_fit][0]}, b={params[best_fit][1]}
 """)
     return methods[best_fit], params[best_fit]
-

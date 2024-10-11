@@ -1,0 +1,1 @@
+from landsuitability.criteria.indicators._indicator import *

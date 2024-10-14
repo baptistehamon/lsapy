@@ -106,7 +106,7 @@ ls = LandSuitability(
         'prd' : SuitabilityCriteria(
             name = 'Soil Depth',
             weight=0.5,
-            category='Terrain/Soil',
+            category='TerrainSoil',
             indicator=CriteriaIndicator(
                 var_name='soil_depth',
                 standard_name='Soil Depth',
@@ -120,7 +120,6 @@ ls = LandSuitability(
         )
     }
 )
-
 
 
 # test criteria suitability

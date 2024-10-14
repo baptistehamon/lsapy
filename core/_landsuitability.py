@@ -25,9 +25,10 @@ class LandSuitability:
         self.short_name = short_name
         self.long_name = long_name
         self.description = description
-        self._criteria_name_list = list(criteria.keys())
-        self._category_list = list(set([sc.category for sc in criteria.values()]))
 
+        self._sort_criteria_by_weight()
+        self._criteria_name_list = list(self.criteria.keys())
+        self._category_list = list(set([sc.category for sc in self.criteria.values()]))
         self._get_params_by_category()
 
 
@@ -113,6 +114,10 @@ class LandSuitability:
             return ls
     
 
+    def _sort_criteria_by_weight(self) -> dict[str, SuitabilityCriteria]:
+        self.criteria = dict(sorted(self.criteria.items(), key=lambda item: item[1].weight, reverse=True))
+
+
     def _get_params_by_category(self):
         self._get_criteria_by_category()
         self._get_weight_by_category()
@@ -128,9 +133,33 @@ class LandSuitability:
         self._category_weights = {category: [] for category in self._category_list}
         for category in self._category_list:
             self._category_weights[category] = sum([sc.weight for sc in self.criteria.values() if sc.category == category])
+    
+
+    def _write_to_netcdf(self, path: str, vars: Optional[Union[str, list[str]]] = None) -> None:
+        pass
+        # if not hasattr(self, 'suitability'):
+        #     raise ValueError("Suitability must be computed first.")
+
+        # if vars is None:
+        #     vars = list(self.suitability.data_vars)
+        
+        # self.suitability[vars].to_netcdf(path)
+
+    
+    def _write_to_geotiff(self, path: str, vars: Optional[Union[str, list[str]]] = None) -> None:
+        pass
+        # if not hasattr(self, 'suitability'):
+        #     raise ValueError("Suitability must be computed first.")
+
+        # if vars is None:
+        #     vars = list(self.suitability.data_vars)
+        
+        # for var in vars:
+        #     pass
+        #     self.suitability[var].rio.to_raster(path, driver='GTiff')
 
 
-# Utility functions
+# Suitability computation functions
 
 def _vars_weighted_mean(ds: xr.Dataset, vars = None, weights = None) -> xr.DataArray:
     if vars is None:

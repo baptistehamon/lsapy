@@ -122,8 +122,9 @@ ls = LandSuitability(
 )
 
 
+
 # test criteria suitability
-ls_out = ls.compute_criteria_suitability()
+ls_out = ls.compute_criteria_suitability(inplace=True)
 
 fig, ax = plt.subplots(1, 3, figsize=(18, 4))
 ls_out['water_req'].isel(time=0).plot(ax=ax[0])
@@ -133,7 +134,7 @@ plt.show()
 
 
 # test category suitability
-ls_out = ls.compute_category_suitability()
+ls_out = ls.compute_category_suitability(method='weighted_geomean', inplace=True)
 
 fig, ax = plt.subplots(1, 2, figsize=(12, 4))
 ls_out['Climate'].isel(time=0).plot(ax=ax[0])
@@ -142,8 +143,14 @@ plt.show()
 
 
 # test land suitability
-ls_out = ls.compute_suitability()
+ls_out = ls.compute_suitability(method='weighted_mean', keep_category=True, inplace=False)
 
-fig, ax = plt.subplots(1, 1, figsize=(6, 4))
-ls_out.isel(time=0).plot(ax=ax)
+fig, ax = plt.subplots(2, 2, figsize=(12, 8))
+ls_out['Climate'].isel(time=0).plot(ax=ax[0,0])
+ls_out['Terrain/Soil'].plot(ax=ax[0,1])
+ls_out['suitability'].isel(time=0).plot(ax=ax[1,0])
+ax[1,1].axis('off')
 plt.show()
+
+import pandas as pd
+

@@ -13,7 +13,7 @@ from landsuitability.testing.utils import load_data
 from landsuitability.core import LandSuitability
 from landsuitability.criteria import SuitabilityCriteria
 from landsuitability.criteria.indicators import CriteriaIndicator
-from landsuitability.functions import SuitabilityFunction, MembershipSuitFunction, DiscreteSuitFunction
+from landsuitability.functions import SuitabilityFunction, MembershipSuitFunction, discrete
 
 # Testing Utilities
 import numpy as np
@@ -25,7 +25,6 @@ from xclim.indicators.atmos import growing_degree_days, precip_accumulation
 soil_data = load_data('soil')
 clim_data = load_data('climate').interp_like(soil_data, 'nearest')
 data = xr.merge([soil_data, clim_data])
-
 
 # test suitabiliy function
 SuitabilityFunction(func_method='logistic', func_params={'a': 1, 'b': 2})
@@ -61,10 +60,28 @@ sc = SuitabilityCriteria(
 )
 gdd_suit = sc.compute(clim_data)
 
-
 fig, ax = plt.subplots(1, 2, figsize=(12, 4))
 gdd.isel(time=0).plot(ax=ax[0])
 gdd_suit.isel(time=0).plot(ax=ax[1])
+plt.show()
+
+
+sc = SuitabilityCriteria(
+    name = 'Drainage Class',
+    weight= 3,
+    category= 'SoilTerrain',
+    indicator = CriteriaIndicator(
+        var_name= 'DRC',
+        standard_name= 'Drainage Class',
+        long_name= 'Drainage Class',
+        units= '',
+        func= lambda x: x['DRC'],
+    ),
+    func=SuitabilityFunction(func_method='discrete', func_params={'rules': {'1': 0, '2': 0.1, '3': 0.5, '4': 0.9, '5': 1}}),
+)
+drc = sc.compute(soil_data)
+
+drc.plot()
 plt.show()
 
 

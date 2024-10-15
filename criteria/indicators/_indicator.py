@@ -32,6 +32,8 @@ class CriteriaIndicator:
             self.func_params[self.data_arg_name] = data
             return self.func(**self.func_params)
         else:
+            if self.func_params is None:
+                return self.func(data)
             return self.func(data, **self.func_params)
     
 

@@ -33,7 +33,8 @@ class SuitabilityCriteria:
     
     def compute(self, x: xr.DataArray | xr.Dataset) -> xr.DataArray:
         ci = self.indicator.compute(x)
-        sc = self.func.map(ci)
+        sc : xr.DataArray = xr.apply_ufunc(self.func.map, ci, vectorize=True, dask='parallelized')
+        sc = sc.where(sc != 9999)
         self._ci_method = ci.attrs
         sc.attrs = self.attrs
         return sc

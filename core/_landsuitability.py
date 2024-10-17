@@ -48,10 +48,9 @@ class LandSuitability:
         sc_list = []
         for sc_name, sc in self.criteria.items():
             print(f'Computing {sc_name}...')
-            res = sc.compute(self.data)
-            res.name = sc_name
-            sc_list.append(res)
-        ls = xr.merge(sc_list, compat='override')
+            sc_list.append(sc.compute(self.data))
+            sc_list[-1].name = sc_name
+        ls = xr.merge(sc_list, compat='override', combine_attrs='drop')
         ls.attrs = {'criteria': self._criteria_name_list, 'categories': self._category_list, 'compute': 'criteria'}
         if inplace:
             self.suitability = ls
@@ -83,10 +82,10 @@ class LandSuitability:
             if method == 'limit_factor':
                 res = res.rename({'limiting_var': f'{category}_limiting_var'})
             cat_list.append(res)
-        ls = xr.merge(cat_list, compat='override')
-        ls.attrs = {'criteria': self._criteria_name_list, 'categories': self._category_list, 'compute': 'category'}
+        ls = xr.merge(cat_list, compat='override', combine_attrs='drop')
         if keep_criteria:
-            ls = xr.merge([ci_ds, ls], compat='override')
+            ls = xr.merge([ci_ds, ls], compat='override', combine_attrs='drop')
+        ls.attrs = {'criteria': self._criteria_name_list, 'categories': self._category_list, 'compute': 'category'}
         if inplace:
             self.suitability = ls
         else:
@@ -136,14 +135,13 @@ class LandSuitability:
     
 
     def _write_to_netcdf(self, path: str, vars: Optional[Union[str, list[str]]] = None) -> None:
-        pass
-        # if not hasattr(self, 'suitability'):
-        #     raise ValueError("Suitability must be computed first.")
+        if not hasattr(self, 'suitability'):
+            raise ValueError("Suitability must be computed first.")
 
-        # if vars is None:
-        #     vars = list(self.suitability.data_vars)
+        if vars is None:
+            vars = list(self.suitability.data_vars)
         
-        # self.suitability[vars].to_netcdf(path)
+        self.suitability[vars].to_netcdf(path)
 
     
     def _write_to_geotiff(self, path: str, vars: Optional[Union[str, list[str]]] = None) -> None:

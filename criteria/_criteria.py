@@ -2,8 +2,8 @@
 from typing import Optional, Union, Any
 import xarray as xr
 
-from landsuitability.functions import SuitabilityFunction, MembershipSuitFunction, DiscreteSuitFunction
-from landsuitability.criteria.indicators import CriteriaIndicator
+from lsapy.functions import SuitabilityFunction, MembershipSuitFunction, DiscreteSuitFunction
+from lsapy.criteria.indicators import CriteriaIndicator
 
 __all__ = ["SuitabilityCriteria"]
 

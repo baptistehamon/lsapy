@@ -1,5 +1,5 @@
 """
-Miscellaneous Testing Utilities
+Development Script
 ===============================
 
 ...
@@ -9,11 +9,11 @@ from pathlib import Path
 import xarray as xr
 from typing import Optional, Union, Any
 
-from landsuitability.testing.utils import load_data
-from landsuitability.core import LandSuitability
-from landsuitability.criteria import SuitabilityCriteria
-from landsuitability.criteria.indicators import CriteriaIndicator
-from landsuitability.functions import SuitabilityFunction, MembershipSuitFunction, discrete
+from lsapy.testing.utils import load_data
+from lsapy.core import LandSuitability
+from lsapy.criteria import SuitabilityCriteria
+from lsapy.criteria.indicators import CriteriaIndicator
+from lsapy.functions import SuitabilityFunction, MembershipSuitFunction, discrete
 
 # Testing Utilities
 import numpy as np
@@ -170,3 +170,111 @@ plt.show()
 
 import pandas as pd
 
+from xclim.indicators.atmos._temperature import TempWithIndexing
+from xclim import indices
+from xclim.indicators import atmos
+
+
+hot_spell_frequency_indexing = TempWithIndexing(
+    title="Hot spell frequency_indx",
+    identifier="hot_spell_frequency_indx",
+    long_name="Number of hot periods of {window} day(s) or more, during which the temperature on a "
+    "window of {window} day(s) is above {thresh}.",
+    description="The {freq} number of hot periods of {window} day(s) or more, during which the temperature on a "
+    "window of {window} day(s) is above {thresh}.",
+    abstract="The frequency of hot periods of `N` days or more, during which the temperature "
+    "over a given time window of days is above a given threshold.",
+    units="",
+    cell_methods="",
+    compute=indices.hot_spell_frequency,
+)
+
+
+# test selection by doy
+def _get_doys(_start, _end, _inclusive):
+    if _start <= _end:
+        _doys = np.arange(_start, _end + 1)
+    else:
+        _doys = np.concatenate((np.arange(_start, 367), np.arange(0, _end + 1)))
+    if not _inclusive[0]:
+        _doys = _doys[1:]
+    if not _inclusive[1]:
+        _doys = _doys[:-1]
+    return _doys
+
+_get_doys(355, 10, [True, True])
+
+gss = atmos.first_day_tg_below(clim_data['tas'], thresh='5 degC', after_date='01-01') # use first day below 5 degC as proxy for growing season start
+gse = atmos.first_day_tg_above(clim_data['tas'], thresh='5 degC', after_date='07-01') # use first day above 5 degC as proxy for growing season end
+
+doy = clim_data['tas'].time.dt.dayofyear
+
+cond = (gss) & (doy <= gse)
+
+gsl = gse - gss
+
+fig, ax = plt.subplots(1, 3, figsize=(18, 4))
+gss.isel(time=6).plot(ax=ax[0])
+gse.isel(time=6).plot(ax=ax[1])
+gsl.isel(time=6).plot(ax=ax[2])
+plt.show()
+
+
+# test for aggregate_between_dates
+from xclim.indices.generic import aggregate_between_dates, season
+from xclim.indices import (
+    growing_season_start, growing_season_end, effective_growing_degree_days,
+    first_day_temperature_above, first_day_temperature_below
+)
+from xclim.core.units import convert_units_to
+
+tas = clim_data['tas'].sel(time=slice('2000-01-01', '2002-12-31'))
+tas = convert_units_to(tas, 'degC')
+tasmin = clim_data['tasmin'].sel(time=slice('2000-01-01', '2002-12-31'))
+tasmin = convert_units_to(tasmin, 'degC')
+tasmax = clim_data['tasmax'].sel(time=slice('2000-01-01', '2002-12-31'))
+tasmax = convert_units_to(tasmax, 'degC')
+
+# effective growing degree days
+egdd = effective_growing_degree_days(tasmax, tasmin, thresh='5 degC', freq='YS', after_date='07-01')
+egdd.isel(time=2).plot()
+plt.show()
+
+# first day temperature above
+fda = first_day_temperature_above(tas, thresh='12 degC', freq='YS-JUL', window=1, after_date='07-01')
+fda_ = first_day_temperature_above(tas, thresh='12 degC', freq='YS', window=1)
+
+fig, ax = plt.subplots(1, 2, figsize=(12, 4))
+fda.isel(time=2).plot(ax=ax[0])
+fda_.isel(time=2).plot(ax=ax[1])
+plt.show()
+
+
+# first day temperature below
+fdb = first_day_temperature_below(tas, thresh='5 degC', freq='YS-JUL', window=1, after_date='01-01')
+fdb_ = first_day_temperature_below(tas, thresh='5 degC', freq='YS', window=1)
+
+fig, ax = plt.subplots(1, 2, figsize=(12, 4))
+fdb.isel(time=2).plot(ax=ax[0])
+fdb_.isel(time=2).plot(ax=ax[1])
+plt.show()
+
+
+
+# south hemisphere
+gss = first_day_temperature_above(tas, thresh='12 degC', freq='YS-JUL', window=1, after_date='07-01')
+gse = first_day_temperature_below(tas, thresh='5 degC', freq='YS-JUL', window=1, after_date='01-01')
+tas_agg = aggregate_between_dates(tas, gss, gse, 'sum', freq='YS-JUL')
+
+fig, ax = plt.subplots(1, 3, figsize=(18, 4))
+gss.isel(time=2).plot(ax=ax[0])
+gse.isel(time=2).plot(ax=ax[1])
+tas_agg.isel(time=2).plot(ax=ax[2])
+plt.show()
+
+# north hemisphere
+gss = growing_season_end(tas, mid_date='01-02', freq='YS')
+gse = growing_season_start(tas, mid_date='07-01')
+
+gss.isel(time=0).plot()
+plt.show()

@@ -3,7 +3,7 @@ from typing import Optional, Any, Union
 import xarray as xr
 import numpy as np
 
-from landsuitability.criteria import SuitabilityCriteria
+from lsapy.criteria import SuitabilityCriteria
 
 __all__ = ["LandSuitability"]
 
@@ -104,9 +104,9 @@ class LandSuitability:
         
         cat_weights = [self._category_weights[category] for category in self._category_list]
         ls = _compute_vars_suitability(ls, method=method, vars=self._category_list, weights=cat_weights, limit_var=limit_var)
-        ls.attrs = {'criteria': self._criteria_name_list, 'categories': self._category_list, 'compute': 'suitability'}
         if keep_category:
             ls = xr.merge([self.suitability, ls], compat='override')
+        ls.attrs = {'criteria': self._criteria_name_list, 'categories': self._category_list, 'compute': 'suitability'}
         if inplace:
             self.suitability = ls
         else:

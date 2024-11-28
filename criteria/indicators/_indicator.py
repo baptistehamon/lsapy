@@ -38,9 +38,6 @@ class CriteriaIndicator:
     
 
 
-# from xclim.indicators.atmos import huglin_index
-# import matplotlib.pyplot as plt
-
 # from landsuitability.testing.utils import load_data
 
 # soil_data = load_data('soil')

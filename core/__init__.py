@@ -1,1 +1,1 @@
-from landsuitability.core._landsuitability import *
+from lsapy.core._landsuitability import *

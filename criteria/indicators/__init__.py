@@ -1,1 +1,0 @@
-from lsapy.criteria.indicators._indicator import *

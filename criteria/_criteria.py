@@ -11,7 +11,7 @@ class SuitabilityCriteria:
     def __init__(
             self,
             name: str,
-            indicator: CriteriaIndicator,
+            indicator: xr.Dataset,
             func: Union[SuitabilityFunction, MembershipSuitFunction, DiscreteSuitFunction],
             weight: Optional[float] = 1.0,
             category: Optional[str] = None,
@@ -31,11 +31,10 @@ class SuitabilityCriteria:
     def __str__(self) -> str:
         return f"{self.name}"
     
-    def compute(self, x: xr.DataArray | xr.Dataset) -> xr.DataArray:
-        ci = self.indicator.compute(x)
-        sc : xr.DataArray = xr.apply_ufunc(self.func.map, ci, vectorize=True, dask='parallelized')
+    def compute(self) -> xr.DataArray:
+        sc : xr.DataArray = xr.apply_ufunc(self.func.map, self.indicator, vectorize=True, dask='parallelized')
         sc = sc.where(sc != 9999)
-        self._ci_method = ci.attrs
+        self._ci_method = self.indicator.attrs
         sc.attrs = self.attrs
         return sc
     

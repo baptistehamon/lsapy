@@ -13,14 +13,14 @@ class LandSuitability:
     def __init__(
             self,
             name: str,
-            data: xr.Dataset,
+            # data: xr.Dataset,
             criteria: dict[str, SuitabilityCriteria],
             short_name: Optional[str] = None,
             long_name: Optional[str] = None,
             description: Optional[str] = None,
     ) -> None:
         self.name = name
-        self.data = data
+        # self.data = data
         self.criteria = criteria
         self.short_name = short_name
         self.long_name = long_name
@@ -48,7 +48,7 @@ class LandSuitability:
         sc_list = []
         for sc_name, sc in self.criteria.items():
             print(f'Computing {sc_name}...')
-            sc_list.append(sc.compute(self.data))
+            sc_list.append(sc.compute())
             sc_list[-1].name = sc_name
         ls = xr.merge(sc_list, compat='override', combine_attrs='drop')
         ls.attrs = {'criteria': self._criteria_name_list, 'categories': self._category_list, 'compute': 'criteria'}

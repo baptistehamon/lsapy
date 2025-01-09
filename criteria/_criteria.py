@@ -3,7 +3,6 @@ from typing import Optional, Union, Any
 import xarray as xr
 
 from lsapy.functions import SuitabilityFunction, MembershipSuitFunction, DiscreteSuitFunction
-from lsapy.criteria.indicators import CriteriaIndicator
 
 __all__ = ["SuitabilityCriteria"]
 
@@ -11,11 +10,11 @@ class SuitabilityCriteria:
     def __init__(
             self,
             name: str,
-            indicator: xr.Dataset,
+            indicator: xr.Dataset | xr.DataArray,
             func: Union[SuitabilityFunction, MembershipSuitFunction, DiscreteSuitFunction],
-            weight: Optional[float] = 1.0,
+            weight: Optional[Union[int|float]] = 1,
             category: Optional[str] = None,
-            long_name: Optional[str] = 'Suitability',
+            long_name: Optional[str] = None,
             description: Optional[str] = None
 
     ) -> None:
@@ -26,37 +25,45 @@ class SuitabilityCriteria:
         self.category = category
         self.long_name = long_name
         self.description = description
-        self._func_method = func.attrs
+        self._from_indicator = _get_indicator_description(indicator)
     
-    def __str__(self) -> str:
-        return f"{self.name}"
+    def __repr__(self) -> str:
+        attrs = []
+        attrs.append(f"name='{self.name}'")
+        attrs.append(f"indicator={self.indicator.name}")
+        attrs.append(f"func={self.func}")
+        attrs.append(f"weight={self.weight}")
+        if self.category is not None:
+            attrs.append(f"category='{self.category}'")
+        if self.long_name is not None:
+            attrs.append(f"long_name='{self.long_name}'")
+        if self.description is not None:
+            attrs.append(f"description='{self.description}'")
+        return f"{self.__class__.__name__}({', '.join(attrs) if attrs else ''})"
+        
     
     def compute(self) -> xr.DataArray:
-        sc : xr.DataArray = xr.apply_ufunc(self.func.map, self.indicator, vectorize=True, dask='parallelized')
-        sc = sc.where(sc != 9999)
-        self._ci_method = self.indicator.attrs
-        sc.attrs = self.attrs
-        return sc
+        sc : xr.DataArray = xr.apply_ufunc(self.func.map, self.indicator, vectorize=True).rename(self.name)
+        sc = sc.where(sc != 9999) # drop nodata values of discrete suitability function
+        return sc.assign_attrs(dict({k: v for k, v in self.attrs.items() if k not in ['name', 'func_method', 'from_indicator']},
+                                    **{'history': f"func_method: {self.func}; from_indicator: [{self._from_indicator}]", 'compute': 'done'}))
+    
     
     @property
     def attrs(self):
-        return {
-            'name': self.name,
-            'weight': self.weight,
-            'category': self.category,
-            'long_name': self.long_name,
-            'description': self.description,
-            'func_method': self._func_method,
-            'ci_method': self._ci_method if hasattr(self, '_ci_method') else ''
+        return {k: v for k, v in {
+                    'name': self.name,
+                    'weight': self.weight,
+                    'category': self.category,
+                    'long_name': self.long_name,
+                    'description': self.description,
+                    'func_method': self.func,
+                    'from_indicator': self._from_indicator
+                }.items() if v is not None}
 
-        }
-    
-    @attrs.setter
-    def attrs(self, value: dict[str, Any]):
-        self.name = value.get('name', '')
-        self._ci_method = value.get('ci_method', {})
-        self._func_method = value.get('func_method', {})
-        self.weight = value.get('weight', 1.0)
-        self.category = value.get('category', None)
-        self.long_name = value.get('long_name', 'Suitability')
-        self.description = value.get('description', None)
+
+def _get_indicator_description(indicator: xr.Dataset | xr.DataArray) -> str:
+    if indicator.attrs != {}:
+        return f"name: {indicator.name}; " + "; ".join([f"{k}: {v}" for k, v in indicator.attrs.items()])
+    else:
+        return f"name: {indicator.name}"

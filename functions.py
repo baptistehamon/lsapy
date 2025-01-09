@@ -20,13 +20,16 @@ class SuitabilityFunction:
                 raise ValueError("If 'func_params' is provided, 'func' or 'func_method' must also be provided.")
 
         self.func = func
-        self._func_method = func_method
-        self._func_params = func_params
+        self.func_method = func_method
+        self.func_params = func_params
         if func is None and func_method is not None:
-            self.func = _get_function_from_name(func_method)
+            try:
+                self.func = _get_function_from_name(func_method)
+            except ValueError as e:
+                raise ValueError(f"Error in initializing function from method '{func_method}': {e}")
     
 
-    def __str__(self):
+    def __repr__(self):
         return f"{self.__class__.__name__}(func={self.func.__name__}, func_method='{self.func_method}', func_params={self.func_params})"
     
 
@@ -39,46 +42,20 @@ class SuitabilityFunction:
     def map(self, x):
         return self(x)
     
-    
-    @property
-    def func_method(self):
-        if self._func_method is None:
-            return ''
-        return self._func_method
-    
-    
-    @func_method.setter
-    def func_method(self, value: str):
-        self._func_method = value if value else None
 
-    
-    @property
-    def func_params(self):
-        if self._func_params is None:
-            return {}
-        return self._func_params
-    
-    
-    @func_params.setter
-    def func_params(self, value: dict[str, Any]):
-        self._func_params = value if value else None
+    def plot(self, x) -> None:
+        plt.plot(x, self(x))
 
 
     @property
     def attrs(self):
-        if self.func_method == '' and self.func_params == {}:
+        if self.func_method == None and self.func_params == None:
             return {}
-        return {'func_method': self.func_method, 'func_params': self.func_params}
-    
-    
-    @attrs.setter
-    def attrs(self, value: dict[str, Any]):
-        self.func_method = value.get('func_method', '')
-        self.func_params = value.get('func_params', {})
+        return {k: v for k, v in {
+                    'func_method': self.func_method,
+                    'func_params': self.func_params
+                }.items() if v is not None}
 
-    
-    def plot(self, x) -> None:
-        plt.plot(x, self(x))
 
 # ---------------------------------------------------------------------------- #
 # ------------------------ Membership functions ------------------------------ #

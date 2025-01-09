@@ -1,6 +1,6 @@
 "Suitability function definitions"
 
-from typing import Optional, Callable, Any
+from typing import Optional, Callable, Union, Any
 import matplotlib.pyplot as plt
 import numpy as np
 import xarray as xr
@@ -13,12 +13,8 @@ class SuitabilityFunction:
             self,
             func: Optional[Callable] = None,
             func_method: Optional[str] = None,
-            func_params: Optional[dict[str, Any]] = None
+            func_params: Union[dict[str, Any]] = {}
     ):
-        if func is not None or func_method is not None:
-            if func_params is None:
-                raise ValueError("If 'func' or 'func_method' is provided, 'func_params' must also be provided.")
-        
         if func_params is not None:
             if func is None and func_method is None:
                 raise ValueError("If 'func_params' is provided, 'func' or 'func_method' must also be provided.")
@@ -29,21 +25,25 @@ class SuitabilityFunction:
         if func is None and func_method is not None:
             self.func = _get_function_from_name(func_method)
     
+
     def __str__(self):
         params_str = ', '.join([f'{k}={v}' for k, v in self.func_params.items()])
         return f'{self.func_method}(x, {params_str})'
     
+    
     def __repr__(self):
         return f"SuitabilityFunction(func={self.func}, func_method='{self.func_method}', func_params={self.func_params})"
-        
+    
+
     def __call__(self, x):
         if self.func is None:
             raise ValueError("No function has been provided.")
-        
         return self.func(x, **self.func_params)
     
-    def map(self, x: xr.DataArray | xr.Dataset ) -> xr.DataArray:
-        return self.__call__(x)
+    
+    def map(self, x):
+        return self(x)
+    
     
     @property
     def func_method(self):
@@ -51,19 +51,23 @@ class SuitabilityFunction:
             return ''
         return self._func_method
     
+    
     @func_method.setter
     def func_method(self, value: str):
         self._func_method = value if value else None
 
+    
     @property
     def func_params(self):
         if self._func_params is None:
             return {}
         return self._func_params
     
+    
     @func_params.setter
     def func_params(self, value: dict[str, Any]):
         self._func_params = value if value else None
+
 
     @property
     def attrs(self):
@@ -71,13 +75,15 @@ class SuitabilityFunction:
             return {}
         return {'func_method': self.func_method, 'func_params': self.func_params}
     
+    
     @attrs.setter
     def attrs(self, value: dict[str, Any]):
         self.func_method = value.get('func_method', '')
         self.func_params = value.get('func_params', {})
 
-
-    # TODO: Implement a method to plot the function
+    
+    def plot(self, x) -> None:
+        plt.plot(x, self(x))
 
 # ---------------------------------------------------------------------------- #
 # ------------------------ Membership functions ------------------------------ #

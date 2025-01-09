@@ -27,12 +27,7 @@ class SuitabilityFunction:
     
 
     def __str__(self):
-        params_str = ', '.join([f'{k}={v}' for k, v in self.func_params.items()])
-        return f'{self.func_method}(x, {params_str})'
-    
-    
-    def __repr__(self):
-        return f"SuitabilityFunction(func={self.func}, func_method='{self.func_method}', func_params={self.func_params})"
+        return f"{self.__class__.__name__}(func={self.func.__name__}, func_method='{self.func_method}', func_params={self.func_params})"
     
 
     def __call__(self, x):

@@ -13,104 +13,149 @@ class LandSuitability:
     def __init__(
             self,
             name: str,
-            # data: xr.Dataset,
             criteria: dict[str, SuitabilityCriteria],
             short_name: Optional[str] = None,
             long_name: Optional[str] = None,
             description: Optional[str] = None,
     ) -> None:
         self.name = name
-        # self.data = data
         self.criteria = criteria
         self.short_name = short_name
         self.long_name = long_name
         self.description = description
 
         self._sort_criteria_by_weight()
-        self._criteria_name_list = list(self.criteria.keys())
+        self._criteria_name_list = [sc.name for sc in self.criteria.values()]
         self._category_list = list(set([sc.category for sc in self.criteria.values()]))
         self._get_params_by_category()
 
 
-    def __str__(self) -> str:
-        return f"{self.name}"
+    def __repr__(self) -> str:
+        if hasattr(self, 'data'):
+            return self.data.__repr__()
+        else:
+            attrs = []
+            for k, v in self.attrs.items():
+                if isinstance(v, str):
+                    v = f"'{v}'"
+                attrs.append(f"{k}={v}")
+            return f"{self.__class__.__name__}({', '.join(attrs) if attrs else ''})"
     
+
+    @property
+    def attrs(self):
+        return {k: v for k, v in {
+                    'name': self.name,
+                    'criteria': self._criteria_name_list,
+                    'short_name': self.short_name,
+                    'long_name': self.long_name,
+                    'description': self.description,
+                }.items() if v is not None}
+
 
     # def __getitem__(self, key: str) -> SuitabilityCriteria:
     #     return self.criteria[key]
-
-
-    def compute(self):
-        return self.compute_criteria_suitability()
 
 
     def compute_criteria_suitability(self, inplace: Optional[bool] = False) -> None | xr.Dataset:
         sc_list = []
         for sc_name, sc in self.criteria.items():
             print(f'Computing {sc_name}...')
-            sc_list.append(sc.compute())
-            sc_list[-1].name = sc_name
+            if sc.indicator.attrs.get('compute', '') == 'done':
+                sc_list.append(sc.indicator.rename(sc.name))
+            else:
+                sc_list.append(sc.compute())
         ls = xr.merge(sc_list, compat='override', combine_attrs='drop')
-        ls.attrs = {'criteria': self._criteria_name_list, 'categories': self._category_list, 'compute': 'criteria'}
+        for sc in sc_list:
+            ls[sc.name].attrs = sc.attrs
+        ls.attrs = dict(self.attrs, **{'compute': 'criteria'})
         if inplace:
-            self.suitability = ls
+            self.data = ls
         else:
             return ls
     
 
     def compute_category_suitability(
-            self, method: Union[str, list[str]] = 'weighted_geomean',
+            self, method: str,
             keep_criteria: Optional[bool] = False,
             inplace: Optional[bool] = False,
             limit_var: Optional[bool] = False,
     ) -> xr.Dataset:
-        if not hasattr(self, 'suitability') or self.suitability.attrs.get('compute', '') != 'criteria':
-            ci_ds = self.compute_criteria_suitability()
+        if not hasattr(self, 'data'):
+            ds = self.compute_criteria_suitability()
         else:
-            ci_ds = self.suitability
+            ds = self.data
         
-        # if isinstance(method, str):
-        #     method = [method]
-        
-        cat_list = []
+        out = []
+        out_attrs = []
         for category in self._category_list:
             print(f'Computing {category}...')
             sc_list = [sc for sc in self.criteria.values() if sc.category == category]
-            res = _compute_vars_suitability(ci_ds[self._category_criteria[category]], method=method,
-                                            weights=[sc.weight for sc in sc_list], limit_var=limit_var)
-            res = res.rename({'Suitability': f'{category}'})
-            if method == 'limit_factor':
-                res = res.rename({'limiting_var': f'{category}_limiting_var'})
-            cat_list.append(res)
-        ls = xr.merge(cat_list, compat='override', combine_attrs='drop')
+            res = _aggregate_vars(ds[self._criteria_by_category[category]], method=method,
+                                  weights=[sc.weight for sc in sc_list], limit_var=limit_var)
+            if isinstance(res, xr.Dataset):
+                res = res.rename({'limiting_factor': f'{category}', 'limiting_var': f'{category}_var'})
+            else:
+                res = res.rename(f'{category}')
+            out.append(res)
+            out_attrs.append(res.attrs)
+        out = xr.merge(out, compat='override', combine_attrs='drop')
         if keep_criteria:
-            ls = xr.merge([ci_ds, ls], compat='override', combine_attrs='drop')
-        ls.attrs = {'criteria': self._criteria_name_list, 'categories': self._category_list, 'compute': 'category'}
+            out = xr.merge([ds, out], compat='override', combine_attrs='drop')
+            for sc in ds.data_vars: # add attributes of criteria
+                out[sc].attrs = ds[sc].attrs
+        for i, category in enumerate(self._category_list): # add attributes of category suitability
+            out[f'{category}'].attrs = out_attrs[i]
         if inplace:
-            self.suitability = ls
+            self.suitability = out
         else:
-            return ls
+            return out
     
 
-    def compute_suitability(self, method: str = 'weighted_mean',
-                            keep_category: Optional[bool] = False,
+    def compute_suitability(self,
+                            method: Union[str, dict[str,str]] = 'mean',
+                            by_category: Optional[bool] = False,
+                            keep_all: Optional[bool] = False,
                             inplace: Optional[bool] = False,
                             limit_var: Optional[bool] = False
     ) -> xr.Dataset:
-        if not hasattr(self, 'suitability') or self.suitability.attrs.get('compute', '') != 'category':
-            raise ValueError("Category suitability must be computed first.")
+        if isinstance(method, str):
+            cat_method, suit_method = method, method
+        elif isinstance(method, dict):
+            cat_method = method.get('category', 'mean')
+            suit_method = method.get('overall', 'mean')
         else:
-            ls = self.suitability
+            raise ValueError("Method must be a string or a dictionary.")
         
-        cat_weights = [self._category_weights[category] for category in self._category_list]
-        ls = _compute_vars_suitability(ls, method=method, vars=self._category_list, weights=cat_weights, limit_var=limit_var)
-        if keep_category:
-            ls = xr.merge([self.suitability, ls], compat='override')
-        ls.attrs = {'criteria': self._criteria_name_list, 'categories': self._category_list, 'compute': 'suitability'}
-        if inplace:
-            self.suitability = ls
+        if not hasattr(self, 'data'):
+            if by_category:
+                ds = self.compute_category_suitability(method=cat_method, keep_criteria=True, inplace=False, limit_var=limit_var)
+            else:
+                ds = self.compute_criteria_suitability(inplace=False)
         else:
-            return ls
+            ds = self.data
+        
+        if by_category:
+            weights = [self.weights_by_category[category] for category in self._category_list]
+            on_vars = [f'{category}' for category in self._category_list]
+        else :
+            weights = [sc.weight for sc in self.criteria.values()]
+            on_vars = self._criteria_name_list
+        
+        print(f'Computing suitability...')
+        out = _aggregate_vars(ds[on_vars], method=suit_method, weights=weights, limit_var=limit_var).rename('suitability')
+        out_attrs = out.attrs
+
+        if keep_all:
+            out = xr.merge([ds, out], compat='override', combine_attrs='drop')
+            for sc in ds.data_vars: # add attributes of criteria
+                out[sc].attrs = ds[sc].attrs
+            out['suitability'].attrs = out_attrs
+        
+        if inplace:
+            self.data = out
+        else:
+            return out
     
 
     def _sort_criteria_by_weight(self) -> dict[str, SuitabilityCriteria]:
@@ -119,33 +164,33 @@ class LandSuitability:
 
     def _get_params_by_category(self):
         self._get_criteria_by_category()
-        self._get_weight_by_category()
+        self._get_weights_by_category()
     
     
     def _get_criteria_by_category(self) -> dict[str, list[str]]:
-        self._category_criteria = {category: [] for category in self._category_list}
-        for sc_name, sc in self.criteria.items():
-            self._category_criteria[sc.category].append(sc_name)
+        self._criteria_by_category = {category: [] for category in self._category_list}
+        for sc in self.criteria.values():
+            self._criteria_by_category[sc.category].append(sc.name)
     
 
-    def _get_weight_by_category(self) -> dict[str, float | int]:
-        self._category_weights = {category: [] for category in self._category_list}
+    def _get_weights_by_category(self) -> dict[str, float | int]:
+        self.weights_by_category = {category: [] for category in self._category_list}
         for category in self._category_list:
-            self._category_weights[category] = sum([sc.weight for sc in self.criteria.values() if sc.category == category])
+            self.weights_by_category[category] = sum([sc.weight for sc in self.criteria.values() if sc.category == category])
     
 
-    def _write_to_netcdf(self, path: str, vars: Optional[Union[str, list[str]]] = None) -> None:
-        if not hasattr(self, 'suitability'):
-            raise ValueError("Suitability must be computed first.")
+    # def _write_to_netcdf(self, path: str, vars: Optional[Union[str, list[str]]] = None) -> None:
+    #     if not hasattr(self, 'data'):
+    #         raise ValueError("Suitability must be computed first.")
 
-        if vars is None:
-            vars = list(self.suitability.data_vars)
+    #     if vars is None:
+    #         vars = list(self.suitability.data_vars)
         
-        self.suitability[vars].to_netcdf(path)
+    #     self.suitability[vars].to_netcdf(path)
 
     
-    def _write_to_geotiff(self, path: str, vars: Optional[Union[str, list[str]]] = None) -> None:
-        pass
+    # def _write_to_geotiff(self, path: str, vars: Optional[Union[str, list[str]]] = None) -> None:
+    #     pass
         # if not hasattr(self, 'suitability'):
         #     raise ValueError("Suitability must be computed first.")
 
@@ -157,9 +202,11 @@ class LandSuitability:
         #     self.suitability[var].rio.to_raster(path, driver='GTiff')
 
 
-# Suitability computation functions
+####################################################################################################
+# VARIABLES AGGREGATION FUNCTIONS
+####################################################################################################
 
-def _vars_weighted_mean(ds: xr.Dataset, vars = None, weights = None) -> xr.DataArray:
+def vars_weighted_mean(ds: xr.Dataset, vars = None, weights = None) -> xr.DataArray:
     if vars is None:
         vars = list(ds.data_vars)
     if weights is None:
@@ -170,14 +217,14 @@ def _vars_weighted_mean(ds: xr.Dataset, vars = None, weights = None) -> xr.DataA
     return da.assign_attrs({
         'method': 'Weighted Mean', 
         'description': f"Weighted Mean of variables: {', '.join([f'{v} ({w})' for v, w in zip(vars, weights)])}."
-    })
+    }).rename('weighted_mean')
 
-def _vars_mean(ds: xr.Dataset, vars = None) -> xr.DataArray:
+def vars_mean(ds: xr.Dataset, vars = None) -> xr.DataArray:
     if vars is None: vars = list(ds.data_vars)
-    da = _vars_weighted_mean(ds, vars=vars)
-    return da.assign_attrs({'method': 'Mean', 'description': f"Mean of variables: {', '.join(vars)}."})
+    da = vars_weighted_mean(ds, vars=vars)
+    return da.assign_attrs({'method': 'Mean', 'description': f"Mean of variables: {', '.join(vars)}."}).rename('mean')
 
-def _vars_weighted_geomean(ds: xr.Dataset, vars = None, weights = None) -> xr.DataArray:
+def vars_weighted_geomean(ds: xr.Dataset, vars = None, weights = None) -> xr.DataArray:
     if vars is None:
         vars = list(ds.data_vars)
     if weights is None:
@@ -188,42 +235,40 @@ def _vars_weighted_geomean(ds: xr.Dataset, vars = None, weights = None) -> xr.Da
     return da.assign_attrs({
         'method': 'Weighted Geometric Mean',
         'description': f"Weighted Geometric Mean of variables: {', '.join([f'{v} ({w})' for v, w in zip(vars, weights)])}."
-    })
+    }).rename('weighted_geometric_mean')
 
-def _vars_geomean(ds: xr.Dataset, vars = None) -> xr.DataArray:
+def vars_geomean(ds: xr.Dataset, vars = None) -> xr.DataArray:
     if vars is None: vars = list(ds.data_vars)
-    da = _vars_weighted_geomean(ds, vars=vars)
-    return da.assign_attrs({'method': 'Geometric Mean', 'description': f"Geometric Mean of variables: {', '.join(vars)}."})
+    da = vars_weighted_geomean(ds, vars=vars)
+    return da.assign_attrs({'method': 'Geometric Mean', 'description': f"Geometric Mean of variables: {', '.join(vars)}."}).rename('geometric_mean')
 
-def _limiting_vars(ds: xr.Dataset, vars = None, limiting_var: Optional[bool] = True) -> xr.Dataset:
+def limiting_factor(ds: xr.Dataset, vars = None, limiting_var: Optional[bool] = True) -> xr.DataArray | xr.Dataset:
     if vars is None:
         vars = list(ds.data_vars)
     
     da = ds[vars].to_array()
     mask = da.notnull().all(dim='variable')
 
-    lim = da.min(dim='variable', skipna=True).where(mask)
-    lim.name = 'Suitability'
+    lim = da.min(dim='variable', skipna=True).where(mask).rename('limiting_factor')
     lim = lim.assign_attrs({'method': 'Limiting Factor', 'description': f"Value of limiting factor among variables: {', '.join(vars)}."})
     if limiting_var:
-        lim_var = da.fillna(2).argmin(dim='variable', skipna=True).where(mask)
+        lim_var = da.fillna(9999).argmin(dim='variable', skipna=True).where(mask).rename('limiting_var')
         lim_var.attrs = {'method': 'Limiting Factor',
                          'description': f"Limiting factor among: {', '.join(vars)}.",
                          'legend': {f'{i}': v for i, v in enumerate(vars)}}
-        lim_var.name = 'limiting_var'
-        return xr.merge([lim, lim_var], compat='override')
+        return xr.merge([lim, lim_var])
     return lim.to_dataset()
 
-def _compute_vars_suitability(ds : xr.Dataset, method: str = 'mean', vars = None, weights = None, limit_var = True) -> xr.Dataset:
+def _aggregate_vars(ds : xr.Dataset, method: str = 'mean', vars = None, weights = None, **kwargs) -> xr.DataArray | xr.Dataset:
     if method.lower() == 'mean':
-        return _vars_mean(ds, vars=vars).to_dataset(name='Suitability')
+        return vars_mean(ds, vars=vars)
     elif method.lower() == 'weighted_mean':
-        return _vars_weighted_mean(ds, vars=vars, weights=weights).to_dataset(name='Suitability')
+        return vars_weighted_mean(ds, vars=vars, weights=weights)
     elif method.lower() == 'geomean':
-        return _vars_geomean(ds, vars=vars).to_dataset(name='Suitability')
+        return vars_geomean(ds, vars=vars)
     elif method.lower() == 'weighted_geomean':
-        return _vars_weighted_geomean(ds, vars=vars, weights=weights).to_dataset(name='Suitability')
+        return vars_weighted_geomean(ds, vars=vars, weights=weights)
     elif method.lower() == 'limit_factor':
-        return _limiting_vars(ds, vars=vars, limiting_var=limit_var)
+        return limiting_factor(ds, vars=vars, **kwargs)
     else:
         raise ValueError(f"Method '{method}' not recognized.")

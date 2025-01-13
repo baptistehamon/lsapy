@@ -12,7 +12,7 @@ class SuitabilityCriteria:
             name: str,
             indicator: xr.Dataset | xr.DataArray,
             func: Union[SuitabilityFunction, MembershipSuitFunction, DiscreteSuitFunction],
-            weight: Optional[Union[int|float]] = 1,
+            weight: Optional[Union[int,float]] = 1,
             category: Optional[str] = None,
             long_name: Optional[str] = None,
             description: Optional[str] = None

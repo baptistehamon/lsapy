@@ -2,6 +2,9 @@
 from typing import Optional, Any, Union
 import xarray as xr
 import numpy as np
+import rioxarray
+from shapely.geometry import mapping
+import geopandas as gpd
 
 from lsapy.criteria import SuitabilityCriteria
 
@@ -177,7 +180,19 @@ class LandSuitability:
         self.weights_by_category = {category: [] for category in self._category_list}
         for category in self._category_list:
             self.weights_by_category[category] = sum([sc.weight for sc in self.criteria.values() if sc.category == category])
+
     
+    def mask(self, mask : Union[xr.DataArray, gpd.GeoDataFrame], inplace : Optional[bool] = False,
+          spatial_dims : Optional[tuple[str, str]] = None, crs : Optional[str] = None, invert : bool = False, **kwargs) -> xr.DataArray | xr.Dataset:
+        
+        if not hasattr(self, 'data'):
+            raise ValueError("Suitability must be computed first.")
+        
+        if inplace:
+            self.data = _mask_data(self.data, mask, spatial_dims=spatial_dims, crs=crs, invert=invert, **kwargs)
+        else:     
+            return _mask_data(self.data, mask, spatial_dims=spatial_dims, crs=crs, invert=invert, **kwargs)
+        
 
     # def _write_to_netcdf(self, path: str, vars: Optional[Union[str, list[str]]] = None) -> None:
     #     if not hasattr(self, 'data'):
@@ -200,6 +215,22 @@ class LandSuitability:
         # for var in vars:
         #     pass
         #     self.suitability[var].rio.to_raster(path, driver='GTiff')
+
+
+def _mask_data(data : xr.DataArray | xr.Dataset, mask : Union[xr.DataArray, gpd.GeoDataFrame],
+          spatial_dims : Optional[tuple[str, str]] = None,
+          crs : Optional[str] = None, invert : bool = False, **kwargs) -> xr.DataArray | xr.Dataset:
+    
+    if isinstance(mask, gpd.GeoDataFrame):
+        mask = mask.to_crs(crs)
+        data = data.rio.set_spatial_dims(*spatial_dims).rio.write_crs(crs)
+        return data.rio.clip(mask.geometry.apply(mapping), invert=invert, **kwargs)
+    elif isinstance(mask, xr.DataArray):
+        if invert:
+            mask = ~mask
+        return data.where(mask, **kwargs)
+    else:
+        raise ValueError('mask must be a GeoDataFrame or DataArray')
 
 
 ####################################################################################################

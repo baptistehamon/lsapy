@@ -2,9 +2,10 @@
 from typing import Optional, Any, Union
 import xarray as xr
 import numpy as np
-import rioxarray
-from shapely.geometry import mapping
+import pandas as pd
 import geopandas as gpd
+from shapely.geometry import mapping
+import rioxarray
 
 from lsapy.criteria import SuitabilityCriteria
 
@@ -192,6 +193,44 @@ class LandSuitability:
             self.data = _mask_data(self.data, mask, spatial_dims=spatial_dims, crs=crs, invert=invert, **kwargs)
         else:     
             return _mask_data(self.data, mask, spatial_dims=spatial_dims, crs=crs, invert=invert, **kwargs)
+    
+
+    def statistics(self,
+                   on_vars: Optional[list] = None,
+                   on_dims: Optional[list] = None,
+                   bins : Optional[np.ndarray] = None,
+                   all_bins : Optional[bool] = False,
+                   cell_area : Optional[tuple[Union[float, str], str]] = None,
+                   **kwargs) -> pd.DataFrame:
+        
+        if not hasattr(self, 'data'):
+            raise ValueError("Suitability must be computed first.")
+        
+        if on_vars is None:
+            on_vars = list(self.data.data_vars)
+        if on_dims is None:
+            on_dims = list(self.data.dims)
+        if cell_area:
+            cell_area, cell_unit = cell_area
+        
+        df = self.data[on_vars].to_dataframe().reset_index().drop(columns=[c for c in self.data.coords if c not in on_dims])
+        df = df.melt(id_vars=on_dims)
+        _dims = ['variable'] + on_dims
+
+        if bins is not None:
+            df['bins'] = pd.cut(df['value'], bins=bins, **kwargs)
+            _dims.append('bins')
+            if all_bins:
+                df = pd.concat([df, df.drop(columns=['bins']).assign(bins='all')])
+
+        df_out = df.groupby(_dims, observed=False).describe().droplevel(0, axis=1).reset_index()
+        if cell_area:
+            df_out[f'area_{cell_unit}'] = df_out['count'] * cell_area
+
+        return df_out.dropna()
+        
+        
+        
         
 
     # def _write_to_netcdf(self, path: str, vars: Optional[Union[str, list[str]]] = None) -> None:

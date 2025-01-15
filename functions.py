@@ -163,8 +163,8 @@ class DiscreteSuitFunction(SuitabilityFunction):
         super().__init__(func, func_method, func_params)
 
 
-def discrete(x, rules: dict[str|int, int|float]) -> float:
-    return rules.get(x, 9999) # 9999 as default to avoid dtype issues
+def discrete(x, rules: dict[str|int, int|float]) -> int | float:
+    return rules.get(x, np.nan)
 
 
 def _get_discrete_function_from_name(name: str) -> Callable:

@@ -44,10 +44,9 @@ class SuitabilityCriteria:
     
     def compute(self) -> xr.DataArray:
         if self.func.func_method == 'discrete': # need to vectorize the discrete function
-            sc : xr.DataArray = xr.apply_ufunc(self.func.map, self.indicator, vectorize=True).rename(self.name)
+            sc : xr.DataArray = xr.apply_ufunc(self.func.map, self.indicator, vectorize=True, output_dtypes=[float]).rename(self.name)
         else:
             sc : xr.DataArray = self.func.map(self.indicator).rename(self.name)
-        sc = sc.where(sc != 9999) # drop nodata values of discrete suitability function
         return sc.assign_attrs(dict({k: v for k, v in self.attrs.items() if k not in ['name', 'func_method', 'from_indicator']},
                                     **{'history': f"func_method: {self.func}; from_indicator: [{self._from_indicator}]", 'compute': 'done'}))
     

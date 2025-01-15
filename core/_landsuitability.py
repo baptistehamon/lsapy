@@ -6,6 +6,7 @@ import pandas as pd
 import geopandas as gpd
 from shapely.geometry import mapping
 import rioxarray
+import regionmask
 
 from lsapy.criteria import SuitabilityCriteria
 
@@ -210,6 +211,7 @@ class LandSuitability:
             on_vars = list(self.data.data_vars)
         if on_dims is None:
             on_dims = list(self.data.dims)
+            on_dims = [d for d in on_dims if d not in ['lat', 'lon', 'x', 'y']]
         if cell_area:
             cell_area, cell_unit = cell_area
         
@@ -228,7 +230,28 @@ class LandSuitability:
             df_out[f'area_{cell_unit}'] = df_out['count'] * cell_area
 
         return df_out.dropna()
+    
+
+    def spatial_statistics(self,
+                           areas : gpd.GeoDataFrame,
+                           name : Optional[str] = 'area',
+                           on_vars: Optional[list] = None,
+                           on_dims: Optional[list] = None,
+                           bins : Optional[np.ndarray] = None,
+                           all_bins : Optional[bool] = False,
+                           cell_area : Optional[tuple[Union[float, str], str]] = None,
+                           mask_kwargs : dict = {},
+                           stats_kwargs: dict = {}) -> pd.DataFrame:
         
+        regions = regionmask.from_geopandas(areas, name=name, **mask_kwargs)
+        mask = regions.mask_3D(self.data)
+
+        out = []
+        for r in mask.region.values:
+            df = self.statistics(on_vars=on_vars, on_dims=on_dims, bins=bins, all_bins=all_bins, cell_area=cell_area, **stats_kwargs)
+            df.insert(0, name, regions[r].name)
+            out.append(df)
+        return pd.concat(out)
         
         
         

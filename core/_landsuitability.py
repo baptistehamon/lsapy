@@ -112,7 +112,7 @@ class LandSuitability:
         for i, category in enumerate(self._category_list): # add attributes of category suitability
             out[f'{category}'].attrs = out_attrs[i]
         if inplace:
-            self.suitability = out
+            self.data = out
         else:
             return out
     

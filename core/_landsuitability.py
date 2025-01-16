@@ -73,7 +73,7 @@ class LandSuitability:
         ls = xr.merge(sc_list, compat='override', combine_attrs='drop')
         for sc in sc_list:
             ls[sc.name].attrs = sc.attrs
-        ls.attrs = dict(self.attrs, **{'compute': 'criteria'})
+        ls.attrs = self.attrs
         if inplace:
             self.data = ls
         else:
@@ -102,6 +102,7 @@ class LandSuitability:
                 res = res.rename({'limiting_factor': f'{category}', 'limiting_var': f'{category}_var'})
             else:
                 res = res.rename(f'{category}')
+            res.attrs.update({'long_name': f'{category} Suitability'})
             out.append(res)
             out_attrs.append(res.attrs)
         out = xr.merge(out, compat='override', combine_attrs='drop')
@@ -111,6 +112,8 @@ class LandSuitability:
                 out[sc].attrs = ds[sc].attrs
         for i, category in enumerate(self._category_list): # add attributes of category suitability
             out[f'{category}'].attrs = out_attrs[i]
+        
+        out.attrs.update(self.attrs)
         if inplace:
             self.data = out
         else:
@@ -149,6 +152,7 @@ class LandSuitability:
         
         print(f'Computing suitability...')
         out = _aggregate_vars(ds[on_vars], method=suit_method, weights=weights, limit_var=limit_var).rename('suitability')
+        out.attrs.update({'long_name': 'Suitability'})
         out_attrs = out.attrs
 
         if keep_all:
@@ -157,6 +161,7 @@ class LandSuitability:
                 out[sc].attrs = ds[sc].attrs
             out['suitability'].attrs = out_attrs
         
+        out.attrs.update(self.attrs)
         if inplace:
             self.data = out
         else:

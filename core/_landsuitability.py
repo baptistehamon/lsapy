@@ -232,7 +232,7 @@ class LandSuitability:
         if not hasattr(self, 'data'):
             raise ValueError("Suitability must be computed first.")
         
-        return _spatial_statistics(self.data, areas, name=name, on_vars=on_vars, on_dims=on_dims, on_dims_values=on_dim_values,
+        return _spatial_statistics(self.data, areas, name=name, on_vars=on_vars, on_dims=on_dims, on_dim_values=on_dim_values,
                                    bins=bins, all_bins=all_bins, cell_area=cell_area, mask_kwargs=mask_kwargs, stats_kwargs=stats_kwargs)
 
         
@@ -294,19 +294,23 @@ def _statistics(
         cell_area : Optional[tuple[Union[float, str], str]] = None,
         **kwargs) -> pd.DataFrame:
     
+    if on_dim_values is not None:
+        data = _select_dims_values(data, on_dim_values)
+    
     if on_vars is None:
         on_vars = list(data.data_vars)
+    data = data[on_vars]
     if on_dims is None:
         on_dims = list(data.dims)
         on_dims = [d for d in on_dims if d not in ['lat', 'lon', 'x', 'y']]
     if cell_area:
         cell_area, cell_unit = cell_area
 
-    if on_dim_values is not None:
-        data = _select_dims_values(data, on_dim_values)
-
-    df = data[on_vars].to_dataframe().reset_index().drop(columns=[c for c in data.coords if c not in on_dims])
-    df = df.melt(id_vars=on_dims)
+    df = data.to_dataframe().reset_index().drop(columns=[c for c in data.coords if c not in on_dims])
+    if len(on_dims) > 0:
+        df = df.melt(id_vars=on_dims)
+    else:
+        df = df.melt()
     _dims = ['variable'] + on_dims
 
     if bins is not None:
@@ -340,7 +344,7 @@ def _spatial_statistics(
 
     out = []
     for r in mask.region.values:
-        df = _statistics(data, on_vars=on_vars, on_dims=on_dims, on_dims_values=on_dim_values, bins=bins, all_bins=all_bins, cell_area=cell_area, **stats_kwargs)
+        df = _statistics(data, on_vars=on_vars, on_dims=on_dims, on_dim_values=on_dim_values, bins=bins, all_bins=all_bins, cell_area=cell_area, **stats_kwargs)
         df.insert(0, name, regions[r].name)
         out.append(df)
     return pd.concat(out)

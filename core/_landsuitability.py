@@ -204,6 +204,7 @@ class LandSuitability:
     def statistics(self,
                    on_vars: Optional[list] = None,
                    on_dims: Optional[list] = None,
+                   on_dim_values: Optional[dict[str, Any]] = None,
                    bins : Optional[np.ndarray] = None,
                    all_bins : Optional[bool] = False,
                    cell_area : Optional[tuple[Union[float, str], str]] = None,
@@ -212,51 +213,28 @@ class LandSuitability:
         if not hasattr(self, 'data'):
             raise ValueError("Suitability must be computed first.")
         
-        if on_vars is None:
-            on_vars = list(self.data.data_vars)
-        if on_dims is None:
-            on_dims = list(self.data.dims)
-            on_dims = [d for d in on_dims if d not in ['lat', 'lon', 'x', 'y']]
-        if cell_area:
-            cell_area, cell_unit = cell_area
-        
-        df = self.data[on_vars].to_dataframe().reset_index().drop(columns=[c for c in self.data.coords if c not in on_dims])
-        df = df.melt(id_vars=on_dims)
-        _dims = ['variable'] + on_dims
-
-        if bins is not None:
-            df['bins'] = pd.cut(df['value'], bins=bins, **kwargs)
-            _dims.append('bins')
-            if all_bins:
-                df = pd.concat([df, df.drop(columns=['bins']).assign(bins='all')])
-
-        df_out = df.groupby(_dims, observed=False).describe().droplevel(0, axis=1).reset_index()
-        if cell_area:
-            df_out[f'area_{cell_unit}'] = df_out['count'] * cell_area
-
-        return df_out.dropna()
+        return _statistics(self.data, on_vars=on_vars, on_dims=on_dims, on_dims_values=on_dim_values, bins=bins, all_bins=all_bins, cell_area=cell_area, **kwargs)
     
 
-    def spatial_statistics(self,
-                           areas : gpd.GeoDataFrame,
-                           name : Optional[str] = 'area',
-                           on_vars: Optional[list] = None,
-                           on_dims: Optional[list] = None,
-                           bins : Optional[np.ndarray] = None,
-                           all_bins : Optional[bool] = False,
-                           cell_area : Optional[tuple[Union[float, str], str]] = None,
-                           mask_kwargs : dict = {},
-                           stats_kwargs: dict = {}) -> pd.DataFrame:
+    def spatial_statistics(
+            self,
+            areas : gpd.GeoDataFrame,
+            name : Optional[str] = 'area',
+            on_vars: Optional[list] = None,
+            on_dims: Optional[list] = None,
+            on_dim_values: Optional[dict[str, Any]] = None,
+            bins : Optional[np.ndarray] = None,
+            all_bins : Optional[bool] = False,
+            cell_area : Optional[tuple[Union[float, str], str]] = None,
+            mask_kwargs : dict = {},
+            stats_kwargs: dict = {}) -> pd.DataFrame:
         
-        regions = regionmask.from_geopandas(areas, name=name, **mask_kwargs)
-        mask = regions.mask_3D(self.data)
+        if not hasattr(self, 'data'):
+            raise ValueError("Suitability must be computed first.")
+        
+        return _spatial_statistics(self.data, areas, name=name, on_vars=on_vars, on_dims=on_dims, on_dims_values=on_dim_values,
+                                   bins=bins, all_bins=all_bins, cell_area=cell_area, mask_kwargs=mask_kwargs, stats_kwargs=stats_kwargs)
 
-        out = []
-        for r in mask.region.values:
-            df = self.statistics(on_vars=on_vars, on_dims=on_dims, bins=bins, all_bins=all_bins, cell_area=cell_area, **stats_kwargs)
-            df.insert(0, name, regions[r].name)
-            out.append(df)
-        return pd.concat(out)
         
         
         
@@ -298,7 +276,74 @@ def _mask_data(data : xr.DataArray | xr.Dataset, mask : Union[xr.DataArray, gpd.
         return data.where(mask, **kwargs)
     else:
         raise ValueError('mask must be a GeoDataFrame or DataArray')
+    
 
+def _select_dims_values(ds: xr.Dataset, on_dim_values: dict[str, Any]) -> xr.Dataset:
+    for dim, value in on_dim_values.items():
+        ds = ds.sel({dim: value})
+    return ds
+
+
+def _statistics(
+        data: xr.DataArray | xr.Dataset,
+        on_vars: Optional[list] = None,
+        on_dims: Optional[list] = None,
+        on_dim_values: Optional[dict[str, Any]] = None,
+        bins : Optional[np.ndarray] = None,
+        all_bins : Optional[bool] = False,
+        cell_area : Optional[tuple[Union[float, str], str]] = None,
+        **kwargs) -> pd.DataFrame:
+    
+    if on_vars is None:
+        on_vars = list(data.data_vars)
+    if on_dims is None:
+        on_dims = list(data.dims)
+        on_dims = [d for d in on_dims if d not in ['lat', 'lon', 'x', 'y']]
+    if cell_area:
+        cell_area, cell_unit = cell_area
+
+    if on_dim_values is not None:
+        data = _select_dims_values(data, on_dim_values)
+
+    df = data[on_vars].to_dataframe().reset_index().drop(columns=[c for c in data.coords if c not in on_dims])
+    df = df.melt(id_vars=on_dims)
+    _dims = ['variable'] + on_dims
+
+    if bins is not None:
+        df['bins'] = pd.cut(df['value'], bins=bins, **kwargs)
+        _dims.append('bins')
+        if all_bins:
+            df = pd.concat([df, df.drop(columns=['bins']).assign(bins='all')])
+
+    df_out = df.groupby(_dims, observed=False).describe().droplevel(0, axis=1).reset_index()
+    if cell_area:
+        df_out[f'area_{cell_unit}'] = df_out['count'] * cell_area
+
+    return df_out.dropna()
+
+
+def _spatial_statistics(
+        data: xr.DataArray | xr.Dataset,
+        areas : gpd.GeoDataFrame,
+        name : Optional[str] = 'area',
+        on_vars: Optional[list] = None,
+        on_dims: Optional[list] = None,
+        on_dim_values: Optional[dict[str, Any]] = None,
+        bins : Optional[np.ndarray] = None,
+        all_bins : Optional[bool] = False,
+        cell_area : Optional[tuple[Union[float, str], str]] = None,
+        mask_kwargs : dict = {},
+        stats_kwargs: dict = {}) -> pd.DataFrame:
+    
+    regions = regionmask.from_geopandas(areas, name=name, **mask_kwargs)
+    mask = regions.mask_3D(data)
+
+    out = []
+    for r in mask.region.values:
+        df = _statistics(data, on_vars=on_vars, on_dims=on_dims, on_dims_values=on_dim_values, bins=bins, all_bins=all_bins, cell_area=cell_area, **stats_kwargs)
+        df.insert(0, name, regions[r].name)
+        out.append(df)
+    return pd.concat(out)
 
 ####################################################################################################
 # VARIABLES AGGREGATION FUNCTIONS

@@ -1,3 +1,3 @@
 from lsapy.core import LandSuitability
-from lsapy import criteria
+from lsapy.criteria import SuitabilityCriteria
 from lsapy.functions import SuitabilityFunction

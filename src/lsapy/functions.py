@@ -162,7 +162,9 @@ class DiscreteSuitFunction(SuitabilityFunction):
             func_method: Optional[str] = None,
             func_params: Optional[dict[str, int | float]] = None
     ):
-        super().__init__(func, func_method, func_params)
+        self.func = discrete
+        self.func_method = 'discrete'
+        self.func_params = func_params
 
 
 def discrete(x, rules: dict[str|int, int|float]) -> float:

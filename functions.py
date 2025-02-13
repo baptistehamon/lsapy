@@ -84,6 +84,8 @@ class MembershipSuitFunction(SuitabilityFunction):
 
 
 def logistic(x, a, b):
+    if type(x) == list:
+        x = np.array(x)
     return 1 / (1 + np.exp(-a*(x - b)))
 
 def sigmoid(x):

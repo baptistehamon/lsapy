@@ -1,0 +1,19 @@
+[project]
+name = "lsapy"
+version = "0.1.0.dev1"
+authors = [
+  { name="Baptiste Hamon", email="baptiste.hamon@pg.canterbury.ac.nz" },
+]
+description = "Land Suitability Analysis for Python"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+
+[project.urls]
+Homepage = "https://github.com/baptistehamon/lsapy"
+Issues = "https://github.com/baptistehamon/lsapy/issues"

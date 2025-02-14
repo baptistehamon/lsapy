@@ -1,3 +1,4 @@
+"""Suitability Criteria definition."""
 
 from typing import Optional, Union, Any
 import xarray as xr

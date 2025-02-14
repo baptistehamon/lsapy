@@ -1,3 +1,4 @@
+"""Land Suitability definition."""
 
 from typing import Optional, Any, Union
 import xarray as xr

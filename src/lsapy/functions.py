@@ -1,10 +1,17 @@
-"Suitability function definitions"
+"""Suitability Functions definitions."""
 
 from typing import Optional, Callable, Union, Any
 import matplotlib.pyplot as plt
 import numpy as np
 import xarray as xr
 from scipy.optimize import curve_fit
+
+
+__all__ = [
+    "SuitabilityFunction",
+    "MembershipSuitFunction",
+    "DiscreteSuitFunction"
+]
 
 
 class SuitabilityFunction:

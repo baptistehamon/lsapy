@@ -65,8 +65,8 @@ class LandSuitability:
 
     def compute_criteria_suitability(self, inplace: Optional[bool] = False) -> None | xr.Dataset:
         sc_list = []
-        for sc_name, sc in self.criteria.items():
-            print(f'Computing {sc_name}...')
+        for _, sc in self.criteria.items():
+            print(f'Computing {sc.name}...')
             if sc.indicator.attrs.get('compute', '') == 'done':
                 sc_list.append(sc.indicator.rename(sc.name))
             else:
@@ -102,8 +102,8 @@ class LandSuitability:
             if isinstance(res, xr.Dataset):
                 res = res.rename({'limiting_factor': f'{category}', 'limiting_var': f'{category}_var'})
             else:
-                res = res.rename(f'{category}')
-            res.attrs.update({'long_name': f'{category} Suitability'})
+                res = res.rename(f'{category}_suitability')
+            res.attrs.update({'long_name': f'{category.capitalize()} Suitability'})
             out.append(res)
             out_attrs.append(res.attrs)
         out = xr.merge(out, compat='override', combine_attrs='drop')
@@ -112,7 +112,7 @@ class LandSuitability:
             for sc in ds.data_vars: # add attributes of criteria
                 out[sc].attrs = ds[sc].attrs
         for i, category in enumerate(self._category_list): # add attributes of category suitability
-            out[f'{category}'].attrs = out_attrs[i]
+            out[f'{category}_suitability'].attrs = out_attrs[i]
         
         out.attrs.update(self.attrs)
         if inplace:
@@ -146,7 +146,7 @@ class LandSuitability:
         
         if by_category:
             weights = [self.weights_by_category[category] for category in self._category_list]
-            on_vars = [f'{category}' for category in self._category_list]
+            on_vars = [f'{category}_suitability' for category in self._category_list]
         else :
             weights = [sc.weight for sc in self.criteria.values()]
             on_vars = self._criteria_name_list

@@ -1,6 +1,7 @@
 """Suitability Functions definitions."""
 
 from typing import Optional, Callable, Union, Any
+import warnings
 import matplotlib.pyplot as plt
 import numpy as np
 import xarray as xr
@@ -24,16 +25,17 @@ class SuitabilityFunction:
     ):
         if func_params is not None:
             if func is None and func_method is None:
-                raise ValueError("If 'func_params' is provided, 'func' or 'func_method' must also be provided.")
+                raise ValueError("If `func_params` is provided, `func` or `func_method` must also be provided.")
 
         self.func = func
         self.func_method = func_method
         self.func_params = func_params
         if func is None and func_method is not None:
-            try:
-                self.func = _get_function_from_name(func_method)
-            except ValueError as e:
-                raise ValueError(f"Error in initializing function from method '{func_method}': {e}")
+            self.func = _get_from_equations(func_method)
+            # try:
+            #     self.func = _get_from_equations(func_method)
+            # except ValueError as e:
+            #     raise ValueError(f"Error in initializing function from method '{func_method}': {e}")
     
 
     def __repr__(self):
@@ -67,14 +69,9 @@ class SuitabilityFunction:
 # ---------------------------------------------------------------------------- #
 # ------------------------ Membership functions ------------------------------ #
 # ---------------------------------------------------------------------------- #
-_MEMBERSHIP_FUNCTIONS = [
-    'logistic',
-    'vetharaniam2022_eq3',
-    'vetharaniam2022_eq5'
-]
+
 
 class MembershipSuitFunction(SuitabilityFunction):
-    _methods = _MEMBERSHIP_FUNCTIONS
 
     def __init__(
             self,
@@ -90,53 +87,35 @@ class MembershipSuitFunction(SuitabilityFunction):
         return _fit_mbs_functions(x, y, methods, plot)
 
 
-def logistic(x, a, b):
-    if type(x) == list:
-        x = np.array(x)
-    return 1 / (1 + np.exp(-a*(x - b)))
-
-def sigmoid(x):
-    return logistic(x, 1, 0)
-
-def logistic_vetharaniam2022_eq3(x, a, b):
-    return np.exp(a * (x - b)) / (1 + np.exp(a * (x - b)))
-
-def logistic_vetharaniam2022_eq5(x, a, b):
-    return 1 / (1 + np.exp(a * (np.sqrt(x) - np.sqrt(b))))
-
-
-# TODO: Check if a general logistic working with positive and negative values exists
-# def _general_logistic(x, c, d, m):
-#     return 1 / (np.power(1 + np.power(x/c, d), m))
-
-# TODO: Add a general normal distribution function
-
-
-def _get_mbs_function_from_name(name: str) -> Callable:
-    if name.lower() not in _MEMBERSHIP_FUNCTIONS:
-        raise ValueError(f"Method must be one of {_MEMBERSHIP_FUNCTIONS}. Got {name}")
-
-    if name.lower() == 'logistic':
-        return logistic
-    elif name.lower() == 'vetharaniam2022_eq3':
-        return logistic_vetharaniam2022_eq3
-    elif name.lower() == 'vetharaniam2022_eq5':
-        return logistic_vetharaniam2022_eq5
-
-
 def _fit_mbs_functions(x, y, methods: str | list[str] = 'all', plot: bool = False):
+    _types = ['sigmoid', 'gaussian']
+
     if methods == 'all':
-        methods = _MEMBERSHIP_FUNCTIONS
-    elif isinstance(methods, str):
-        methods = [methods]
+        methods = [f for t in _types for f in equations[t]]
+    elif isinstance(methods, list) or isinstance(methods, str):
+        if isinstance(methods, str):
+            methods = [methods]
+        
+        _methods = []
+        for method in methods:
+            if method in _types:
+                [_methods.append(m) for m in equations[method].keys()]
+            else:
+                try:
+                    _get_from_equations(method)
+                    _methods.append(method)
+                except :
+                    warnings.warn(f"`{method}` not found in equations. Skipped.")
+        methods = _methods
+    
     else:
-        raise ValueError(f"'methods' must be a string or a list of strings. Got {methods}")
+        raise ValueError(f"'methods' must be a string or a list of strings. Got `{type(methods)}`.")
     
     x_ = np.linspace(min(x), max(x), 100)
     rms_errors = []
     f_params = []
     for method in methods:
-        f = _get_mbs_function_from_name(method)
+        f = _get_from_equations(method)
         popt, _ = curve_fit(f, x, y, p0=[1, np.median(x)], maxfev=15000)
         y_ = f(x_, *popt)
         f_params.append(popt)
@@ -150,23 +129,17 @@ def _fit_mbs_functions(x, y, methods: str | list[str] = 'all', plot: bool = Fals
         plt.show()
     
     f_best, p_best = _get_best_fit(methods, rms_errors, f_params)
-    return _get_mbs_function_from_name(f_best), p_best
+    return _get_from_equations(f_best), p_best
 
 
 # ---------------------------------------------------------------------------- #
 # --------------------------- Discrete functions ----------------------------- #
 # ---------------------------------------------------------------------------- #
-_DISCRETE_FUNCTIONS = [
-    'discrete'
-]
 
 class DiscreteSuitFunction(SuitabilityFunction):
-    _methods = _DISCRETE_FUNCTIONS
 
     def __init__(
             self,
-            func: Optional[Callable] = None,
-            func_method: Optional[str] = None,
             func_params: Optional[dict[str, int | float]] = None
     ):
         self.func = discrete
@@ -174,30 +147,87 @@ class DiscreteSuitFunction(SuitabilityFunction):
         self.func_params = func_params
 
 
+# ---------------------------------------------------------------------------- #
+# ---------------------------- Utility functions ----------------------------- #
+# ---------------------------------------------------------------------------- #
+
+equations : dict[str, dict] = {}
+
+
+def _get_from_equations(name: str) -> callable:
+    for _type, funcs in equations.items():
+        if name in funcs:
+            return funcs[name]
+    raise ValueError(f"Equation `{name}` not implemented.")
+
+
+def equation(type: str):
+    """
+    Register an equation in the `equations` mapping under the specified type.
+
+    Parameters
+    ----------
+    type : str
+        The type of equation to register.
+    
+    Returns
+    -------
+    decorator
+        The decorator function.
+    """
+
+    def decorator(func: callable):
+        if type not in equations:
+            equations[type] = {}
+
+        equations[type].update({func.__name__: func})
+        return func
+    return decorator
+
+
+@equation('discrete')
 def discrete(x, rules: dict[str|int, int|float]) -> float:
     return np.vectorize(rules.get, otypes=[np.float32])(x, np.nan)
 
 
-def _get_discrete_function_from_name(name: str) -> Callable:
-    if name.lower() not in _DISCRETE_FUNCTIONS:
-        raise ValueError(f"Method must be one of {_DISCRETE_FUNCTIONS}. Got {name}")
+@equation('sigmoid')
+def logistic(x, a, b):
+    return 1 / (1 + np.exp(-a*(x - b)))
 
-    if name.lower() == 'discrete':
-        return discrete
 
-# ---------------------------------------------------------------------------- #
-# ---------------------------- Utility functions ----------------------------- #
-# ---------------------------------------------------------------------------- #
-_FUNCTIONS = _MEMBERSHIP_FUNCTIONS + _DISCRETE_FUNCTIONS
+@equation('sigmoid')
+def sigmoid(x):
+    return logistic(x, 1, 0)
 
-def _get_function_from_name(name: str):
-    if name.lower() not in _FUNCTIONS:
-        raise ValueError(f"Method must be one of {_FUNCTIONS}. Got {name}")
-    
-    if name.lower() in _MEMBERSHIP_FUNCTIONS:
-        return _get_mbs_function_from_name(name)
-    elif name.lower() in _DISCRETE_FUNCTIONS:
-        return _get_discrete_function_from_name(name)
+
+@equation('sigmoid')
+def vetharaniam2022_eq3(x, a, b):
+    return np.exp(a * (x - b)) / (1 + np.exp(a * (x - b)))
+
+
+@equation('sigmoid')
+def vetharaniam2022_eq5(x, a, b):
+    return 1 / (1 + np.exp(a * (np.sqrt(x) - np.sqrt(b))))
+
+
+@equation('gaussian')
+def vetharaniam2024_eq8(x, a, b, c):
+    return np.exp(-a * np.power(x - b, c))
+
+
+@equation('gaussian')
+def vetharaniam2024_eq10(x, a, b, c):
+    return 2 / (1 + np.exp(a * np.power(np.power(x, c) - np.power(b, c), 2)))
+
+
+@equation('discrete')
+def discrete(x, rules: dict[str|int, int|float]) -> float:
+    return np.vectorize(rules.get, otypes=[np.float32])(x, np.nan)
+
+
+# TODO: Check if a general logistic working with positive and negative values exists
+# def _general_logistic(x, c, d, m):
+#     return 1 / (np.power(1 + np.power(x/c, d), m))
 
 
 def _rms_error(y_true, y_pred):
@@ -206,7 +236,7 @@ def _rms_error(y_true, y_pred):
 
 
 def _get_best_fit(methods, rmse, params, verbose=True):
-    best_fit = np.argmin(rmse)
+    best_fit = np.argmin(rmse) #TODO: fix when nan in rmse
     if verbose:
         print(f"""
 Best fit: {methods[best_fit]}

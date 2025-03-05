@@ -31,11 +31,7 @@ class SuitabilityFunction:
         self.func_method = func_method
         self.func_params = func_params
         if func is None and func_method is not None:
-            self.func = _get_from_equations(func_method)
-            # try:
-            #     self.func = _get_from_equations(func_method)
-            # except ValueError as e:
-            #     raise ValueError(f"Error in initializing function from method '{func_method}': {e}")
+            self.func = _get_function_from_name(func_method)
     
 
     def __repr__(self):
@@ -87,11 +83,12 @@ class MembershipSuitFunction(SuitabilityFunction):
         return _fit_mbs_functions(x, y, methods, plot)
 
 
-def _fit_mbs_functions(x, y, methods: str | list[str] = 'all', plot: bool = False):
-    _types = ['sigmoid', 'gaussian']
+def _prepare_for_fitting(methods:  str | list[str] = 'all'):
+    _types = ['sigmoid_like', 'gaussian_like']
+    _skipped = []
 
     if methods == 'all':
-        methods = [f for t in _types for f in equations[t]]
+        methods = [f for t in _types for f in equations[t.replace('_like', '')]]
     elif isinstance(methods, list) or isinstance(methods, str):
         if isinstance(methods, str):
             methods = [methods]
@@ -99,37 +96,70 @@ def _fit_mbs_functions(x, y, methods: str | list[str] = 'all', plot: bool = Fals
         _methods = []
         for method in methods:
             if method in _types:
-                [_methods.append(m) for m in equations[method].keys()]
+                [_methods.append(m) for m in equations[method.replace('_like', '')].keys()]
             else:
-                try:
-                    _get_from_equations(method)
+                try :
+                    _get_function_from_name(method)
                     _methods.append(method)
                 except :
-                    warnings.warn(f"`{method}` not found in equations. Skipped.")
+                    _skipped.append(method)
+                    warnings.warn(f"`{method}` not found in equations. Skipped.", stacklevel=2)
         methods = _methods
+        for m in ['sigmoid', 'vetharaniam2024_eq8']:
+            if m in methods:
+                methods.remove(m)
+                _skipped.append(m)
+                if m == 'sigmoid':
+                    warnings.warn("No parameters to determine for `sigmoid`. Skipped.", stacklevel=2)
+                if m == 'vetharaniam2024_eq8':
+                    warnings.warn("Fitting method does not support `vetharaniam2024_eq8`. Skipped.", stacklevel=2)
+    return methods, _skipped
+
+
+def _get_function_p0(method: str, x: np.ndarray) -> list[float]:
+    if method in equations['sigmoid']:
+        return [1, np.median(x)]
+    if method in equations['gaussian']:
+        return [1, np.median(x), 1]
+    return []
+
+
+def _fit_mbs_functions(x, y, methods: str | list[str] = 'all', plot: bool = False):
     
-    else:
-        raise ValueError(f"'methods' must be a string or a list of strings. Got `{type(methods)}`.")
-    
-    x_ = np.linspace(min(x), max(x), 100)
-    rms_errors = []
-    f_params = []
-    for method in methods:
-        f = _get_from_equations(method)
-        popt, _ = curve_fit(f, x, y, p0=[1, np.median(x)], maxfev=15000)
-        y_ = f(x_, *popt)
-        f_params.append(popt)
-        rmse = _rms_error(y,f(x, *popt))
-        rms_errors.append(rmse)
+    skipped = []
+    methods, _skipped = _prepare_for_fitting(methods)
+    skipped.extend(_skipped)
+
+    if len(methods) == 0:
+        print(f"Skipped fitting for the following methods: {', '.join(skipped)}.")
+        raise ValueError("No methods to fit.")
+    else :
+        x_ = np.linspace(min(x), max(x), 100)
+        rms_errors = []
+        f_params = []
+        for method in methods:
+            try :
+                f = _get_function_from_name(method)
+                p0 = _get_function_p0(method, x)
+                popt, _ = curve_fit(f, x, y, p0=p0, maxfev=15000)
+                y_ = f(x_, *popt)
+                f_params.append(popt)
+                rmse = _rms_error(y,f(x, *popt))
+                rms_errors.append(rmse)
+                if plot:
+                    plt.plot(x_, y_, label=method + f' (RMSE={rmse:.2f})')
+            except:
+                skipped.append(method)
+                warnings.warn(f"Failed to fit `{method}`. Skipped.", stacklevel=2)
         if plot:
-            plt.plot(x_, y_, label=method + f' (RMSE={rmse:.2f})')
-    if plot:
-        plt.scatter(x, y, c='r')
-        plt.legend()
-        plt.show()
-    
+            plt.scatter(x, y, c='r')
+            plt.legend()
+            plt.show()
+
+        if len(skipped) > 0:
+            print(f"Skipped fitting for the following methods: {', '.join(skipped)}.")
     f_best, p_best = _get_best_fit(methods, rms_errors, f_params)
-    return _get_from_equations(f_best), p_best
+    return _get_function_from_name(f_best), p_best
 
 
 # ---------------------------------------------------------------------------- #
@@ -154,7 +184,7 @@ class DiscreteSuitFunction(SuitabilityFunction):
 equations : dict[str, dict] = {}
 
 
-def _get_from_equations(name: str) -> callable:
+def _get_function_from_name(name: str) -> callable:
     for _type, funcs in equations.items():
         if name in funcs:
             return funcs[name]
@@ -225,18 +255,13 @@ def discrete(x, rules: dict[str|int, int|float]) -> float:
     return np.vectorize(rules.get, otypes=[np.float32])(x, np.nan)
 
 
-# TODO: Check if a general logistic working with positive and negative values exists
-# def _general_logistic(x, c, d, m):
-#     return 1 / (np.power(1 + np.power(x/c, d), m))
-
-
 def _rms_error(y_true, y_pred):
     diff = abs(y_true - y_pred)
     return np.sqrt(np.mean(diff**2))
 
 
 def _get_best_fit(methods, rmse, params, verbose=True):
-    best_fit = np.argmin(rmse) #TODO: fix when nan in rmse
+    best_fit = np.nanargmin(rmse)
     if verbose:
         print(f"""
 Best fit: {methods[best_fit]}

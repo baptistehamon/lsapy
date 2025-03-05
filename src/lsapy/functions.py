@@ -250,11 +250,6 @@ def vetharaniam2024_eq10(x, a, b, c):
     return 2 / (1 + np.exp(a * np.power(np.power(x, c) - np.power(b, c), 2)))
 
 
-@equation('discrete')
-def discrete(x, rules: dict[str|int, int|float]) -> float:
-    return np.vectorize(rules.get, otypes=[np.float32])(x, np.nan)
-
-
 def _rms_error(y_true, y_pred):
     diff = abs(y_true - y_pred)
     return np.sqrt(np.mean(diff**2))

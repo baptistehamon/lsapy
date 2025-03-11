@@ -1,18 +1,22 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["flit_core >=3.11,<4"]
+build-backend = "flit_core.buildapi"
 
 [project]
 name = "lsapy"
-version = "0.1.0.dev1"
 authors = [
   { name="Baptiste Hamon", email="baptiste.hamon@pg.canterbury.ac.nz" },
 ]
-description = "Land Suitability Analysis for Python"
+maintainers = [
+  { name="Baptiste Hamon", email="baptiste.hamon@pg.canterbury.ac.nz" },
+]
 readme = "README.md"
 requires-python = ">=3.10"
-keywords = ["LSAPy", "Land Suitability Analysis", "GIS"]
+keywords = ["LSAPy", "Land Suitability Analysis", "GIS", "Spatial Analysis", "Geography"]
+license = {file = "LICENSE"}
 classifiers = [
+    "Private :: Do Not Upload", # Remove this line to publish
+    "Development Status :: 2 - Pre-Alpha"
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
     "Natural Language :: English",
@@ -20,8 +24,7 @@ classifiers = [
     "Operating System :: OS Independent",
     "Topic :: Scientific/Engineering :: GIS",
 ]
-license = "MIT"
-license-files = ["LICEN[CS]E*"]
+dynamic = ["description", "version"]
 
 [project.urls]
 Homepage = "https://github.com/baptistehamon/lsapy"

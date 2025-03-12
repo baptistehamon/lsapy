@@ -28,3 +28,30 @@ dynamic = ["description", "version"]
 [project.urls]
 Homepage = "https://github.com/baptistehamon/lsapy"
 Issues = "https://github.com/baptistehamon/lsapy/issues"
+
+[tool.bumpversion]
+current_version = "0.0.0"
+commit = true
+commit_args = "--signoff"
+tag = false
+allow_dirty = false
+parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)(\\-(?P<release>[a-z]+)((?P<build>\\d+)))?"
+serialize = [
+  "{major}.{minor}.{patch}-{release}{build}",
+  "{major}.{minor}.{patch}"
+]
+
+[[tool.bumpversion.files]]
+filename = "src/lsapy/__init__.py"
+search = "__version__ = \"{current_version}\""
+replace = "__version__ = \"{new_version}\""
+
+[tool.bumpversion.parts.build]
+independent = false
+
+[tool.bumpversion.parts.release]
+optional_value = "release"
+values = [
+  "dev",
+  "release"
+]

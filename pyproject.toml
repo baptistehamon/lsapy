@@ -55,3 +55,15 @@ values = [
   "dev",
   "release"
 ]
+
+[tool.flit.sdist]
+include = [
+  "LICENSE",
+  "README.md",
+  "src/lsapy/*.py",
+]
+exclude = [
+  "**/__pycache__/**",
+  "**/*.py[co]",
+  ".*"
+]

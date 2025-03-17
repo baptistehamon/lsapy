@@ -98,7 +98,7 @@ ignore = [
 
 [tool.ruff.lint.isort]
 case-sensitive = true
-known-first-party = ["bhmn_example_package"]
+known-first-party = ["lsapy"]
 
 [tool.ruff.lint.mccabe]
 max-complexity = 10

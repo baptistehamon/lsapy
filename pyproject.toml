@@ -67,3 +67,44 @@ exclude = [
   "**/*.py[co]",
   ".*"
 ]
+
+[tool.ruff]
+line-length = 120
+output-format = "grouped"
+
+[tool.ruff.format]
+docstring-code-format = true
+line-ending = "lf"
+
+[tool.ruff.lint]
+preview=true
+select = [ # default values
+  "B", # bugbear
+  "C90", # McCabe complexity
+  "D", # docstring
+  "E", # pycodestyle errors
+  "F", # pyflakes
+  "I", # imports
+  "N", # naming
+  "PL", # pylint
+  "S", # bandit
+  "UP", # pyupgrade
+  "W", # pycodestyle warnings
+]
+ignore = [
+  "D400", # end-in-period
+  "D401", # non-imperative-mood
+]
+
+[tool.ruff.lint.isort]
+case-sensitive = true
+known-first-party = ["bhmn_example_package"]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
+
+[tool.ruff.lint.pycodestyle]
+max-line-length = 120
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"

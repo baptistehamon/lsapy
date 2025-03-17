@@ -94,17 +94,25 @@ select = [ # default values
 ignore = [
   "D400", # end-in-period
   "D401", # non-imperative-mood
+  "PLR6201", # literal-membership
 ]
+
+[tool.ruff.lint.per-file-ignores]
+"src/lsapy/**/__init__.py" = ["F401", "F403"]
 
 [tool.ruff.lint.isort]
 case-sensitive = true
 known-first-party = ["lsapy"]
 
 [tool.ruff.lint.mccabe]
-max-complexity = 10
+max-complexity = 20
 
 [tool.ruff.lint.pycodestyle]
 max-line-length = 120
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
+
+[tool.ruff.lint.pylint]
+max-args = 15
+max-branches = 20

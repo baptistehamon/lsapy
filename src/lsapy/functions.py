@@ -1,12 +1,12 @@
 """Suitability Functions definitions."""
 
-from typing import Optional, Callable, Union, Any
 import warnings
+from collections.abc import Callable
+from typing import Any
+
 import matplotlib.pyplot as plt
 import numpy as np
-import xarray as xr
 from scipy.optimize import curve_fit
-
 
 __all__ = [
     "SuitabilityFunction",
@@ -19,42 +19,42 @@ class SuitabilityFunction:
 
     def __init__(
             self,
-            func: Optional[Callable] = None,
-            func_method: Optional[str] = None,
-            func_params: Union[dict[str, Any]] = {}
+            func: Callable | None = None,
+            func_method: str | None = None,
+            func_params: dict[str, Any] = None
     ):
         if func_params is not None:
             if func is None and func_method is None:
                 raise ValueError("If `func_params` is provided, `func` or `func_method` must also be provided.")
+        else:
+            func_params = {}
 
         self.func = func
         self.func_method = func_method
         self.func_params = func_params
         if func is None and func_method is not None:
             self.func = _get_function_from_name(func_method)
-    
 
     def __repr__(self):
-        return f"{self.__class__.__name__}(func={self.func.__name__}, func_method='{self.func_method}', func_params={self.func_params})"
-    
+        return (f"{self.__class__.__name__}("
+                f"func={self.func.__name__}, "
+                f"func_method='{self.func_method}', "
+                f"func_params={self.func_params})")
 
     def __call__(self, x):
         if self.func is None:
             raise ValueError("No function has been provided.")
         return self.func(x, **self.func_params)
-    
-    
+
     def map(self, x):
         return self(x)
-    
 
     def plot(self, x) -> None:
         plt.plot(x, self(x))
 
-
     @property
     def attrs(self):
-        if self.func_method == None and self.func_params == None:
+        if self.func_method is None and self.func_params is None:
             return {}
         return {k: v for k, v in {
                     'func_method': self.func_method,
@@ -71,16 +71,17 @@ class MembershipSuitFunction(SuitabilityFunction):
 
     def __init__(
             self,
-            func: Optional[Callable] = None,
-            func_method: Optional[str] = None,
-            func_params: Optional[dict[str, int | float]] = None
+            func: Callable | None = None,
+            func_method: str | None = None,
+            func_params: dict[str, int | float] | None = None
     ):
         super().__init__(func, func_method, func_params)
 
-
     @staticmethod
-    def fit(x, y = np.array([0,.25,.5,.75,1]), methods: str | list[str] = 'all', plot: bool = False):
-        return _fit_mbs_functions(x, y, methods, plot)
+    def fit(x, y=None, methods: str | list[str] = 'all', plot: bool = False):
+        if y is None:
+            y = [0, .25, .5, .75, 1]
+        return _fit_mbs_functions(x, np.array(y), methods, plot)
 
 
 def _prepare_for_fitting(methods:  str | list[str] = 'all'):
@@ -92,16 +93,16 @@ def _prepare_for_fitting(methods:  str | list[str] = 'all'):
     elif isinstance(methods, list) or isinstance(methods, str):
         if isinstance(methods, str):
             methods = [methods]
-        
+
         _methods = []
         for method in methods:
             if method in _types:
                 [_methods.append(m) for m in equations[method.replace('_like', '')].keys()]
             else:
-                try :
+                try:
                     _get_function_from_name(method)
                     _methods.append(method)
-                except :
+                except Exception:
                     _skipped.append(method)
                     warnings.warn(f"`{method}` not found in equations. Skipped.", stacklevel=2)
         methods = _methods
@@ -125,7 +126,7 @@ def _get_function_p0(method: str, x: np.ndarray) -> list[float]:
 
 
 def _fit_mbs_functions(x, y, methods: str | list[str] = 'all', plot: bool = False):
-    
+
     skipped = []
     methods, _skipped = _prepare_for_fitting(methods)
     skipped.extend(_skipped)
@@ -133,22 +134,22 @@ def _fit_mbs_functions(x, y, methods: str | list[str] = 'all', plot: bool = Fals
     if len(methods) == 0:
         print(f"Skipped fitting for the following methods: {', '.join(skipped)}.")
         raise ValueError("No methods to fit.")
-    else :
+    else:
         x_ = np.linspace(min(x), max(x), 100)
         rms_errors = []
         f_params = []
         for method in methods:
-            try :
+            try:
                 f = _get_function_from_name(method)
                 p0 = _get_function_p0(method, x)
                 popt, _ = curve_fit(f, x, y, p0=p0, maxfev=15000)
                 y_ = f(x_, *popt)
                 f_params.append(popt)
-                rmse = _rms_error(y,f(x, *popt))
+                rmse = _rms_error(y, f(x, *popt))
                 rms_errors.append(rmse)
                 if plot:
                     plt.plot(x_, y_, label=method + f' (RMSE={rmse:.2f})')
-            except:
+            except Exception:
                 skipped.append(method)
                 warnings.warn(f"Failed to fit `{method}`. Skipped.", stacklevel=2)
         if plot:
@@ -170,7 +171,7 @@ class DiscreteSuitFunction(SuitabilityFunction):
 
     def __init__(
             self,
-            func_params: Optional[dict[str, int | float]] = None
+            func_params: dict[str, int | float] | None = None
     ):
         self.func = discrete
         self.func_method = 'discrete'
@@ -181,7 +182,7 @@ class DiscreteSuitFunction(SuitabilityFunction):
 # ---------------------------- Utility functions ----------------------------- #
 # ---------------------------------------------------------------------------- #
 
-equations : dict[str, dict] = {}
+equations: dict[str, dict] = {}
 
 
 def _get_function_from_name(name: str) -> callable:
@@ -199,7 +200,7 @@ def equation(type: str):
     ----------
     type : str
         The type of equation to register.
-    
+
     Returns
     -------
     decorator
@@ -216,13 +217,13 @@ def equation(type: str):
 
 
 @equation('discrete')
-def discrete(x, rules: dict[str|int, int|float]) -> float:
+def discrete(x, rules: dict[str | int, int | float]) -> float:
     return np.vectorize(rules.get, otypes=[np.float32])(x, np.nan)
 
 
 @equation('sigmoid')
 def logistic(x, a, b):
-    return 1 / (1 + np.exp(-a*(x - b)))
+    return 1 / (1 + np.exp(-a * (x - b)))
 
 
 @equation('sigmoid')

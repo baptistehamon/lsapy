@@ -1,22 +1,22 @@
 """Suitability Criteria definition."""
 
-from typing import Optional, Union, Any
 import xarray as xr
 
-from lsapy.functions import SuitabilityFunction, MembershipSuitFunction, DiscreteSuitFunction
+from lsapy.functions import DiscreteSuitFunction, MembershipSuitFunction, SuitabilityFunction
 
 __all__ = ["SuitabilityCriteria"]
+
 
 class SuitabilityCriteria:
     def __init__(
             self,
             name: str,
             indicator: xr.Dataset | xr.DataArray,
-            func: Union[SuitabilityFunction, MembershipSuitFunction, DiscreteSuitFunction],
-            weight: Optional[Union[int,float]] = 1,
-            category: Optional[str] = None,
-            long_name: Optional[str] = None,
-            description: Optional[str] = None
+            func: SuitabilityFunction | MembershipSuitFunction | DiscreteSuitFunction,
+            weight: int | float | None = 1,
+            category: str | None = None,
+            long_name: str | None = None,
+            description: str | None = None
 
     ) -> None:
         self.name = name
@@ -27,7 +27,7 @@ class SuitabilityCriteria:
         self.long_name = long_name
         self.description = description
         self._from_indicator = _get_indicator_description(indicator)
-    
+
     def __repr__(self) -> str:
         attrs = []
         attrs.append(f"name='{self.name}'")
@@ -41,17 +41,20 @@ class SuitabilityCriteria:
         if self.description is not None:
             attrs.append(f"description='{self.description}'")
         return f"{self.__class__.__name__}({', '.join(attrs) if attrs else ''})"
-        
-    
+
     def compute(self) -> xr.DataArray:
-        if self.func.func_method == 'discrete': # need to vectorize the discrete function
-            sc : xr.DataArray = xr.apply_ufunc(self.func.map, self.indicator).rename(self.name)
+        if self.func.func_method == 'discrete':  # need to vectorize the discrete function
+            sc: xr.DataArray = xr.apply_ufunc(self.func.map, self.indicator).rename(self.name)
         else:
-            sc : xr.DataArray = self.func.map(self.indicator).rename(self.name)
-        return sc.assign_attrs(dict({k: v for k, v in self.attrs.items() if k not in ['name', 'func_method', 'from_indicator']},
-                                    **{'history': f"func_method: {self.func}; from_indicator: [{self._from_indicator}]", 'compute': 'done'}))
-    
-    
+            sc: xr.DataArray = self.func.map(self.indicator).rename(self.name)
+        return sc.assign_attrs(
+            dict({k: v for k, v in self.attrs.items() if k not in ['name', 'func_method', 'from_indicator']},
+                 **{
+                     'history': f"func_method: {self.func}; from_indicator: [{self._from_indicator}]",
+                     'compute': 'done'
+                 })
+        )
+
     @property
     def attrs(self):
         return {k: v for k, v in {

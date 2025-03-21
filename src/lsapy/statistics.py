@@ -17,11 +17,51 @@ def statistics_summary(
         bins: list | np.ndarray | None = None,
         bins_labels: list | None = None,
         all_bins: bool | None = False,
-        cell_area: tuple[float | str, str] | None = None,
+        cell_area: tuple[float | int, str] | None = None,
         dropna: bool | None = False,
         **kwargs) -> pd.DataFrame:
+    """
+    Generate a summary statistics of the data.
 
-    def _correct_lowest_cut_interal(x: pd.Series) -> pd.Series:
+    Returns a pandas DataFrame of data according to the given parameters.
+    The statistics includes count, mean, std, min, 25%, 50%, 75%, and max.
+    Bins can be provided to further group the data into intervals.
+
+    Parameters
+    ----------
+    data : xr.DataArray | xr.Dataset
+        The input data.
+    on_vars : list, optional
+        Variables on which the statistics are calculated. If None (default), all variables are kept.
+    on_dims : list, optional
+        Dimensions on which the statistics are calculated. If None (default), all dimensions are kept.
+        Spatial dimensions (i.e., `lon` or `x` and `lat` or `y`) are removed by default.
+    on_dim_values : sequence, optional
+        Values of dimensions to be kept in the summary. If None (default), all values are kept.
+    bins : list or np.ndarray, optional
+        Bins defining data intervals. If None (default), no binning is performed.
+    bins_labels : list, optional
+        Labels for the bins. If None (default), bins values are used as labels.
+        The length of the list must be equal to the number of bins. Ignored if `bins` is None.
+    all_bins : bool, optional
+        If True, a additional bin corresponding to the bounds of `bins` is added to the summary. Default is False.
+        Ignored if `bins` is None.
+    cell_area : tuple of float or int and str, optional
+        Add a column to the summary with the given associated area calculated based on the count statistic
+        variable. The tuple must contain the area value and the unit of the area
+    dropna : bool, optional
+        If True, dimensions with NaN values are removed. Default is False.
+    **kwargs : dict, optional
+        Additional keyword arguments passed to `pd.cut` used to bin the data.
+
+    Returns
+    -------
+    pd.DataFrame
+        A DataFrame with the statistics for the defined dimensions and variables, including:
+        count, mean, std, min, 25%, 50%, 75%, and max.
+    """
+
+    def _correct_lowest_cut_interval(x: pd.Series) -> pd.Series:
         first_cat = x.cat.categories[0]
         lf = first_cat.left + (abs(first_cat.left) - bins[0])
         return x.cat.rename_categories({first_cat: pd.Interval(lf, first_cat.right, closed='both')})
@@ -52,7 +92,7 @@ def statistics_summary(
     if bins is not None:
         df['bin'] = pd.cut(df['value'], bins=pd.Index(bins), **kwargs)
         if 'include_lowest' in kwargs and kwargs['include_lowest']:
-            df['bin'] = _correct_lowest_cut_interal(df['bin'])
+            df['bin'] = _correct_lowest_cut_interval(df['bin'])
 
         if bins_labels is not None:
             lab_mapping = dict(zip(df['bin'].cat.categories.astype(str), bins_labels, strict=False))
@@ -96,7 +136,52 @@ def spatial_statistics_summary(
         dropna: bool | None = False,
         mask_kwargs: dict = None,
         stats_kwargs: dict = None) -> pd.DataFrame:
+    """
+    Generate a spatial summary statistics of the data.
 
+    Returns a pandas DataFrame of data consireding the given areas based on `statistic_summary` function.
+    The summary includes count, mean, std, min, 25%, 50%, 75%, and max.
+    Bins can be provided to further group the data into intervals.
+
+    Parameters
+    ----------
+    data : xr.DataArray | xr.Dataset
+        The input data.
+    areas : gpd.GeoDataFrame
+        Areas to be used as spatial masks.
+    name : str, optional
+        Name of the area column in the output DataFrame. Default is 'area'.
+    on_vars : list, optional
+        Variables on which the statistics are calculated. If None (default), all variables are kept.
+    on_dims : list, optional
+        Dimensions on which the statistics are calculated. If None (default), all dimensions are kept.
+        Spatial dimensions (i.e., `lon` or `x` and `lat` or `y`) are removed by default.
+    on_dim_values : sequence, optional
+        Values of dimensions to be kept in the summary. If None (default), all values are kept.
+    bins : list or np.ndarray, optional
+        Bins defining data intervals. If None (default), no binning is performed.
+    bins_labels : list, optional
+        Labels for the bins. If None (default), bins values are used as labels.
+        The length of the list must be equal to the number of bins. Ignored if `bins` is None.
+    all_bins : bool, optional
+        If True, a additional bin corresponding to the bounds of `bins` is added to the summary. Default is False.
+        Ignored if `bins` is None.
+    cell_area : tuple of float or int and str, optional
+        Add a column to the summary with the given associated area calculated based on the count statistic
+        variable. The tuple must contain the area value and the unit of the area
+    dropna : bool, optional
+        If True, dimensions with NaN values are removed. Default is False.
+    mask_kwargs : dict, optional
+        Additional keyword arguments passed to `regionmask.from_geopandas`.
+    stats_kwargs : dict, optional
+        Additional keyword arguments passed to `statistics_summary`.
+
+    Returns
+    -------
+    pd.DataFrame
+        A DataFrame with the statistics for the defined areas, dimensions and variables, including:
+        count, mean, std, min, 25%, 50%, 75%, and max.
+    """
     if mask_kwargs is None:
         mask_kwargs = {}
     if stats_kwargs is None:

@@ -8,10 +8,36 @@ __all__ = ["SuitabilityCriteria"]
 
 
 class SuitabilityCriteria:
+    """
+    A data structure for suitability criteria.
+
+    Suitability criteria are used to compute the suitability of a location from an indicator and based on a set of rules
+    defined by a suitability function. The suitability criteria can be weighted and categorized defining how it will be
+    aggregated with other criteria.
+
+    Parameters
+    ----------
+    name : str
+        Name of the suitability criteria.
+    indicator : xr.DataArray
+        Indicator on which the criteria is based.
+    func : SuitabilityFunction | MembershipSuitFunction | DiscreteSuitFunction
+        Suitability function describing how the suitability of the criteria is computed.
+    weight : int | float | None, optional
+        Weight of the criteria used in the aggregation process if a weighted aggregation method is used.
+        The default is 1.
+    category : str | None, optional
+        Category of the criteria. The default is None.
+    long_name : str | None, optional
+        A long name for the criteria. The default is None.
+    description : str | None, optional
+        A description for the criteria. The default is None. # TODO: check default behavior
+    """
+
     def __init__(
             self,
             name: str,
-            indicator: xr.Dataset | xr.DataArray,
+            indicator: xr.Dataset | xr.DataArray,  # TODO: check if it's work with ds
             func: SuitabilityFunction | MembershipSuitFunction | DiscreteSuitFunction,
             weight: int | float | None = 1,
             category: str | None = None,
@@ -29,6 +55,7 @@ class SuitabilityCriteria:
         self._from_indicator = _get_indicator_description(indicator)
 
     def __repr__(self) -> str:
+        """Returns a string representation for a particular criteria."""
         attrs = []
         attrs.append(f"name='{self.name}'")
         attrs.append(f"indicator={self.indicator.name}")
@@ -43,6 +70,17 @@ class SuitabilityCriteria:
         return f"{self.__class__.__name__}({', '.join(attrs) if attrs else ''})"
 
     def compute(self) -> xr.DataArray:
+        """
+        Compute the suitability of the criteria.
+
+        Returns a xarray DataArray with criteria suitability. The attributes of the DataArray describe how
+        the suitability was computed.
+
+        Returns
+        -------
+        xr.DataArray
+            Criteria suitability.
+        """
         if self.func.func_method == 'discrete':  # need to vectorize the discrete function
             sc: xr.DataArray = xr.apply_ufunc(self.func.map, self.indicator).rename(self.name)
         else:
@@ -56,7 +94,8 @@ class SuitabilityCriteria:
         )
 
     @property
-    def attrs(self):
+    def attrs(self) -> dict:
+        """Dictionary of the criteria attributes."""
         return {k: v for k, v in {
                     'name': self.name,
                     'weight': self.weight,

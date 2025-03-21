@@ -16,6 +16,25 @@ __all__ = [
 
 
 class SuitabilityFunction:
+    """
+    Base class for suitability functions.
+
+    Suitability function define how the criteria indicator is transformed into a suitability value. The suitability
+    function are available for continuous and discrete indicators. For continuous indicators, a membership function
+    is used to transform the indicator into a suitability value. For discrete indicators, a set of rules is mapped
+    on the indicator.
+
+    Parameters
+    ----------
+    func : Callable | None, optional
+        Function to compute the suitability value.
+    func_method : str | None, optional
+        Name of the function to compute the suitability value. If `func` is not provided and `func_method` is provided,
+        the function will be retrieved from the available implemented equations.
+    func_params : dict[str, Any], optional
+        Parameters of the function. For discrete functions, the keys correspond to the indicator values and
+        the values to its associated suitability values.
+    """
 
     def __init__(
             self,
@@ -36,24 +55,76 @@ class SuitabilityFunction:
             self.func = _get_function_from_name(func_method)
 
     def __repr__(self):
+        """Return the string representation of the object."""
         return (f"{self.__class__.__name__}("
                 f"func={self.func.__name__}, "
                 f"func_method='{self.func_method}', "
                 f"func_params={self.func_params})")
 
     def __call__(self, x):
+        """
+        Compute the suitability value.
+
+        Parameters
+        ----------
+        x : any
+            Input values.
+
+        Returns
+        -------
+        any
+            Suitability values.
+
+        Raises
+        ------
+        ValueError
+            If no function has been provided.
+        """
         if self.func is None:
             raise ValueError("No function has been provided.")
         return self.func(x, **self.func_params)
 
     def map(self, x):
+        """
+        Map the suitability function.
+
+        This method converts the input values into suitability values for the defined function.
+
+        Parameters
+        ----------
+        x : any
+            Input values to map.
+
+        Returns
+        -------
+        any
+            Suitability values.
+
+        Raises
+        ------
+        ValueError
+            If no function has been provided.
+        """
         return self(x)
 
     def plot(self, x) -> None:
+        """
+        Basic plot of the suitability function.
+
+        Parameters
+        ----------
+        x : any
+            Input values to plot.
+
+        Returns
+        -------
+        None
+        """
         plt.plot(x, self(x))
 
     @property
     def attrs(self):
+        """Dictionary of the suitability function attributes."""
         if self.func_method is None and self.func_params is None:
             return {}
         return {k: v for k, v in {
@@ -62,12 +133,23 @@ class SuitabilityFunction:
                 }.items() if v is not None}
 
 
-# ---------------------------------------------------------------------------- #
-# ------------------------ Membership functions ------------------------------ #
-# ---------------------------------------------------------------------------- #
-
-
 class MembershipSuitFunction(SuitabilityFunction):
+    """
+    Membership Suitability Function.
+
+    Membership functions are used to transform continuous indicator values into suitability values.
+    The membership converts the indicator values into a suitability value between 0 and 1.
+
+    Parameters
+    ----------
+    func : Callable | None, optional
+        Function to compute the suitability value.
+    func_method : str | None, optional
+        Name of the function to compute the suitability value. If `func` is not provided and `func_method` is provided,
+        the function will be retrieved from the available implemented equations.
+    func_params : dict[str, int | float] | None, optional
+        Parameters of the function to compute the suitability value.
+    """
 
     def __init__(
             self,
@@ -79,6 +161,29 @@ class MembershipSuitFunction(SuitabilityFunction):
 
     @staticmethod
     def fit(x, y=None, methods: str | list[str] = 'all', plot: bool = False):
+        """
+        Fit the membership functions to data.
+
+        This methods help to identify the best membership function to use on the data by fitting
+        the available functions.
+
+        Parameters
+        ----------
+        x : any
+            Input values to fit the functions on.
+        y : any, optional
+            Target suitability values to fit the functions. Should be the same length as `x`. If not provided,
+            the default values are used (0, 0.25, 0.5, 0.75, 1).
+        methods : str | list[str], optional
+            List of methods to fit. If 'all', all available methods are fitted. If a list of methods, only the specified
+            methods are fitted. Default is 'all'.
+        plot : bool, optional
+            Whether to plot the fitted functions. Default is False.
+
+        Returns
+        -------
+        None
+        """
         if y is None:
             y = [0, .25, .5, .75, 1]
         return _fit_mbs_functions(x, np.array(y), methods, plot)
@@ -163,11 +268,19 @@ def _fit_mbs_functions(x, y, methods: str | list[str] = 'all', plot: bool = Fals
     return _get_function_from_name(f_best), p_best
 
 
-# ---------------------------------------------------------------------------- #
-# --------------------------- Discrete functions ----------------------------- #
-# ---------------------------------------------------------------------------- #
-
 class DiscreteSuitFunction(SuitabilityFunction):
+    """
+    Discrete Suitability Function.
+
+    Discrete functions are used to transform discrete indicator values into suitability values. The discrete functions
+    map the indicator values to a set of rules that define the suitability values.
+
+    Parameters
+    ----------
+    func_params : dict[str, int | float] | None, optional
+        Parameters of the function. The keys correspond to the indicator values and the values to its associated
+        suitability values.
+    """
 
     def __init__(
             self,
@@ -177,10 +290,6 @@ class DiscreteSuitFunction(SuitabilityFunction):
         self.func_method = 'discrete'
         self.func_params = func_params
 
-
-# ---------------------------------------------------------------------------- #
-# ---------------------------- Utility functions ----------------------------- #
-# ---------------------------------------------------------------------------- #
 
 equations: dict[str, dict] = {}
 
@@ -218,36 +327,216 @@ def equation(type: str):
 
 @equation('discrete')
 def discrete(x, rules: dict[str | int, int | float]) -> float:
+    """
+    Discrete suitability function.
+
+    This function maps the indicator values to a set of rules that define the suitability values.
+
+    Parameters
+    ----------
+    x : any
+        Indicator values to map.
+    rules : dict[str | int, int | float]
+        Rules to map the indicator values to suitability values. The keys correspond to the indicator values and the
+        values to its associated suitability values.
+
+    Returns
+    -------
+    float
+        Suitability values.
+    """
     return np.vectorize(rules.get, otypes=[np.float32])(x, np.nan)
 
 
 @equation('sigmoid')
 def logistic(x, a, b):
+    r"""
+    Logistic function.
+
+    Parameters
+    ----------
+    x : any
+        Input values to map.
+    a : float | int
+        Steepness of the function parameter.
+    b : float | int
+        Value of the function's midpoint.
+
+    Returns
+    -------
+    float
+        Suitability values.
+
+    Notes
+    -----
+    The logistic function is defined as:
+
+    .. math:: f(x) = \\frac{1}{1 + e^{-a(x - b)}}
+    """
     return 1 / (1 + np.exp(-a * (x - b)))
 
 
 @equation('sigmoid')
 def sigmoid(x):
+    r"""
+    Sigmoid function.
+
+    Parameters
+    ----------
+    x : any
+        Input values to map.
+
+    Returns
+    -------
+    float
+        Suitability values.
+
+    Notes
+    -----
+    The sigmoid function is defined as:
+
+    .. math:: f(x) = \\frac{1}{1 + e^{-x}}
+    """
     return logistic(x, 1, 0)
 
 
 @equation('sigmoid')
 def vetharaniam2022_eq3(x, a, b):
+    r"""
+    Sigmoid like function.
+
+    # TODO: add a more detailed description.
+
+    Parameters
+    ----------
+    x : any
+        Input values to map.
+    a : float | int
+        Steepness of the function parameter.
+    b : float | int
+        Value of the function's midpoint.
+
+    Returns
+    -------
+    float
+        Suitability values.
+
+    Notes
+    -----
+    The sigmoid like function is defined as:
+
+    .. math:: f(x) = \\frac{e^{a(x - b)}}{1 + e^{a(x - b)}}
+
+    References
+    ----------
+    #TODO: add references
+    """
     return np.exp(a * (x - b)) / (1 + np.exp(a * (x - b)))
 
 
 @equation('sigmoid')
 def vetharaniam2022_eq5(x, a, b):
+    r"""
+    Sigmoid like function.
+
+    # TODO: add a more detailed description.
+
+    Parameters
+    ----------
+    x : any
+        Input values to map.
+    a : float | int
+        Steepness of the function parameter.
+    b : float | int
+        Value of the function's midpoint.
+
+    Returns
+    -------
+    float
+        Suitability values.
+
+    Notes
+    -----
+    The sigmoid like function is defined as:
+
+    .. math:: f(x) = \\frac{1}{1 + e^{a(\\sqrt{x} - \\sqrt{b})}}
+
+    References
+    ----------
+    #TODO: add references
+    """
     return 1 / (1 + np.exp(a * (np.sqrt(x) - np.sqrt(b))))
 
 
 @equation('gaussian')
 def vetharaniam2024_eq8(x, a, b, c):
+    r"""
+    Gaussian like function.
+
+    # TODO: add a more detailed description.
+
+    Parameters
+    ----------
+    x :
+        Input values to map.
+    a : float | int
+        Steepness of the function parameter.
+    b : float | int
+        Value of the function's midpoint.
+    c : float | int
+        Scaling parameter.
+
+    Returns
+    -------
+    float
+        Suitability values.
+
+    Notes
+    -----
+    The Gaussian like function is defined as:
+
+    .. math:: f(x) = e^{-a(x - b)^c}
+
+    References
+    ----------
+    #TODO: add references
+    """
     return np.exp(-a * np.power(x - b, c))
 
 
 @equation('gaussian')
 def vetharaniam2024_eq10(x, a, b, c):
+    r"""
+    Gaussian like function.
+
+    # TODO: add a more detailed description.
+
+    Parameters
+    ----------
+    x : any
+        Input values to map.
+    a : float | int
+        Steepness of the function parameter.
+    b : float | int
+        Value of the function's midpoint.
+    c : float | int
+        Scaling parameter.
+
+    Returns
+    -------
+    float
+        Suitability values.
+
+    Notes
+    -----
+    The Gaussian like function is defined as:
+
+    .. math:: f(x) = e^{-a(x^c - b^c)}
+
+    References
+    ----------
+    #TODO: add references
+    """
     return 2 / (1 + np.exp(a * np.power(np.power(x, c) - np.power(b, c), 2)))
 
 

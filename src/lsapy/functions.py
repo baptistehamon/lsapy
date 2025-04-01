@@ -34,6 +34,23 @@ class SuitabilityFunction:
     func_params : dict[str, Any], optional
         Parameters of the function. For discrete functions, the keys correspond to the indicator values and
         the values to its associated suitability values.
+    
+    See Also
+    --------
+    MembershipSuitFunction : Membership Suitability Function.
+    DiscreteSuitFunction : Discrete Suitability Function.
+
+    Examples
+    --------
+    >>> func = SuitabilityFunction(func_method="logistic", func_params={'a': 1, 'b': 5})
+    >>> func(3)
+    0.11920292202211755
+
+    `SuitabilityFunction` can also be used for discrete functions.
+
+    >>> func = SuitabilityFunction(func_params={1: 0, 2: 0.1, 3: 0.5, 4: 0.9, 5: 1})
+    >>> func(3)
+    array(0.5, dtype=float32)
     """
 
     def __init__(
@@ -82,7 +99,7 @@ class SuitabilityFunction:
         """
         if self.func is None:
             raise ValueError("No function has been provided.")
-        return self.func(x, **self.func_params)
+        return self.func(x, **self.func_params) # TODO: implement vectorization to support list
 
     def map(self, x):
         """
@@ -104,6 +121,12 @@ class SuitabilityFunction:
         ------
         ValueError
             If no function has been provided.
+
+        Examples
+        --------
+        >>> func = SuitabilityFunction(func_method="logistic", func_params={'a': 1, 'b': 5})
+        >>> func.map(3)
+        0.11920292202211755
         """
         return self(x)
 
@@ -119,6 +142,11 @@ class SuitabilityFunction:
         Returns
         -------
         None
+
+        Examples
+        --------
+        >>> func = SuitabilityFunction(func_method="logistic", func_params={'a': 1, 'b': 5})
+        >>> func.plot(np.linspace(0, 10, 100))
         """
         plt.plot(x, self(x))
 
@@ -149,6 +177,17 @@ class MembershipSuitFunction(SuitabilityFunction):
         the function will be retrieved from the available implemented equations.
     func_params : dict[str, int | float] | None, optional
         Parameters of the function to compute the suitability value.
+
+    See Also
+    --------
+    SuitabilityFunction : Suitability Function.
+    DiscreteSuitFunction : Discrete Suitability Function
+
+    Examples
+    --------
+    >>> func = MembershipSuitFunction(func_method="logistic", func_params={'a': 1, 'b': 5})
+    >>> func(3)
+    0.11920292202211755
     """
 
     def __init__(
@@ -162,6 +201,7 @@ class MembershipSuitFunction(SuitabilityFunction):
     @staticmethod
     def fit(x, y=None, methods: str | list[str] = 'all', plot: bool = False):
         """
+        # TODO: check if results should be print or return
         Fit the membership functions to data.
 
         This methods help to identify the best membership function to use on the data by fitting
@@ -183,6 +223,25 @@ class MembershipSuitFunction(SuitabilityFunction):
         Returns
         -------
         None
+
+        Examples
+        --------
+        >>> MembershipSuitFunction.fit([1, 3, 5, 7, 9])
+        Skipped fitting for the following methods: sigmoid, vetharaniam2024_eq8.
+        Best fit: logistic
+        RMSE: 0.04863
+        Params: a=0.6772100495121773, b=4.999999998691947
+        (<function logistic at 0x0000015722C73C40>, array([0.67721005, 5.        ]))
+
+        By default, the function will fit all available methods. If you want to fit only specific methods, you can
+        specify the methods to fit: "all", "sigmoid_like", "gaussian_like", or a list of methods.
+
+        >>> MembershipSuitFunction.fit(x=[1, 3, 5, 5, 7, 9], y=[0,0.5,1,1,0.5,0], methods="gaussian_like")
+        Skipped fitting for the following methods: vetharaniam2024_eq8.
+        Best fit: vetharaniam2024_eq10
+        RMSE: 0.01329
+        Params: a=0.38213218843552715, b=4.972731378762913
+        (<function vetharaniam2024_eq10 at 0x0000015722C73F60>, array([0.38213219, 4.97273138, 0.93922462]))
         """
         if y is None:
             y = [0, .25, .5, .75, 1]
@@ -280,6 +339,19 @@ class DiscreteSuitFunction(SuitabilityFunction):
     func_params : dict[str, int | float] | None, optional
         Parameters of the function. The keys correspond to the indicator values and the values to its associated
         suitability values.
+    
+    See Also
+    --------
+    SuitabilityFunction : Suitability Function.
+    MembershipSuitFunction : Membership Suitability Function.
+
+    Examples
+    --------
+    >>> func = DiscreteSuitFunction(func_params={1: 0, 2: 0.1, 3: 0.5, 4: 0.9, 5: 1})
+
+    `DiscreteSuitFunction` also support keys as strings.
+
+    >>> func = DiscreteSuitFunction(func_params={'1': 0, '2': 0.1, '3': 0.5, '4': 0.9, '5': 1})
     """
 
     def __init__(

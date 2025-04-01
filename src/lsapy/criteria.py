@@ -32,6 +32,31 @@ class SuitabilityCriteria:
         A long name for the criteria. The default is None.
     description : str | None, optional
         A description for the criteria. The default is None. # TODO: check default behavior
+
+    Examples
+    --------
+    Here is an example using the sample soil data with the drainage class (DRC) as indicator for the criteria.    
+    >>> soil_data = load_soil_data()
+    >>> sc = SuitabilityCriteria(
+        name = "drainage_class",
+        long_name= "Drainage Class Suitability",
+        weight= 3,
+        category= "soilTerrain",
+        indicator = soil_data['DRC'],
+        func=SuitabilityFunction(func_method='discrete', func_params={'rules': {'1': 0, '2': 0.1, '3': 0.5, '4': 0.9, '5': 1}})
+    )
+
+    Here is another example using the sample climate data with the growing degree days (GDD)
+    as indicator for the criteria computing using the `xclim` package.
+    >>> gdd = growing_degree_days(clim_data['tas'], thresh='10 degC', freq='YS-JUL')
+    >>> sc = SuitabilityCriteria(
+        name = "growing_degree_days"
+        long_name= "Growing Degree Days Suitability",
+        weight= 1,
+        category= "climate",
+        indicator=gdd,
+        func = SuitabilityFunction(func_method='vetharaniam2022_eq5', func_params={'a': -1.41, 'b': 801})
+    )
     """
 
     def __init__(

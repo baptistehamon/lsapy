@@ -323,7 +323,7 @@ def _fit_mbs_functions(x, y, methods: str | list[str] = 'all', plot: bool = Fals
 
         if len(skipped) > 0:
             print(f"Skipped fitting for the following methods: {', '.join(skipped)}.")
-    f_best, p_best = _get_best_fit(methods, rms_errors, f_params)
+    f_best, p_best = _get_best_fit([m for m in methods if m not in skipped], rms_errors, f_params)
     return _get_function_from_name(f_best), p_best
 
 

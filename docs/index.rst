@@ -6,12 +6,20 @@
 lsapy documentation
 ===================
 
-Add your content using ``reStructuredText`` syntax. See the
-`reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-documentation for details.
+Welcome to the lsapy documentation!
 
+``lsapy`` stands for Land Suitability Analysis (LSA) in Python. The package has been designed to perfom
+spatial and temporal LSA operating on `xarray`_ ``DataArray`` and ``Dataset``.
+
+.. _xarray: https://docs.xarray.dev/en/stable/
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Table of Contents:
+   
+   About <readme>
 
+.. toctree:: 
+   :titlesonly:
+
+   changelog

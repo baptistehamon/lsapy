@@ -13,6 +13,7 @@ Bug fixes
 v0.1.0-dev0 (2025-03-12)
 ------------------------
 Contributor to this version: Baptiste Hamon (@baptistehamon).
+
 * First release on PyPI.
 
 New features

@@ -6,4 +6,4 @@ from lsapy.lsa import LandSuitability
 
 __author__ = "Baptiste Hamon"
 __email__ = "baptiste.hamon@pg.canterbury.ac.nz"
-__version__ = "0.1.0-dev0"
+__version__ = "0.1.0-dev1"

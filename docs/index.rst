@@ -3,10 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-lsapy documentation
+LSAPy Documentation
 ===================
-
-Welcome to the lsapy documentation!
 
 ``lsapy`` stands for Land Suitability Analysis (LSA) in Python. The package has been designed to perfom
 spatial and temporal LSA operating on `xarray`_ ``DataArray`` and ``Dataset``.
@@ -18,6 +16,7 @@ spatial and temporal LSA operating on `xarray`_ ``DataArray`` and ``Dataset``.
    :caption: Table of Contents:
    
    About <readme>
+   notebooks/index
 
 .. toctree:: 
    :titlesonly:

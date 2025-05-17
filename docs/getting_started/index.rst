@@ -16,6 +16,11 @@ To install `LSAPy` from `PyPI`_, you can use pip:
 
 In the future, `LSAPy` will be available on `conda-forge`_.
 
+.. note::
+
+   The package is still in development and only pre-realease versions have been published,
+   meaning the package should not be considered stable yet.
+
 Land Suitability Analysis (LSA)
 -------------------------------
 

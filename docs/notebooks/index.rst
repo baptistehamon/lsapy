@@ -2,8 +2,8 @@
 User Guide
 ==========
 
-``lsapy`` provides three module: ``SuitabilityFunction``, ``SuitabilityCriteria`` and ``LandSuitability`` that operate toghether
-to perform LSA. The tutorials aim to describe them and explain how they should be used and combine. 
+In this user guide, you will find tutorials describing and detailing the main components of the `LSAPy` package,
+and explaining how they operate together to perform Land Suitability Analysis (LSA).
 
 
 .. toctree::

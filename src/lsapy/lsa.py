@@ -34,10 +34,11 @@ class LandSuitability:
         A long name for the land suitability. The default is None.
     description : str | None, optional
         A description for the land suitability. The default is None.
-    
+
     Examples
     --------
-    Let first define the suitability criteria (we use `xclim`package for the GDD computation):
+    Let first define the ``SuitabilityCriteria`` (we use `xclim` package for the GDD computation):
+
     >>> soil_data = load_soil_data()
     >>> climate_data = load_climate_data()
     >>> sc = {
@@ -56,18 +57,18 @@ class LandSuitability:
             category= "climate",
             indicator = growing_degree_days(climate_data['tas'], thresh='10 degC', freq='YS-JUL'),
             func = SuitabilityFunction(func_method='vetharaniam2022_eq5', func_params={'a': -1.41, 'b': 801})
-        )
-    }
+        )}
 
-    Now we can define the land suitability:
+    Now we can define the ``LandSuitability`` :
+
     >>> ls = LandSuitability(
         name = "lsa",
         short_name = "land_suitability",
         long_name = "Land Suitability Analysis",
-        criteria = sc
-    )
+        criteria = sc)
     
     The land suitability can now be computed:
+
     >>> ls.compute_criteria_suitability(inplace=True)
     >>> ls.compute_category_suitability(method='weighted_mean', keep_criteria=True, inplace=True)
     >>> ls.compute_suitability(method='weighted_mean', by_category=True, keep_all=True, inplace=True)

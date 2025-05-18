@@ -46,7 +46,7 @@ class SuitabilityFunction:
     >>> func(3)
     0.11920292202211755
 
-    `SuitabilityFunction` can also be used for discrete functions.
+    ``SuitabilityFunction`` can also be used for discrete functions.
 
     >>> func = SuitabilityFunction(func_params={1: 0, 2: 0.1, 3: 0.5, 4: 0.9, 5: 1})
     >>> func(3)
@@ -201,11 +201,11 @@ class MembershipSuitFunction(SuitabilityFunction):
     @staticmethod
     def fit(x, y=None, methods: str | list[str] = 'all', plot: bool = False):
         """
-        # TODO: check if results should be print or return
         Fit the membership functions to data.
 
         This methods help to identify the best membership function to use on the data by fitting
         the available functions.
+        # TODO: check if results should be print or return
 
         Parameters
         ----------
@@ -349,7 +349,7 @@ class DiscreteSuitFunction(SuitabilityFunction):
     --------
     >>> func = DiscreteSuitFunction(func_params={1: 0, 2: 0.1, 3: 0.5, 4: 0.9, 5: 1})
 
-    `DiscreteSuitFunction` also support keys as strings.
+    ``DiscreteSuitFunction`` also support keys as strings.
 
     >>> func = DiscreteSuitFunction(func_params={'1': 0, '2': 0.1, '3': 0.5, '4': 0.9, '5': 1})
     """
@@ -443,7 +443,9 @@ def logistic(x, a, b):
     -----
     The logistic function is defined as:
 
-    .. math:: f(x) = \\frac{1}{1 + e^{-a(x - b)}}
+    .. math::
+    
+        f(x) = \frac{1}{1 + e^{-a(x - b)}}
     """
     return 1 / (1 + np.exp(-a * (x - b)))
 
@@ -467,7 +469,9 @@ def sigmoid(x):
     -----
     The sigmoid function is defined as:
 
-    .. math:: f(x) = \\frac{1}{1 + e^{-x}}
+    .. math::
+    
+        f(x) = \frac{1}{1 + e^{-x}}
     """
     return logistic(x, 1, 0)
 
@@ -497,11 +501,12 @@ def vetharaniam2022_eq3(x, a, b):
     -----
     The sigmoid like function is defined as:
 
-    .. math:: f(x) = \\frac{e^{a(x - b)}}{1 + e^{a(x - b)}}
+    .. math::
 
+        f(x) = \frac{e^{a(x - b)}}{1 + e^{a(x - b)}}
     References
     ----------
-    #TODO: add references
+    :cite:cts:`vetharaniam_lsa_2022`
     """
     return np.exp(a * (x - b)) / (1 + np.exp(a * (x - b)))
 
@@ -531,11 +536,13 @@ def vetharaniam2022_eq5(x, a, b):
     -----
     The sigmoid like function is defined as:
 
-    .. math:: f(x) = \\frac{1}{1 + e^{a(\\sqrt{x} - \\sqrt{b})}}
-
+    .. math::
+    
+        f(x) = \frac{1}{1 + e^{a(\sqrt{x} - \sqrt{b})}}
+    
     References
     ----------
-    #TODO: add references
+    :cite:cts:`vetharaniam_lsa_2022`
     """
     return 1 / (1 + np.exp(a * (np.sqrt(x) - np.sqrt(b))))
 
@@ -567,11 +574,13 @@ def vetharaniam2024_eq8(x, a, b, c):
     -----
     The Gaussian like function is defined as:
 
-    .. math:: f(x) = e^{-a(x - b)^c}
+    .. math::
+    
+        f(x) = e^{-a(x - b)^c}
 
     References
     ----------
-    #TODO: add references
+    :cite:cts:`vetharaniam_lsa_2024`
     """
     return np.exp(-a * np.power(x - b, c))
 
@@ -603,11 +612,13 @@ def vetharaniam2024_eq10(x, a, b, c):
     -----
     The Gaussian like function is defined as:
 
-    .. math:: f(x) = e^{-a(x^c - b^c)}
+    .. math::
+    
+        f(x) = e^{-a(x^c - b^c)}
 
     References
     ----------
-    #TODO: add references
+    :cite:cts:`vetharaniam_lsa_2024`
     """
     return 2 / (1 + np.exp(a * np.power(np.power(x, c) - np.power(b, c), 2)))
 

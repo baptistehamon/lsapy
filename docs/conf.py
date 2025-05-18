@@ -6,6 +6,10 @@
 import os
 import sys
 
+from pybtex.plugin import register_plugin  # noqa
+from pybtex.style.formatting.alpha import Style as AlphaStyle  # noqa
+from pybtex.style.labels import BaseLabelStyle  # noqa
+
 sys.path.insert(0, os.path.abspath("../src/"))
 
 import lsapy
@@ -29,6 +33,7 @@ extensions = [
     "nbsphinx",
     "IPython.sphinxext.ipython_console_highlighting",
     "sphinx.ext.autodoc",
+    "sphinx.ext.mathjax",
     "sphinx.ext.napoleon",
     "sphinx.ext.autosummary",
     "sphinx_copybutton",
@@ -39,7 +44,22 @@ extensions = [
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
+
+# Bibliography stuff (stolen from xclim package)
+# a simple label style which uses the bibtex keys for labels
+class XCLabelStyle(BaseLabelStyle):
+    def format_labels(self, sorted_entries):
+        for entry in sorted_entries:
+            yield entry.key
+
+
+class XCStyle(AlphaStyle):
+    default_label_style = XCLabelStyle
+
+
+register_plugin("pybtex.style.formatting", "xcstyle", XCStyle)
 bibtex_bibfiles = ["references.bib"]
+bibtex_default_style = "xcstyle"
 bibtex_reference_style = "author_year"
 
 # -- Options for HTML output -------------------------------------------------

@@ -2,6 +2,14 @@
 Changelog
 =========
 
+v0.1.0 (unreleased)
+-------------------
+Contributor to this version: Baptiste Hamon (@baptistehamon).
+
+New features
+^^^^^^^^^^^^
+* Add `Code of Conduct` and `Contributing Guidelines`.
+
 v0.1.0-dev1 (2025-05-16)
 ------------------------
 Contributor to this version: Baptiste Hamon (@baptistehamon).

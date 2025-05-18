@@ -1,5 +1,1 @@
-=====================
-LSAPy Code of Conduct
-=====================
-
-To write.
+.. mdinclude:: ../../CODE_OF_CONDUCT.md

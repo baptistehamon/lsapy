@@ -2,8 +2,16 @@
 Community
 =========
 
-To write.
+The project is only at the beginning of its journey but help is always welcome! We are working hard to make it better,
+and in that sense, we appreciate any feedbacks and contributions. As a project's contributor, you should adhere to the
+:doc:`Code of Conduct </community/code_of_conduct>`. 
 
-.. container:: button
+If you are interested in contributing to the project, please read the :doc:`Contributing Guidelines </community/contributing>`.
 
-    :doc:`Contributing </community/contributing>` :doc:`Code of Conduct </community/code_of_conduct>`
+.. toctree::
+    :maxdepth: 1
+    :caption: Community
+    :hidden:
+
+    Contributing <contributing>
+    Code of Conduct <code_of_conduct>

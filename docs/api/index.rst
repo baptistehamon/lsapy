@@ -4,6 +4,12 @@ LSAPy API
 
 This page provides an overview of all implemented public objects, functions and methods of the `LSAPy` package.
 
+.. warning::
+
+   The package is still in development and only pre-realease versions have been published,
+   meaning the package should not be considered stable yet. Breaking changes are likely to
+   occur before the first official release.
+
 .. currentmodule:: lsapy
 
 Constructors

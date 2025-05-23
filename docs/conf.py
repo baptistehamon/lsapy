@@ -30,14 +30,17 @@ release = lsapy.__version__
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-    "nbsphinx",
-    "IPython.sphinxext.ipython_console_highlighting",
     "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
+    "sphinx.ext.viewcode",
     "sphinx.ext.mathjax",
     "sphinx.ext.napoleon",
-    "sphinx.ext.autosummary",
-    "sphinx_copybutton",
+    "sphinx.ext.coverage",
+    "nbsphinx",
+    "IPython.sphinxext.ipython_console_highlighting",
+    "sphinx_autodoc_typehints",
     "sphinxcontrib.bibtex",
+    "sphinx_copybutton",
     "sphinx_mdinclude",
 ]
 

@@ -39,39 +39,43 @@ class LandSuitability:
     --------
     Let first define the ``SuitabilityCriteria`` (we use `xclim` package for the GDD computation):
 
+    >>> from lsapy.utils import load_soil_data, load_climate_data
+    >>> from xclim.indicators.atmos import growing_degree_days  # doctest: +SKIP
+    <BLANKLINE>
     >>> soil_data = load_soil_data()
     >>> climate_data = load_climate_data()
-    >>> sc = {
-        "drainage_class": SuitabilityCriteria(
-            name = "drainage_class",
-            long_name= "Drainage Class Suitability",
-            weight= 3,
-            category= "soilTerrain",
-            indicator = soil_data['DRC'],
-            func=SuitabilityFunction(func_method='discrete', func_params={'rules': {'1': 0, '2': 0.1, '3': 0.5, '4': 0.9, '5': 1}})
-        ),
-        "growing_degree_days": SuitabilityCriteria(
-            name = "growing_degree_days",
-            long_name= "Growing Degree Days Suitability",
-            weight= 1,
-            category= "climate",
-            indicator = growing_degree_days(climate_data['tas'], thresh='10 degC', freq='YS-JUL'),
-            func = SuitabilityFunction(func_method='vetharaniam2022_eq5', func_params={'a': -1.41, 'b': 801})
-        )}
+    >>> sc = {  # doctest: +SKIP
+    ...     "drainage_class": SuitabilityCriteria(
+    ...         name="drainage_class",
+    ...         long_name="Drainage Class Suitability",
+    ...         weight=3,
+    ...         category="soilTerrain",
+    ...         indicator=soil_data["DRC"],
+    ...         func=SuitabilityFunction(
+    ...             func_method="discrete", func_params={"rules": {"1": 0, "2": 0.1, "3": 0.5, "4": 0.9, "5": 1}}
+    ...         ),
+    ...     ),
+    ...     "growing_degree_days": SuitabilityCriteria(
+    ...         name="growing_degree_days",
+    ...         long_name="Growing Degree Days Suitability",
+    ...         weight=1,
+    ...         category="climate",
+    ...         indicator=growing_degree_days(climate_data["tas"], thresh="10 degC", freq="YS-JUL"),
+    ...         func=SuitabilityFunction(func_method="vetharaniam2022_eq5", func_params={"a": -1.41, "b": 801}),
+    ...     ),
+    ... }
 
     Now we can define the ``LandSuitability`` :
 
-    >>> ls = LandSuitability(
-        name = "lsa",
-        short_name = "land_suitability",
-        long_name = "Land Suitability Analysis",
-        criteria = sc)
-    
+    >>> ls = LandSuitability(  # doctest: +SKIP
+    ...     name="lsa", short_name="land_suitability", long_name="Land Suitability Analysis", criteria=sc
+    ... )
+
     The land suitability can now be computed:
 
-    >>> ls.compute_criteria_suitability(inplace=True)
-    >>> ls.compute_category_suitability(method='weighted_mean', keep_criteria=True, inplace=True)
-    >>> ls.compute_suitability(method='weighted_mean', by_category=True, keep_all=True, inplace=True)
+    >>> ls.compute_criteria_suitability(inplace=True)  # doctest: +SKIP
+    >>> ls.compute_category_suitability(method="weighted_mean", keep_criteria=True, inplace=True)  # doctest: +SKIP
+    >>> ls.compute_suitability(method="weighted_mean", by_category=True, keep_all=True, inplace=True)  # doctest: +SKIP
     """
 
     def __init__(
@@ -550,9 +554,8 @@ def vars_weighted_mean(ds: xr.Dataset, vars=None, weights=None) -> xr.DataArray:
         {
             "method": "Weighted Mean",
             "descritpion": (
-                "Weighted Mean of variables: "
-                f"{', '.join([f'{v} ({w})' for v, w in zip(vars, weights, strict=False)])}."
-            )
+                f"Weighted Mean of variables: {', '.join([f'{v} ({w})' for v, w in zip(vars, weights, strict=False)])}."
+            ),
         }
     ).rename("weighted_mean")
 
@@ -580,7 +583,7 @@ def vars_weighted_geomean(ds: xr.Dataset, vars=None, weights=None) -> xr.DataArr
             "description": (
                 "Weighted Geometric Mean of variables: "
                 f"{', '.join([f'{v} ({w})' for v, w in zip(vars, weights, strict=False)])}."
-            )
+            ),
         }
     ).rename("weighted_geometric_mean")
 

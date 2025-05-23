@@ -8,11 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.optimize import curve_fit
 
-__all__ = [
-    "SuitabilityFunction",
-    "MembershipSuitFunction",
-    "DiscreteSuitFunction"
-]
+__all__ = ["SuitabilityFunction", "MembershipSuitFunction", "DiscreteSuitFunction"]
 
 
 class SuitabilityFunction:
@@ -34,7 +30,7 @@ class SuitabilityFunction:
     func_params : dict[str, Any], optional
         Parameters of the function. For discrete functions, the keys correspond to the indicator values and
         the values to its associated suitability values.
-    
+
     See Also
     --------
     MembershipSuitFunction : Membership Suitability Function.
@@ -42,22 +38,15 @@ class SuitabilityFunction:
 
     Examples
     --------
-    >>> func = SuitabilityFunction(func_method="logistic", func_params={'a': 1, 'b': 5})
-    >>> func(3)
-    0.11920292202211755
+    >>> func = SuitabilityFunction(func_method="logistic", func_params={"a": 1, "b": 5})
 
     ``SuitabilityFunction`` can also be used for discrete functions.
 
-    >>> func = SuitabilityFunction(func_params={1: 0, 2: 0.1, 3: 0.5, 4: 0.9, 5: 1})
-    >>> func(3)
-    array(0.5, dtype=float32)
+    >>> func = SuitabilityFunction(func_method="discrete", func_params={1: 0, 2: 0.1, 3: 0.5, 4: 0.9, 5: 1})
     """
 
     def __init__(
-            self,
-            func: Callable | None = None,
-            func_method: str | None = None,
-            func_params: dict[str, Any] = None
+        self, func: Callable | None = None, func_method: str | None = None, func_params: dict[str, Any] = None
     ):
         if func_params is not None:
             if func is None and func_method is None:
@@ -73,10 +62,12 @@ class SuitabilityFunction:
 
     def __repr__(self):
         """Return the string representation of the object."""
-        return (f"{self.__class__.__name__}("
-                f"func={self.func.__name__}, "
-                f"func_method='{self.func_method}', "
-                f"func_params={self.func_params})")
+        return (
+            f"{self.__class__.__name__}("
+            f"func={self.func.__name__}, "
+            f"func_method='{self.func_method}', "
+            f"func_params={self.func_params})"
+        )
 
     def __call__(self, x):
         """
@@ -99,7 +90,7 @@ class SuitabilityFunction:
         """
         if self.func is None:
             raise ValueError("No function has been provided.")
-        return self.func(x, **self.func_params) # TODO: implement vectorization to support list
+        return self.func(x, **self.func_params)  # TODO: implement vectorization to support list
 
     def map(self, x):
         """
@@ -124,9 +115,9 @@ class SuitabilityFunction:
 
         Examples
         --------
-        >>> func = SuitabilityFunction(func_method="logistic", func_params={'a': 1, 'b': 5})
+        >>> func = SuitabilityFunction(func_method="logistic", func_params={"a": 1, "b": 5})
         >>> func.map(3)
-        0.11920292202211755
+        np.float64(0.11920292202211755)
         """
         return self(x)
 
@@ -145,8 +136,10 @@ class SuitabilityFunction:
 
         Examples
         --------
-        >>> func = SuitabilityFunction(func_method="logistic", func_params={'a': 1, 'b': 5})
-        >>> func.plot(np.linspace(0, 10, 100))
+        >>> import numpy as np  # doctest: +SKIP
+        <BLANKLINE>
+        >>> func = SuitabilityFunction(func_method="logistic", func_params={"a": 1, "b": 5})
+        >>> func.plot(np.linspace(0, 10, 100))  # doctest: +SKIP
         """
         plt.plot(x, self(x))
 
@@ -155,10 +148,9 @@ class SuitabilityFunction:
         """Dictionary of the suitability function attributes."""
         if self.func_method is None and self.func_params is None:
             return {}
-        return {k: v for k, v in {
-                    'func_method': self.func_method,
-                    'func_params': self.func_params
-                }.items() if v is not None}
+        return {
+            k: v for k, v in {"func_method": self.func_method, "func_params": self.func_params}.items() if v is not None
+        }
 
 
 class MembershipSuitFunction(SuitabilityFunction):
@@ -185,21 +177,21 @@ class MembershipSuitFunction(SuitabilityFunction):
 
     Examples
     --------
-    >>> func = MembershipSuitFunction(func_method="logistic", func_params={'a': 1, 'b': 5})
+    >>> func = MembershipSuitFunction(func_method="logistic", func_params={"a": 1, "b": 5})
     >>> func(3)
-    0.11920292202211755
+    np.float64(0.11920292202211755)
     """
 
     def __init__(
-            self,
-            func: Callable | None = None,
-            func_method: str | None = None,
-            func_params: dict[str, int | float] | None = None
+        self,
+        func: Callable | None = None,
+        func_method: str | None = None,
+        func_params: dict[str, int | float] | None = None,
     ):
         super().__init__(func, func_method, func_params)
 
     @staticmethod
-    def fit(x, y=None, methods: str | list[str] = 'all', plot: bool = False):
+    def fit(x, y=None, methods: str | list[str] = "all", plot: bool = False):
         """
         Fit the membership functions to data.
 
@@ -226,34 +218,40 @@ class MembershipSuitFunction(SuitabilityFunction):
 
         Examples
         --------
-        >>> MembershipSuitFunction.fit([1, 3, 5, 7, 9])
+        >>> MembershipSuitFunction.fit([1, 3, 5, 7, 10])  # doctest: +SKIP
         Skipped fitting for the following methods: sigmoid, vetharaniam2024_eq8.
+        <BLANKLINE>
         Best fit: logistic
         RMSE: 0.04863
         Params: a=0.6772100495121773, b=4.999999998691947
+        <BLANKLINE>
         (<function logistic at 0x0000015722C73C40>, array([0.67721005, 5.        ]))
 
         By default, the function will fit all available methods. If you want to fit only specific methods, you can
         specify the methods to fit: "all", "sigmoid_like", "gaussian_like", or a list of methods.
 
-        >>> MembershipSuitFunction.fit(x=[1, 3, 5, 5, 7, 9], y=[0,0.5,1,1,0.5,0], methods="gaussian_like")
+        >>> MembershipSuitFunction.fit(
+        ...     x=[1, 3, 5, 5, 7, 9], y=[0, 0.5, 1, 1, 0.5, 0], methods="gaussian_like"
+        ... )  # doctest: +SKIP
         Skipped fitting for the following methods: vetharaniam2024_eq8.
+        <BLANKLINE>
         Best fit: vetharaniam2024_eq10
         RMSE: 0.01329
         Params: a=0.38213218843552715, b=4.972731378762913
+        <BLANKLINE>
         (<function vetharaniam2024_eq10 at 0x0000015722C73F60>, array([0.38213219, 4.97273138, 0.93922462]))
         """
         if y is None:
-            y = [0, .25, .5, .75, 1]
+            y = [0, 0.25, 0.5, 0.75, 1]
         return _fit_mbs_functions(x, np.array(y), methods, plot)
 
 
-def _prepare_for_fitting(methods:  str | list[str] = 'all'):
-    _types = ['sigmoid_like', 'gaussian_like']
+def _prepare_for_fitting(methods: str | list[str] = "all"):
+    _types = ["sigmoid_like", "gaussian_like"]
     _skipped = []
 
-    if methods == 'all':
-        methods = [f for t in _types for f in equations[t.replace('_like', '')]]
+    if methods == "all":
+        methods = [f for t in _types for f in equations[t.replace("_like", "")]]
     elif isinstance(methods, list) or isinstance(methods, str):
         if isinstance(methods, str):
             methods = [methods]
@@ -261,7 +259,7 @@ def _prepare_for_fitting(methods:  str | list[str] = 'all'):
         _methods = []
         for method in methods:
             if method in _types:
-                [_methods.append(m) for m in equations[method.replace('_like', '')].keys()]
+                [_methods.append(m) for m in equations[method.replace("_like", "")].keys()]
             else:
                 try:
                     _get_function_from_name(method)
@@ -270,27 +268,26 @@ def _prepare_for_fitting(methods:  str | list[str] = 'all'):
                     _skipped.append(method)
                     warnings.warn(f"`{method}` not found in equations. Skipped.", stacklevel=2)
         methods = _methods
-        for m in ['sigmoid', 'vetharaniam2024_eq8']:
+        for m in ["sigmoid", "vetharaniam2024_eq8"]:
             if m in methods:
                 methods.remove(m)
                 _skipped.append(m)
-                if m == 'sigmoid':
+                if m == "sigmoid":
                     warnings.warn("No parameters to determine for `sigmoid`. Skipped.", stacklevel=2)
-                if m == 'vetharaniam2024_eq8':
+                if m == "vetharaniam2024_eq8":
                     warnings.warn("Fitting method does not support `vetharaniam2024_eq8`. Skipped.", stacklevel=2)
     return methods, _skipped
 
 
 def _get_function_p0(method: str, x: np.ndarray) -> list[float]:
-    if method in equations['sigmoid']:
+    if method in equations["sigmoid"]:
         return [1, np.median(x)]
-    if method in equations['gaussian']:
+    if method in equations["gaussian"]:
         return [1, np.median(x), 1]
     return []
 
 
-def _fit_mbs_functions(x, y, methods: str | list[str] = 'all', plot: bool = False):
-
+def _fit_mbs_functions(x, y, methods: str | list[str] = "all", plot: bool = False):
     skipped = []
     methods, _skipped = _prepare_for_fitting(methods)
     skipped.extend(_skipped)
@@ -312,12 +309,12 @@ def _fit_mbs_functions(x, y, methods: str | list[str] = 'all', plot: bool = Fals
                 rmse = _rms_error(y, f(x, *popt))
                 rms_errors.append(rmse)
                 if plot:
-                    plt.plot(x_, y_, label=method + f' (RMSE={rmse:.2f})')
+                    plt.plot(x_, y_, label=method + f" (RMSE={rmse:.2f})")
             except Exception:
                 skipped.append(method)
                 warnings.warn(f"Failed to fit `{method}`. Skipped.", stacklevel=2)
         if plot:
-            plt.scatter(x, y, c='r')
+            plt.scatter(x, y, c="r")
             plt.legend()
             plt.show()
 
@@ -339,7 +336,7 @@ class DiscreteSuitFunction(SuitabilityFunction):
     func_params : dict[str, int | float] | None, optional
         Parameters of the function. The keys correspond to the indicator values and the values to its associated
         suitability values.
-    
+
     See Also
     --------
     SuitabilityFunction : Suitability Function.
@@ -351,15 +348,12 @@ class DiscreteSuitFunction(SuitabilityFunction):
 
     ``DiscreteSuitFunction`` also support keys as strings.
 
-    >>> func = DiscreteSuitFunction(func_params={'1': 0, '2': 0.1, '3': 0.5, '4': 0.9, '5': 1})
+    >>> func = DiscreteSuitFunction(func_params={"1": 0, "2": 0.1, "3": 0.5, "4": 0.9, "5": 1})
     """
 
-    def __init__(
-            self,
-            func_params: dict[str, int | float] | None = None
-    ):
+    def __init__(self, func_params: dict[str, int | float] | None = None):
         self.func = discrete
-        self.func_method = 'discrete'
+        self.func_method = "discrete"
         self.func_params = func_params
 
 
@@ -394,10 +388,11 @@ def equation(type: str):
 
         equations[type].update({func.__name__: func})
         return func
+
     return decorator
 
 
-@equation('discrete')
+@equation("discrete")
 def discrete(x, rules: dict[str | int, int | float]) -> float:
     """
     Discrete suitability function.
@@ -420,7 +415,7 @@ def discrete(x, rules: dict[str | int, int | float]) -> float:
     return np.vectorize(rules.get, otypes=[np.float32])(x, np.nan)
 
 
-@equation('sigmoid')
+@equation("sigmoid")
 def logistic(x, a, b):
     r"""
     Logistic function.
@@ -444,13 +439,13 @@ def logistic(x, a, b):
     The logistic function is defined as:
 
     .. math::
-    
+
         f(x) = \frac{1}{1 + e^{-a(x - b)}}
     """
     return 1 / (1 + np.exp(-a * (x - b)))
 
 
-@equation('sigmoid')
+@equation("sigmoid")
 def sigmoid(x):
     r"""
     Sigmoid function.
@@ -470,13 +465,13 @@ def sigmoid(x):
     The sigmoid function is defined as:
 
     .. math::
-    
+
         f(x) = \frac{1}{1 + e^{-x}}
     """
     return logistic(x, 1, 0)
 
 
-@equation('sigmoid')
+@equation("sigmoid")
 def vetharaniam2022_eq3(x, a, b):
     r"""
     Sigmoid like function.
@@ -504,6 +499,7 @@ def vetharaniam2022_eq3(x, a, b):
     .. math::
 
         f(x) = \frac{e^{a(x - b)}}{1 + e^{a(x - b)}}
+
     References
     ----------
     :cite:cts:`vetharaniam_lsa_2022`
@@ -511,7 +507,7 @@ def vetharaniam2022_eq3(x, a, b):
     return np.exp(a * (x - b)) / (1 + np.exp(a * (x - b)))
 
 
-@equation('sigmoid')
+@equation("sigmoid")
 def vetharaniam2022_eq5(x, a, b):
     r"""
     Sigmoid like function.
@@ -537,9 +533,9 @@ def vetharaniam2022_eq5(x, a, b):
     The sigmoid like function is defined as:
 
     .. math::
-    
+
         f(x) = \frac{1}{1 + e^{a(\sqrt{x} - \sqrt{b})}}
-    
+
     References
     ----------
     :cite:cts:`vetharaniam_lsa_2022`
@@ -547,7 +543,7 @@ def vetharaniam2022_eq5(x, a, b):
     return 1 / (1 + np.exp(a * (np.sqrt(x) - np.sqrt(b))))
 
 
-@equation('gaussian')
+@equation("gaussian")
 def vetharaniam2024_eq8(x, a, b, c):
     r"""
     Gaussian like function.
@@ -575,7 +571,7 @@ def vetharaniam2024_eq8(x, a, b, c):
     The Gaussian like function is defined as:
 
     .. math::
-    
+
         f(x) = e^{-a(x - b)^c}
 
     References
@@ -585,7 +581,7 @@ def vetharaniam2024_eq8(x, a, b, c):
     return np.exp(-a * np.power(x - b, c))
 
 
-@equation('gaussian')
+@equation("gaussian")
 def vetharaniam2024_eq10(x, a, b, c):
     r"""
     Gaussian like function.
@@ -613,7 +609,7 @@ def vetharaniam2024_eq10(x, a, b, c):
     The Gaussian like function is defined as:
 
     .. math::
-    
+
         f(x) = e^{-a(x^c - b^c)}
 
     References

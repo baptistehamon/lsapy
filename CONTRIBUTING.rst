@@ -41,6 +41,21 @@ Below is the steps to follow for contributing to the project.
     
     You can now make changes.
 
+#. Before committing your changes, we ask you to format your code using `ruff`:
+
+    .. code-block:: shell
+
+        ruff check --fix src/lsapy/
+        ruff format --check src/lsapy/
+
+    This will automatically format your code and fix any linting issues.
+
+#. The last step before committing is to run the tests:
+
+    .. code-block:: shell
+
+        pytest --doctest-modules src/lsapy/ # to run doctests
+
 #. Commit your changes and push your branch.
 
     .. code-block:: shell
@@ -88,7 +103,7 @@ Packaging and Deployment
 
 .. note::
 
-    This section come largely from the `xclim Contributing guidelines`_. Small edits have been made to match the
+    This section comes largely from the `xclim Contributing guidelines`_. Small edits have been made to match the
     development stage of `LSAPy`.
 
 This section serves as a reminder for the maintainers on how to prepare the library for a tagged version and how to deploy packages to TestPyPI and PyPI.

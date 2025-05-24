@@ -1,3 +1,5 @@
+:html_theme.sidebar_secondary.remove:
+
 ==========
 User Guide
 ==========
@@ -7,7 +9,7 @@ and explaining how they operate together to perform Land Suitability Analysis (L
 
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    
    functions
    criteria

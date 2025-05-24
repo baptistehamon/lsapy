@@ -30,12 +30,12 @@ You can now perform your LSA:
     criteria = {
         'crit1': SuitabilityCriteria(
             name='criteria1',
-            indicator='indicator1',
+            indicator= indicator1, # xarray object
             suitability_function= SuitabilityFunction("relevant-function")
         ),
         'crit2': SuitabilityCriteria(
             name='criteria2',
-            indicator='indicator2',
+            indicator= indicator2, # xarray object
             suitability_function= SuitabilityFunction("relevant-function")
         )
         # add all necessary criteria

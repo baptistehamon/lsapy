@@ -110,7 +110,7 @@ html_theme_options = {
 
 # primary sidebar options
 html_sidebars = {
-    "*": [],
+    "*": ["search-button-field"],
     "api/*": ["search-button-field", "sidebar-nav-bs"],
     "community/*": ["search-button-field", "sidebar-nav-bs"],
     "getting_started/*": ["search-button-field", "sidebar-nav-bs"],

@@ -46,7 +46,7 @@ Below is the steps to follow for contributing to the project.
     .. code-block:: shell
 
         ruff check --fix src/lsapy/
-        ruff format --check src/lsapy/
+        ruff format src/lsapy/
 
     This will automatically format your code and fix any linting issues.
 

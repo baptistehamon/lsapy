@@ -1,4 +1,3 @@
-===========================================
 LSAPy: Land Suitability Analysis in Python
 ===========================================
 
@@ -64,7 +63,7 @@ Credits
 The development of `LSAPy` started as part of a PhD, funded by the the `Food Transition 2050`_  Joint Postgraduate School and hosted
 by the `University of Canterbury`_ in New Zealand.
 
-|FT2050| |UC-black|
+|FT2050| |UC-white| |UC-black|
 
 The Python package has been created following the `pyOpenSci Guidebook`_.
 
@@ -73,15 +72,22 @@ The Python package has been created following the `pyOpenSci Guidebook`_.
 .. _`pyOpenSci Guidebook`: https://www.pyopensci.org/python-package-guide/
 
 .. |FT2050| image:: /logos/FT2050-full_colour.png
+    :class: dark-light
     :target: https://www.foodtransitions2050.ac.nz/
     :width: 200px
-    :alt: Food Transition 2050 Logo 
+    :alt: Food Transition 2050 Logo
+
+.. |UC-white| image:: /logos/UCWhite.png
+    :class: only-dark
+    :target: https://www.canterbury.ac.nz/
+    :width: 100px
+    :alt: University of Canterbury Logo 
 
 .. |UC-black| image:: /logos/UCBlack.png
+    :class: only-light
     :target: https://www.canterbury.ac.nz/
     :width: 100px
     :alt: University of Canterbury Logo
-    
 
 .. |pypi| image:: https://img.shields.io/pypi/v/lsapy.svg
     :target: https://pypi.python.org/pypi/lsapy

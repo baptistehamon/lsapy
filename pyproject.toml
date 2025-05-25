@@ -47,7 +47,7 @@ dev = [
 ]
 docs = [
   # docs & examples 
-  "nbsphinx >=0.9.7",
+  "nbsphinx >=0.9.5",
   "pybtex >=0.24.0",
   "pydata-sphinx-theme >=0.16.0",
   "sphinx >=8.2.0",

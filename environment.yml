@@ -17,7 +17,7 @@ dependencies:
   - ipykernel
   - ipython >=9.0.0
   - matplotlib >=3.9.0
-  - nbsphinx >=0.9.7
+  - nbsphinx >=0.9.5
   - pybtex >=0.24.0
   - pydata-sphinx-theme >=0.16.0
   - pytest >=8.3.0

@@ -40,7 +40,7 @@ dev = [
   # dev tools
   "bump-my-version >=1.1.4",
   "flit >=3.11",
-  "ipykernel"
+  "ipykernel",
   "ipython >=9.0.0",
   "matplotlib >=3.9.0",
   "pytest >=8.3.0",

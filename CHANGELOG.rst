@@ -2,8 +2,8 @@
 Changelog
 =========
 
-v0.1.0 (unreleased)
--------------------
+v0.1.0-dev2 (2025-05-25)
+------------------------
 Contributor to this version: Baptiste Hamon (@baptistehamon).
 
 Internal changes

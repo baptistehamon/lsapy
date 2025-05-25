@@ -11,7 +11,7 @@ maintainers = [
   { name="Baptiste Hamon", email="baptiste.hamon@pg.canterbury.ac.nz" },
 ]
 readme = "README.rst"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 keywords = ["LSAPy", "Land Suitability Analysis", "Spatial Analysis", "GIS", "Geography"]
 license = {file = "LICENSE"}
 classifiers = [
@@ -25,7 +25,7 @@ classifiers = [
 ]
 dynamic = ["description", "version"]
 dependencies = [
-  "python >=3.10",
+  "python >=3.11",
   "geopandas >=0.14.0",
   "numpy >=1.26.0",
   "pandas >=2.2.0",

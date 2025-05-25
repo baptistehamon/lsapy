@@ -15,6 +15,69 @@ __all__ = ["LandSuitability"]
 
 
 class LandSuitability:
+    """
+    Data structure to define and compute land suitability.
+
+    Land suitability is defined by a set of suitability criteria that are combined to compute the
+    suitability and this class encompasses a wide range of functionalities to compute and analyze
+    land suitability.
+
+    Parameters
+    ----------
+    name : str
+        A name for the land suitability.
+    criteria : dict[str, SuitabilityCriteria]
+        A dictionary of suitability criteria where the key is the name of the criteria.
+    short_name : str | None, optional
+        A short name for the land suitability. The default is None.
+    long_name : str | None, optional
+        A long name for the land suitability. The default is None.
+    description : str | None, optional
+        A description for the land suitability. The default is None.
+
+    Examples
+    --------
+    Let first define the ``SuitabilityCriteria`` (we use `xclim` package for the GDD computation):
+
+    >>> from lsapy.utils import load_soil_data, load_climate_data
+    >>> from xclim.indicators.atmos import growing_degree_days  # doctest: +SKIP
+    <BLANKLINE>
+    >>> soil_data = load_soil_data()
+    >>> climate_data = load_climate_data()
+    >>> sc = {  # doctest: +SKIP
+    ...     "drainage_class": SuitabilityCriteria(
+    ...         name="drainage_class",
+    ...         long_name="Drainage Class Suitability",
+    ...         weight=3,
+    ...         category="soilTerrain",
+    ...         indicator=soil_data["DRC"],
+    ...         func=SuitabilityFunction(
+    ...             func_method="discrete", func_params={"rules": {"1": 0, "2": 0.1, "3": 0.5, "4": 0.9, "5": 1}}
+    ...         ),
+    ...     ),
+    ...     "growing_degree_days": SuitabilityCriteria(
+    ...         name="growing_degree_days",
+    ...         long_name="Growing Degree Days Suitability",
+    ...         weight=1,
+    ...         category="climate",
+    ...         indicator=growing_degree_days(climate_data["tas"], thresh="10 degC", freq="YS-JUL"),
+    ...         func=SuitabilityFunction(func_method="vetharaniam2022_eq5", func_params={"a": -1.41, "b": 801}),
+    ...     ),
+    ... }
+
+    Now we can define the ``LandSuitability`` :
+
+    >>> ls = LandSuitability(  # doctest: +SKIP
+    ...     name="lsa", short_name="land_suitability", long_name="Land Suitability Analysis", criteria=sc
+    ... )
+
+    The land suitability can now be computed:
+
+    >>> ls.compute_criteria_suitability(inplace=True)  # doctest: +SKIP
+    >>> ls.compute_category_suitability(method="weighted_mean", keep_criteria=True, inplace=True)  # doctest: +SKIP
+    >>> ls.compute_suitability(method="weighted_mean", by_category=True, keep_all=True, inplace=True)  # doctest: +SKIP
+    """
+
     def __init__(
         self,
         name: str,
@@ -35,6 +98,7 @@ class LandSuitability:
         self._get_params_by_category()
 
     def __repr__(self) -> str:
+        """Returns a string representation of the land suitability."""
         if hasattr(self, "data"):
             return self.data.__repr__()
         else:
@@ -49,6 +113,7 @@ class LandSuitability:
 
     @property
     def attrs(self):
+        """Dictionary of attributes of the land suitability."""
         return {
             k: v
             for k, v in {
@@ -61,10 +126,23 @@ class LandSuitability:
             if v is not None
         }
 
-    # def __getitem__(self, key: str) -> SuitabilityCriteria:
-    #     return self.criteria[key]
-
     def compute_criteria_suitability(self, inplace: bool | None = False) -> None | xr.Dataset:
+        """
+        Compute the suitability of each criteria.
+
+        The suitability of each criteria is computed individually. Criteria that have already been computed
+        are skipped.
+
+        Parameters
+        ----------
+        inplace : bool | None, optional
+            If True, compute the suitability in place. The default is False.
+
+        Returns
+        -------
+        None | xr.Dataset
+            If inplace is True, return None. Otherwise, return the computed suitability as a Dataset.
+        """
         sc_list = []
         for _, sc in self.criteria.items():
             print(f"Computing {sc.name}...")
@@ -88,6 +166,30 @@ class LandSuitability:
         inplace: bool | None = False,
         limit_var: bool | None = False,
     ) -> xr.Dataset:
+        """
+        Compute suitability by category.
+
+        The suitability of each category is computed by aggregating the suitability of the criteria
+        that belong to the category. The method support several aggregation methods.
+
+        Parameters
+        ----------
+        method : str
+            The method to aggregate the criteria suitability. Options are 'mean' (default), 'weighted_mean',
+            'geomean', 'weighted_geomean', and 'limit_factor'.
+        keep_criteria : bool | None, optional
+            If True, keep the criteria in the output Dataset. The default is False.
+        inplace : bool | None, optional
+            If True, compute the suitability in place. The default is False.
+        limit_var : bool | None, optional
+            If method is 'limit_factor', whether to return the variable that is the limiting factor.
+            The default is False.
+
+        Returns
+        -------
+        xr.Dataset
+            The computed suitability by category.
+        """
         if not hasattr(self, "data"):
             ds = self.compute_criteria_suitability()
         else:
@@ -133,6 +235,34 @@ class LandSuitability:
         inplace: bool | None = False,
         limit_var: bool | None = False,
     ) -> xr.Dataset:
+        """
+        Compute the land suitability.
+
+        The land suitability is computed by aggregating the suitability of the criteria. The method support
+        several aggregation methods.
+
+        Parameters
+        ----------
+        method : str | dict[str, str], optional
+            The method to aggregate the criteria suitability. Options are 'mean' (default), 'weighted_mean',
+            'geomean', 'weighted_geomean', and 'limit_factor'. If a dictionary is passed, the key 'category' is
+            used to aggregate the criteria suitability and the key 'overall' is used to aggregate the category
+            suitability.
+        by_category : bool | None, optional
+            If True, compute the suitability by category. The default is False.
+        keep_all : bool | None, optional
+            If True, keep all the computed data. The default is False.
+        inplace : bool | None, optional
+            If True, compute the suitability in place. The default is False.
+        limit_var : bool | None, optional
+            If method is 'limit_factor', whether to return the variable that is the limiting factor.
+            The default is False.
+
+        Returns
+        -------
+        xr.Dataset
+            Computed land suitability.
+        """
         if isinstance(method, str):
             cat_method, suit_method = method, method
         elif isinstance(method, dict):
@@ -205,6 +335,38 @@ class LandSuitability:
         invert: bool = False,
         **kwargs,
     ) -> xr.DataArray | xr.Dataset:
+        """
+        Mask the suitability data.
+
+        Returns suitability data where the mask is True.
+        xr.DataArray or gpd.GeoDataFrame are supported as mask.
+
+        Parameters
+        ----------
+        mask : xr.DataArray | gpd.GeoDataFrame
+            The mask to apply to the suitability data. If GeoDataFrame, data falls within the geometries are kept.
+        inplace : bool | None, optional
+            If True, apply the mask in place. The default is False.
+        spatial_dims : tuple[str, str] | None, optional
+            If the mask is a GeoDataFrame, the spatial dimensions of the data. The default is None.
+        crs : str | None, optional
+            If the mask is a GeoDataFrame, the CRS of the data. The default is None.
+        invert : bool, optional
+            If True, invert the mask. The default is False.
+        **kwargs : dict
+            Additional keyword arguments to pass to `rio.clip` if the mask is a GeoDataFrame or to `xr.where`
+            if the mask is a DataArray.
+
+        Returns
+        -------
+        xr.DataArray | xr.Dataset
+            Masked suitability data.
+
+        Raises
+        ------
+        ValueError
+            If suitability has not been computed.
+        """
         if not hasattr(self, "data"):
             raise ValueError("Suitability must be computed first.")
 
@@ -225,6 +387,49 @@ class LandSuitability:
         dropna: bool | None = False,
         **kwargs,
     ) -> pd.DataFrame:
+        """
+        Generate a summary statistics of the data.
+
+        Returns a pandas DataFrame of data according to the given parameters.
+        The statistics includes count, mean, std, min, 25%, 50%, 75%, and max.
+        Bins can be provided to further group the data into intervals.
+
+        Parameters
+        ----------
+        on_vars : list, optional
+            Variables on which the statistics are calculated. If None (default), all variables are kept.
+        on_dims : list, optional
+            Dimensions on which the statistics are calculated. If None (default), all dimensions are kept.
+            Spatial dimensions (i.e., `lon` or `x` and `lat` or `y`) are removed by default.
+        on_dim_values : sequence, optional
+            Values of dimensions to be kept in the summary. If None (default), all values are kept.
+        bins : list or np.ndarray, optional
+            Bins defining data intervals. If None (default), no binning is performed.
+        bins_labels : list, optional
+            Labels for the bins. If None (default), bins values are used as labels.
+            The length of the list must be equal to the number of bins. Ignored if `bins` is None.
+        all_bins : bool, optional
+            If True, a additional bin corresponding to the bounds of `bins` is added to the summary.Default is False.
+            Ignored if `bins` is None.
+        cell_area : tuple of float or int and str, optional
+            Add a column to the summary with the given associated area calculated based on the count statistic
+            variable. The tuple must contain the area value and the unit of the area
+        dropna : bool, optional
+            If True, dimensions with NaN values are removed. Default is False.
+        **kwargs : dict, optional
+            Additional keyword arguments passed to `pd.cut` used to bin the data.
+
+        Returns
+        -------
+        pd.DataFrame
+            A DataFrame with the statistics for the defined dimensions and variables, including:
+            count, mean, std, min, 25%, 50%, 75%, and max.
+
+        Raises
+        ------
+        ValueError
+            If suitability has not been computed.
+        """
         if not hasattr(self, "data"):
             raise ValueError("Suitability must be computed first.")
 
@@ -237,7 +442,8 @@ class LandSuitability:
             bins_labels=bins_labels,
             all_bins=all_bins,
             cell_area=cell_area,
-            dropna=dropna**kwargs,
+            dropna=dropna,
+            **kwargs,
         )
 
     def spatial_statistics(
@@ -253,6 +459,50 @@ class LandSuitability:
         mask_kwargs: dict = None,
         stats_kwargs: dict = None,
     ) -> pd.DataFrame:
+        """
+        Generate a spatial summary statistics of the data.
+
+        Returns a pandas DataFrame of data consireding the given areas based on `statistic_summary` function.
+        The summary includes count, mean, std, min, 25%, 50%, 75%, and max.
+        Bins can be provided to further group the data into intervals.
+
+        Parameters
+        ----------
+        areas : gpd.GeoDataFrame
+            Areas to be used as spatial masks.
+        name : str, optional
+            Name of the area column in the output DataFrame. Default is 'area'.
+        on_vars : list, optional
+            Variables on which the statistics are calculated. If None (default), all variables are kept.
+        on_dims : list, optional
+            Dimensions on which the statistics are calculated. If None (default), all dimensions are kept.
+            Spatial dimensions (i.e., `lon` or `x` and `lat` or `y`) are removed by default.
+        on_dim_values : sequence, optional
+            Values of dimensions to be kept in the summary. If None (default), all values are kept.
+        bins : list or np.ndarray, optional
+            Bins defining data intervals. If None (default), no binning is performed.
+        bins_labels : list, optional
+            Labels for the bins. If None (default), bins values are used as labels.
+            The length of the list must be equal to the number of bins. Ignored if `bins` is None.
+        all_bins : bool, optional
+            If True, a additional bin corresponding to the bounds of `bins` is added to the summary. Default is False.
+            Ignored if `bins` is None.
+        cell_area : tuple of float or int and str, optional
+            Add a column to the summary with the given associated area calculated based on the count statistic
+            variable. The tuple must contain the area value and the unit of the area
+        dropna : bool, optional
+            If True, dimensions with NaN values are removed. Default is False.
+        mask_kwargs : dict, optional
+            Additional keyword arguments passed to `regionmask.from_geopandas`.
+        stats_kwargs : dict, optional
+            Additional keyword arguments passed to `statistics_summary`.
+
+        Returns
+        -------
+        pd.DataFrame
+            A DataFrame with the statistics for the defined areas, dimensions and variables, including:
+            count, mean, std, min, 25%, 50%, 75%, and max.
+        """
         if not hasattr(self, "data"):
             raise ValueError("Suitability must be computed first.")
 
@@ -291,12 +541,8 @@ def _mask_data(
         raise ValueError("mask must be a GeoDataFrame or DataArray")
 
 
-####################################################################################################
-# VARIABLES AGGREGATION FUNCTIONS
-####################################################################################################
-
-
 def vars_weighted_mean(ds: xr.Dataset, vars=None, weights=None) -> xr.DataArray:
+    """Compute the weighted mean of the variables."""
     if vars is None:
         vars = list(ds.data_vars)
     if weights is None:
@@ -308,14 +554,14 @@ def vars_weighted_mean(ds: xr.Dataset, vars=None, weights=None) -> xr.DataArray:
         {
             "method": "Weighted Mean",
             "descritpion": (
-                "Weighted Mean of variables: "
-                f"{', '.join([f'{v} ({w})' for v, w in zip(vars, weights, strict=False)])}."
-            )
+                f"Weighted Mean of variables: {', '.join([f'{v} ({w})' for v, w in zip(vars, weights, strict=False)])}."
+            ),
         }
     ).rename("weighted_mean")
 
 
 def vars_mean(ds: xr.Dataset, vars=None) -> xr.DataArray:
+    """Compute the mean of the variables."""
     if vars is None:
         vars = list(ds.data_vars)
     da = vars_weighted_mean(ds, vars=vars)
@@ -323,6 +569,7 @@ def vars_mean(ds: xr.Dataset, vars=None) -> xr.DataArray:
 
 
 def vars_weighted_geomean(ds: xr.Dataset, vars=None, weights=None) -> xr.DataArray:
+    """Compute the weighted geometric mean of the variables."""
     if vars is None:
         vars = list(ds.data_vars)
     if weights is None:
@@ -336,12 +583,13 @@ def vars_weighted_geomean(ds: xr.Dataset, vars=None, weights=None) -> xr.DataArr
             "description": (
                 "Weighted Geometric Mean of variables: "
                 f"{', '.join([f'{v} ({w})' for v, w in zip(vars, weights, strict=False)])}."
-            )
+            ),
         }
     ).rename("weighted_geometric_mean")
 
 
 def vars_geomean(ds: xr.Dataset, vars=None) -> xr.DataArray:
+    """Compute the geometric mean of the variables."""
     if vars is None:
         vars = list(ds.data_vars)
     da = vars_weighted_geomean(ds, vars=vars)
@@ -351,6 +599,7 @@ def vars_geomean(ds: xr.Dataset, vars=None) -> xr.DataArray:
 
 
 def limiting_factor(ds: xr.Dataset, vars=None, limiting_var: bool | None = True) -> xr.DataArray | xr.Dataset:
+    """Compute the limiting factor among the variables."""
     if vars is None:
         vars = list(ds.data_vars)
 

@@ -6,7 +6,21 @@ import xarray as xr
 
 
 def _load_data(name: str) -> xr.Dataset:
-    """Load a sample dataset for testing or example purposes."""
+    """
+    A sample dataset.
+
+    Returns a sample dataset for testing and example purposes.
+
+    Parameters
+    ----------
+    name : {soil, climate}
+        The name of the dataset to load.
+
+    Returns
+    -------
+    xr.Dataset
+        The sample dataset.
+    """
     if name.lower() not in ["soil", "climate"]:
         raise ValueError(f"Invalid data name: {name}. Must be one of 'soil' or 'climate'.")
 
@@ -15,10 +29,28 @@ def _load_data(name: str) -> xr.Dataset:
 
 
 def load_soil_data() -> xr.Dataset:
-    """Load soil dataset for testing or example purposes."""
+    """
+    A soil dataset.
+
+    Returns a soil dataset provided for testing and example purposes.
+
+    Returns
+    -------
+    xr.Dataset
+        The sample soil dataset.
+    """
     return _load_data("soil")
 
 
 def load_climate_data() -> xr.Dataset:
-    """Load climate dataset for testing or example purposes."""
+    """
+    A climate dataset.
+
+    Returns a climate dataset provided for testing and example purposes.
+
+    Returns
+    -------
+    xr.Dataset
+        The sample climate dataset.
+    """
     return _load_data("climate")

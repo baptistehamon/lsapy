@@ -10,7 +10,7 @@ authors = [
 maintainers = [
   { name="Baptiste Hamon", email="baptiste.hamon@pg.canterbury.ac.nz" },
 ]
-readme = "README.md"
+readme = "README.rst"
 requires-python = ">=3.10"
 keywords = ["LSAPy", "Land Suitability Analysis", "Spatial Analysis", "GIS", "Geography"]
 license = {file = "LICENSE"}
@@ -24,6 +24,39 @@ classifiers = [
     "Topic :: Scientific/Engineering :: GIS",
 ]
 dynamic = ["description", "version"]
+dependencies = [
+  "geopandas >=0.14.0",
+  "numpy >=1.26.0",
+  "pandas >=2.2.0",
+  "regionmask >=0.13.0",
+  "scipy >=1.15.0",
+  "Shapely==2.0.0",
+  "xarray >=2024.10.0"
+]
+
+[project.optional-dependencies]
+dev = [
+  # dev tools
+  "bump-my-version >=1.1.4",
+  "flit >=3.11",
+  "ipykernel",
+  "ipython >=9.0.0",
+  "matplotlib >=3.9.0",
+  "pytest >=8.3.0",
+  "ruff >=0.10.0"
+]
+docs = [
+  # docs & examples 
+  "nbsphinx >=0.9.5",
+  "pybtex >=0.24.0",
+  "pydata-sphinx-theme >=0.16.0",
+  "sphinx >=8.2.0",
+  "sphinx-autodoc-typehints >=3.2.0",
+  "sphinx-copybutton",
+  "sphinx-mdinclude",
+  "sphinxcontrib-bibtex >=2.6.0"
+]
+all = ["lsapy[dev]", "lsapy[docs]"]
 
 [project.urls]
 Homepage = "https://github.com/baptistehamon/lsapy"

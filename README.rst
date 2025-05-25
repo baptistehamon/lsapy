@@ -49,13 +49,18 @@ You can now perform your LSA:
     # run your analysis
     ls.compute_suitability(params)
 
-More detailed tutorials and examples can be found in the :doc:`notebooks/index`.
+More detailed tutorials and examples can be found in the `User Guide`_.
+
+.. _`User Guide`: https://lsapy.readthedocs.io/en/latest/notebooks/index.html
+
 
 Contributing
 ------------
 
 `LSAPy` is an open-source project and we welcome contributions from the community. If you are interested in contributing, please
-refer to the :doc:`Contribution </community/contributing>` section for guidelines on how to get started helping us improve the library.
+refer to the `Contribution`_ section for guidelines on how to get started helping us improve the library.
+
+.. _`Contribution`: https://lsapy.readthedocs.io/en/latest/community/contributing.html
 
 Credits
 -------
@@ -71,19 +76,19 @@ The Python package has been created following the `pyOpenSci Guidebook`_.
 .. _`University of Canterbury`: https://www.canterbury.ac.nz/
 .. _`pyOpenSci Guidebook`: https://www.pyopensci.org/python-package-guide/
 
-.. |FT2050| image:: /logos/FT2050-full_colour.png
+.. |FT2050| image:: https://raw.githubusercontent.com/baptistehamon/lsapy/main/docs/logos/FT2050-full_colour.png
     :class: dark-light
     :target: https://www.foodtransitions2050.ac.nz/
     :width: 200px
     :alt: Food Transition 2050 Logo
 
-.. |UC-white| image:: /logos/UCWhite.png
+.. |UC-white| image:: https://raw.githubusercontent.com/baptistehamon/lsapy/main/docs/logos/UCWhite.png
     :class: only-dark
     :target: https://www.canterbury.ac.nz/
     :width: 100px
     :alt: University of Canterbury Logo 
 
-.. |UC-black| image:: /logos/UCBlack.png
+.. |UC-black| image:: https://raw.githubusercontent.com/baptistehamon/lsapy/main/docs/logos/UCBlack.png
     :class: only-light
     :target: https://www.canterbury.ac.nz/
     :width: 100px

@@ -18,7 +18,7 @@ In the future, `LSAPy` will be available on `conda-forge`_.
 
 .. warning::
 
-   The package is still in development and only pre-realease versions have been published,
+   The package is still in development and only pre-release versions have been published,
    meaning the package should not be considered stable yet. Breaking changes are likely to
    occur before the first official release.
 

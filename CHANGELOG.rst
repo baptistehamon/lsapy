@@ -10,6 +10,7 @@ Internal changes
 ^^^^^^^^^^^^^^^^
 * Templates for requesting new features, asking question and submitting PR have been added (issue `#11 <https://github.com/baptistehamon/lsapy/issues/11>`_, PR `#12 <https://github.com/baptistehamon/lsapy/pull/12>`_).
 * The README has been updated to make links permanent and to add docs badge (PR `#13 <https://github.com/baptistehamon/lsapy/pull/13>`_).
+* A configuration file for Zenodo integration has been added to the repository (PR `#14 <https://github.com/baptistehamon/lsapy/pull/14>`_).
 
 v0.1.0-dev2 (2025-05-25)
 ------------------------

@@ -1,0 +1,32 @@
+name: Questions and/or support
+description: For asking questions or help
+labels: [ "question" ]
+
+body:
+  - type: checkboxes
+    id: check-answer
+    attributes:
+      label: Addressed Question?
+      description: |
+        Before submitting a question, please confirm that you haven't been able to find an answer in the existing
+        [documentation](https://lsapy.readthedocs.io/en/latest/index.html) and that no similar question has already
+        been reported as an [issue](https://github.com/baptistehamon/lsapy/issues) (you can use the "question" label
+        to filer issues).
+      options:
+        - label: I confirm that I haven't found an answer in LSAPy's documentation.
+          required: true
+        - label: I confirm that I haven't found a similar question in open/closed issues.
+          required: true
+  - type: textarea
+    id: question
+    attributes:
+      label: How can we help you?
+      description: What is your question? Please be as specific as possible to help us assist you effectively.
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow LSAPy's [Code of Conduct](https://lsapy.readthedocs.io/en/latest/community/code_of_conduct.html).
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

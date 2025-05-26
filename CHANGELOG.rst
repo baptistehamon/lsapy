@@ -2,6 +2,15 @@
 Changelog
 =========
 
+v0.1.0 (unreleased)
+-------------------
+Contributor to this version: Baptiste Hamon (@baptistehamon).
+
+Internal changes
+^^^^^^^^^^^^^^^^
+* Templates for requesting new features, asking question and submitting PR have been added (issue `#11 <https://github.com/baptistehamon/lsapy/issues/11>`_, PR `#12 <https://github.com/baptistehamon/lsapy/pull/12>`_).
+  
+
 v0.1.0-dev2 (2025-05-25)
 ------------------------
 Contributor to this version: Baptiste Hamon (@baptistehamon).

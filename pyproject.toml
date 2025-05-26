@@ -92,7 +92,7 @@ values = [
 [tool.flit.sdist]
 include = [
   "LICENSE",
-  "README.md",
+  "README.rst",
   "src/lsapy/*.py",
 ]
 exclude = [

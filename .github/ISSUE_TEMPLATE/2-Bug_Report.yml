@@ -1,0 +1,54 @@
+name: Bug report
+description: Help us improve LSAPy
+labels: [ "bug" ]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: textarea
+    id: setup-information
+    attributes:
+      label: Setup Information
+      description: |
+        What software versions are you running? Example:
+        - LSAPy version: 0.1.0-dev2
+        - Python version: 4.2
+      value: |
+        - LSAPy version:
+        - Python version:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe what you were trying to get done. Tell us what happened, what went wrong, and what you expected to happen.
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps To Reproduce
+      description: Paste the command(s) you ran and the output. If there was a crash, please include the traceback below.
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Add any other context about the problem here.
+  - type: checkboxes
+    id: submit-pr
+    attributes:
+      label: Contribution
+      description: Do you intend to submit a fix for this bug?
+      options:
+        - label: I would be willing/able to open a Pull Request to address this bug.
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow LSAPy's [Code of Conduct](https://lsapy.readthedocs.io/en/latest/community/code_of_conduct.html).
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true
+  - type: markdown
+    attributes:
+      value: |
+        *This template come from [xclim](https://github.com/Ouranosinc/xclim) project.*

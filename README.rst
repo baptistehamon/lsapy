@@ -85,7 +85,7 @@ The Python package has been created following the `pyOpenSci Guidebook`_.
     :class: only-dark
     :target: https://www.canterbury.ac.nz/
     :width: 100px
-    :alt: University of Canterbury Logo 
+    :alt: University of Canterbury Logo
 
 .. |UC-black| image:: https://raw.githubusercontent.com/baptistehamon/lsapy/main/docs/logos/UCBlack.png
     :class: only-light

@@ -19,14 +19,14 @@ making LSA's workflow straight forward and easy to understand.
 .. toctree::
    :maxdepth: 2
    :caption: Table of Contents:
-   
+
    About <readme>
    Getting Started <getting_started/index>
    User Guide <notebooks/index>
    API Reference <api/index>
    Community <community/index>
 
-.. toctree:: 
+.. toctree::
    :titlesonly:
 
    changelog

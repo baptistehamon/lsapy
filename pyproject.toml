@@ -38,15 +38,17 @@ dependencies = [
 dev = [
   # dev tools
   "bump-my-version >=1.1.4",
+  "codespell >=2.4.1",
   "flit >=3.11",
   "ipykernel",
   "ipython >=9.0.0",
   "matplotlib >=3.9.0",
+  "pre-commit >=4.0.0",
   "pytest >=8.3.0",
   "ruff >=0.10.0"
 ]
 docs = [
-  # docs & examples 
+  # docs & examples
   "nbsphinx >=0.9.5",
   "pybtex >=0.24.0",
   "pydata-sphinx-theme >=0.16.0",
@@ -88,6 +90,9 @@ values = [
   "dev",
   "release"
 ]
+
+[tool.codespell]
+skip = "docs/notebooks/*.ipynb, docs/references.bib"
 
 [tool.flit.sdist]
 include = [

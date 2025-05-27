@@ -553,7 +553,7 @@ def vars_weighted_mean(ds: xr.Dataset, vars=None, weights=None) -> xr.DataArray:
     return da.assign_attrs(
         {
             "method": "Weighted Mean",
-            "descritpion": (
+            "description": (
                 f"Weighted Mean of variables: {', '.join([f'{v} ({w})' for v, w in zip(vars, weights, strict=False)])}."
             ),
         }

@@ -10,8 +10,7 @@ body:
       description: |
         Before submitting a question, please confirm that you haven't been able to find an answer in the existing
         [documentation](https://lsapy.readthedocs.io/en/latest/index.html) and that no similar question has already
-        been reported as an [issue](https://github.com/baptistehamon/lsapy/issues) (you can use the "question" label
-        to filer issues).
+        been reported as an [issue](https://github.com/baptistehamon/lsapy/labels/question).
       options:
         - label: I confirm that I haven't found an answer in LSAPy's documentation.
           required: true

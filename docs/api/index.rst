@@ -15,7 +15,7 @@ This page provides an overview of all implemented public objects, functions and 
 Constructors
 ------------
 
-.. autosummary:: 
+.. autosummary::
    :toctree: generated
    :nosignatures:
 
@@ -26,7 +26,7 @@ Constructors
 Membership Functions
 --------------------
 
-.. autosummary:: 
+.. autosummary::
    :toctree: generated
    :nosignatures:
 
@@ -36,4 +36,3 @@ Membership Functions
    functions.vetharaniam2022_eq5
    functions.vetharaniam2024_eq8
    functions.vetharaniam2024_eq10
-

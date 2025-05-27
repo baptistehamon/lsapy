@@ -27,4 +27,3 @@ dependencies:
   - sphinx-copybutton
   - sphinx-mdinclude
   - sphinxcontrib-bibtex >=2.6.0
-

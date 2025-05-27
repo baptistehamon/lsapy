@@ -1,21 +1,21 @@
-{   
-    "title": "LSAPy: Land Suitability Analysis (LSA) in Python",
-    "creators": [
-        {
-            "name": "Hamon, Baptiste",
-            "affiliation": "University of Canterbury, Christchurch, New Zealand",
-            "orcid": "0009-0007-4530-9772"
-        }
-    ],
-    "keywords": [
-        "lsapy",
-        "land suitability analysis",
-        "geospatial analysis",
-        "gis",
-        "geography"
-    ],
-    "license": "mit",
-    "language": "eng",
-    "upload_type": "software",
-    "access_rights": "open"
+{
+  "title": "LSAPy: Land Suitability Analysis (LSA) in Python",
+  "creators": [
+    {
+      "name": "Hamon, Baptiste",
+      "affiliation": "University of Canterbury, Christchurch, New Zealand",
+      "orcid": "0009-0007-4530-9772"
+    }
+  ],
+  "keywords": [
+    "lsapy",
+    "land suitability analysis",
+    "geospatial analysis",
+    "gis",
+    "geography"
+  ],
+  "license": "mit",
+  "language": "eng",
+  "upload_type": "software",
+  "access_rights": "open"
 }

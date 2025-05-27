@@ -38,7 +38,7 @@ Below is the steps to follow for contributing to the project.
     .. code-block:: shell
 
         git checkout -b name-of-your-bugfix-or-feature
-    
+
     You can now make changes.
 
 #. Before committing your changes, we ask you to format your code using `ruff`:
@@ -59,18 +59,18 @@ Below is the steps to follow for contributing to the project.
 #. Commit your changes and push your branch.
 
     .. code-block:: shell
-        
+
         git add *
         git commit -m "Short description of your changes"
         git push origin name-of-your-bugfix-or-feature
 
 #. Create a pull request on GitHub.
-  
+
     Before creating a pull request, we first ask you to open an issue in the `GitHub repository`_. Describe the bug you would
     like to fix or the feature you would like to add. Link the issue to your pull request.
 
 .. note::
-    
+
     **Longer Term Commitment ?**
 
     While the project is still in its early stages, a bigger maintainers team may be required in the future if the project
@@ -92,7 +92,7 @@ The project follows `Semantic Versioning`_ scheme:
     major.minor.patch-releaseX
       |     |     |      |   |
       |     |     |      |   +--- Build number (e.g., 1, 2, 3...)
-      |     |     |      +------- Degree of production (e.g., dev, alpha, beta) 
+      |     |     |      +------- Degree of production (e.g., dev, alpha, beta)
       |     |     +-------------- Patch release (e.g., bug fixes)
       |     +-------------------- Minor release (e.g., new features)
       +-------------------------- Major release (e.g., breaking changes)

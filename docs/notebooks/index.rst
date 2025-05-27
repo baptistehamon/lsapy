@@ -10,7 +10,7 @@ and explaining how they operate together to perform Land Suitability Analysis (L
 
 .. toctree::
    :maxdepth: 2
-   
+
    functions
    criteria
    lsa

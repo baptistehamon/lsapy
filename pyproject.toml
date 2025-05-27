@@ -89,6 +89,9 @@ values = [
   "release"
 ]
 
+[tool.codespell]
+skip = "docs/notebooks/*.ipynb, docs/references.bib"
+
 [tool.flit.sdist]
 include = [
   "LICENSE",

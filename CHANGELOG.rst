@@ -30,7 +30,7 @@ Internal changes
     * The documentation building using `Sphinx <https://www.sphinx-doc.org/en/master/>`_ has been setup:
         * The documentation uses the `PyData theme <https://pydata-sphinx-theme.readthedocs.io/en/stable/>`_.
         * A User-facing documentation is now available and has been published on `Read the Docs <https://readthedocs.org/>`_.
-    * The project dependencies have been updated and made consistent accross *pyproject.toml* and *environments.yml* files.
+    * The project dependencies have been updated and made consistent across *pyproject.toml* and *environments.yml* files.
 
 v0.1.0-dev1 (2025-05-16)
 ------------------------

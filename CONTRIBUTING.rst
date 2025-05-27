@@ -41,12 +41,21 @@ Below is the steps to follow for contributing to the project.
 
     You can now make changes.
 
-#. Before committing your changes, we ask you to format your code using `ruff`:
+#. Before committing your changes, we ask that you install ``pre-commit`` in your development environment and run git hooks to ensure that your code adheres to the project's coding standards:
 
     .. code-block:: shell
 
-        ruff check --fix src/lsapy/
-        ruff format src/lsapy/
+        # To install the necessary pre-commit hooks:
+        pre-commit install
+        # To run pre-commit hooks manually:
+        pre-commit run --all-files
+
+    Instead of ``pre-commit``, you can check individual hooks manually with `ruff`:
+
+        .. code-block:: shell
+
+            ruff check --fix --show-fixes src/lsapy/
+            ruff format src/lsapy/
 
     This will automatically format your code and fix any linting issues.
 

@@ -130,10 +130,6 @@ class SuitabilityFunction:
         x : any
             Input values to plot.
 
-        Returns
-        -------
-        None
-
         Examples
         --------
         >>> import numpy as np  # doctest: +SKIP
@@ -145,7 +141,15 @@ class SuitabilityFunction:
 
     @property
     def attrs(self):
-        """Dictionary of the suitability function attributes."""
+        """
+        Dictionary of the suitability function attributes.
+
+        Returns
+        -------
+        dict
+            Dictionary containing the function method and parameters. If both are undefined, an empty dictionary
+            is returned.
+        """
         if self.func_method is None and self.func_params is None:
             return {}
         return {
@@ -173,7 +177,7 @@ class MembershipSuitFunction(SuitabilityFunction):
     See Also
     --------
     SuitabilityFunction : Suitability Function.
-    DiscreteSuitFunction : Discrete Suitability Function
+    DiscreteSuitFunction : Discrete Suitability Function.
 
     Examples
     --------
@@ -214,7 +218,8 @@ class MembershipSuitFunction(SuitabilityFunction):
 
         Returns
         -------
-        None
+        tuple
+            A tuple containing the best fitting function and its parameters.
 
         Examples
         --------
@@ -382,14 +387,14 @@ def equation(type: str):
         The decorator function.
     """
 
-    def decorator(func: callable):
+    def _decorator(func: callable):
         if type not in equations:
             equations[type] = {}
 
         equations[type].update({func.__name__: func})
         return func
 
-    return decorator
+    return _decorator
 
 
 @equation("discrete")
@@ -552,7 +557,7 @@ def vetharaniam2024_eq8(x, a, b, c):
 
     Parameters
     ----------
-    x :
+    x : any
         Input values to map.
     a : float | int
         Steepness of the function parameter.

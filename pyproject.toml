@@ -106,6 +106,20 @@ exclude = [
   ".*"
 ]
 
+[tool.numpydoc_validation]
+checks = [
+  "all",
+  "ES01", # No extended summary found
+  "EX01", # No examples section found
+  "SA01", # No see also section found
+]
+exclude = [
+  # don't report on objects that match any of these regex
+  '\.__repr__$',
+  # any object starting with an underscore is a private object
+  '\._\w+'
+]
+
 [tool.ruff]
 line-length = 120
 output-format = "grouped"

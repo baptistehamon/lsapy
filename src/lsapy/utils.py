@@ -1,4 +1,4 @@
-"""Miscellaneous Utilities"""
+"""Miscellaneous Utilities."""
 
 from pathlib import Path
 

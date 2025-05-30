@@ -1,4 +1,4 @@
-"""Statistics Module"""
+"""Statistics Module."""
 
 from typing import Any
 
@@ -49,7 +49,7 @@ def statistics_summary(
         Ignored if `bins` is None.
     cell_area : tuple of float or int and str, optional
         Add a column to the summary with the given associated area calculated based on the count statistic
-        variable. The tuple must contain the area value and the unit of the area
+        variable. The tuple must contain the area value and the unit of the area.
     dropna : bool, optional
         If True, dimensions with NaN values are removed. Default is False.
     **kwargs : dict, optional
@@ -170,7 +170,7 @@ def spatial_statistics_summary(
         Ignored if `bins` is None.
     cell_area : tuple of float or int and str, optional
         Add a column to the summary with the given associated area calculated based on the count statistic
-        variable. The tuple must contain the area value and the unit of the area
+        variable. The tuple must contain the area value and the unit of the area.
     dropna : bool, optional
         If True, dimensions with NaN values are removed. Default is False.
     mask_kwargs : dict, optional

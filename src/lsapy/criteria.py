@@ -31,7 +31,7 @@ class SuitabilityCriteria:
     long_name : str | None, optional
         A long name for the criteria. The default is None.
     description : str | None, optional
-        A description for the criteria. The default is None. # TODO: check default behavior
+        A description for the criteria. The default is None. # TODO: check default behavior.
 
     Examples
     --------
@@ -85,7 +85,7 @@ class SuitabilityCriteria:
         self._from_indicator = _get_indicator_description(indicator)
 
     def __repr__(self) -> str:
-        """Returns a string representation for a particular criteria."""
+        """Return a string representation for a particular criteria."""
         attrs = []
         attrs.append(f"name='{self.name}'")
         attrs.append(f"indicator={self.indicator.name}")
@@ -124,7 +124,14 @@ class SuitabilityCriteria:
 
     @property
     def attrs(self) -> dict:
-        """Dictionary of the criteria attributes."""
+        """
+        Dictionary of the criteria attributes.
+
+        Returns
+        -------
+        dict
+            Dictionary with the criteria attributes.
+        """
         return {
             k: v
             for k, v in {

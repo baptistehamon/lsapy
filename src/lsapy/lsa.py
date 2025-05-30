@@ -98,7 +98,7 @@ class LandSuitability:
         self._get_params_by_category()
 
     def __repr__(self) -> str:
-        """Returns a string representation of the land suitability."""
+        """Return a string representation of the land suitability."""
         if hasattr(self, "data"):
             return self.data.__repr__()
         else:
@@ -113,7 +113,15 @@ class LandSuitability:
 
     @property
     def attrs(self):
-        """Dictionary of attributes of the land suitability."""
+        """
+        Dictionary of attributes of the land suitability.
+
+        Returns
+        -------
+        dict
+            A dictionary of attributes of the land suitability, including name, criteria, short_name,
+            long_name, and description.
+        """
         return {
             k: v
             for k, v in {
@@ -413,7 +421,7 @@ class LandSuitability:
             Ignored if `bins` is None.
         cell_area : tuple of float or int and str, optional
             Add a column to the summary with the given associated area calculated based on the count statistic
-            variable. The tuple must contain the area value and the unit of the area
+            variable. The tuple must contain the area value and the unit of the area.
         dropna : bool, optional
             If True, dimensions with NaN values are removed. Default is False.
         **kwargs : dict, optional
@@ -454,8 +462,10 @@ class LandSuitability:
         on_dims: list | None = None,
         on_dim_values: dict[str, Any] | None = None,
         bins: np.ndarray | None = None,
+        bins_labels: list | None = None,
         all_bins: bool | None = False,
         cell_area: tuple[float | str, str] | None = None,
+        dropna: bool | None = False,
         mask_kwargs: dict = None,
         stats_kwargs: dict = None,
     ) -> pd.DataFrame:
@@ -489,7 +499,7 @@ class LandSuitability:
             Ignored if `bins` is None.
         cell_area : tuple of float or int and str, optional
             Add a column to the summary with the given associated area calculated based on the count statistic
-            variable. The tuple must contain the area value and the unit of the area
+            variable. The tuple must contain the area value and the unit of the area.
         dropna : bool, optional
             If True, dimensions with NaN values are removed. Default is False.
         mask_kwargs : dict, optional
@@ -514,8 +524,10 @@ class LandSuitability:
             on_dims=on_dims,
             on_dim_values=on_dim_values,
             bins=bins,
+            bins_labels=bins_labels,
             all_bins=all_bins,
             cell_area=cell_area,
+            dropna=dropna,
             mask_kwargs=mask_kwargs,
             stats_kwargs=stats_kwargs,
         )
@@ -542,7 +554,25 @@ def _mask_data(
 
 
 def vars_weighted_mean(ds: xr.Dataset, vars=None, weights=None) -> xr.DataArray:
-    """Compute the weighted mean of the variables."""
+    """
+    Compute the weighted mean of the variables.
+
+    Parameters
+    ----------
+    ds : xr.Dataset
+        The dataset containing the variables to compute the weighted mean.
+    vars : list[str] | None, optional
+        List of variable names to include in the weighted mean.
+        If None, all data variables are used.
+    weights : list[float] | None, optional
+        List of weights corresponding to the variables.
+        If None, equal weights are used (default is 1 for each variable).
+
+    Returns
+    -------
+    xr.DataArray
+        A DataArray containing the weighted mean of the specified variables.
+    """
     if vars is None:
         vars = list(ds.data_vars)
     if weights is None:
@@ -561,7 +591,22 @@ def vars_weighted_mean(ds: xr.Dataset, vars=None, weights=None) -> xr.DataArray:
 
 
 def vars_mean(ds: xr.Dataset, vars=None) -> xr.DataArray:
-    """Compute the mean of the variables."""
+    """
+    Compute the mean of the variables.
+
+    Parameters
+    ----------
+    ds : xr.Dataset
+        The dataset containing the variables to compute the mean.
+    vars : list[str] | None, optional
+        List of variable names to include in the mean.
+        If None, all data variables are used.
+
+    Returns
+    -------
+    xr.DataArray
+        A DataArray containing the mean of the specified variables.
+    """
     if vars is None:
         vars = list(ds.data_vars)
     da = vars_weighted_mean(ds, vars=vars)
@@ -569,7 +614,25 @@ def vars_mean(ds: xr.Dataset, vars=None) -> xr.DataArray:
 
 
 def vars_weighted_geomean(ds: xr.Dataset, vars=None, weights=None) -> xr.DataArray:
-    """Compute the weighted geometric mean of the variables."""
+    """
+    Compute the weighted geometric mean of the variables.
+
+    Parameters
+    ----------
+    ds : xr.Dataset
+        The dataset containing the variables to compute the weighted geometric mean.
+    vars : list[str] | None, optional
+        List of variable names to include in the weighted geometric mean.
+        If None, all data variables are used.
+    weights : list[float] | None, optional
+        List of weights corresponding to the variables.
+        If None, equal weights are used (default is 1 for each variable).
+
+    Returns
+    -------
+    xr.DataArray
+        A DataArray containing the weighted geometric mean of the specified variables.
+    """
     if vars is None:
         vars = list(ds.data_vars)
     if weights is None:
@@ -589,7 +652,22 @@ def vars_weighted_geomean(ds: xr.Dataset, vars=None, weights=None) -> xr.DataArr
 
 
 def vars_geomean(ds: xr.Dataset, vars=None) -> xr.DataArray:
-    """Compute the geometric mean of the variables."""
+    """
+    Compute the geometric mean of the variables.
+
+    Parameters
+    ----------
+    ds : xr.Dataset
+        The dataset containing the variables to compute the geometric mean.
+    vars : list[str] | None, optional
+        List of variable names to include in the geometric mean.
+        If None, all data variables are used.
+
+    Returns
+    -------
+    xr.DataArray
+        A DataArray containing the geometric mean of the specified variables.
+    """
     if vars is None:
         vars = list(ds.data_vars)
     da = vars_weighted_geomean(ds, vars=vars)
@@ -599,7 +677,26 @@ def vars_geomean(ds: xr.Dataset, vars=None) -> xr.DataArray:
 
 
 def limiting_factor(ds: xr.Dataset, vars=None, limiting_var: bool | None = True) -> xr.DataArray | xr.Dataset:
-    """Compute the limiting factor among the variables."""
+    """
+    Compute the limiting factor among the variables.
+
+    Parameters
+    ----------
+    ds : xr.Dataset
+        The dataset containing the variables to compute the limiting factor.
+    vars : list[str] | None, optional
+        List of variable names to include in the limiting factor computation.
+        If None, all data variables are used.
+    limiting_var : bool, optional
+        If True, return the variable that is the limiting factor. The default is True.
+
+    Returns
+    -------
+    xr.DataArray | xr.Dataset
+        A DataArray containing the value of the limiting factor among the specified variables.
+        If `limiting_var` is True, a Dataset is returned containing both the limiting factor
+        and the variable that is the limiting factor.
+    """
     if vars is None:
         vars = list(ds.data_vars)
 

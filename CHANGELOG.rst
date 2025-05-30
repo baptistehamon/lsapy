@@ -11,7 +11,7 @@ Internal changes
 * Templates for requesting new features, asking question and submitting PR have been added (issue `#11 <https://github.com/baptistehamon/lsapy/issues/11>`_, PR `#12 <https://github.com/baptistehamon/lsapy/pull/12>`_).
 * The README has been updated to make links permanent and to add docs badge (PR `#13 <https://github.com/baptistehamon/lsapy/pull/13>`_, PR `#15 <https://github.com/baptistehamon/lsapy/pull/15>`).
 * A configuration file for Zenodo integration has been added to the repository (PR `#14 <https://github.com/baptistehamon/lsapy/pull/14>`_).
-* `Pre-commit` has been setup and `ruff` and `codespell` hooks have been added (issue `#8 <https://github.com/baptistehamon/lsapy/issues/8>`_, PR `#18 <https://github.com/baptistehamon/lsapy/pull/18>`_).
+* `Pre-commit` has been setup and `ruff`, `codespell` and `numpydoc` hooks have been added (issue `#8 <https://github.com/baptistehamon/lsapy/issues/8>`_, PR `#18 <https://github.com/baptistehamon/lsapy/pull/18>`_/PR `#19 <https://github.com/baptistehamon/lsapy/pull/19>`_).
 
 v0.1.0-dev2 (2025-05-25)
 ------------------------

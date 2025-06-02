@@ -27,6 +27,9 @@ Internal changes
 * `Pre-commit` has been setup and `ruff`, `codespell` and `numpydoc` hooks have been added (issue `#8 <https://github.com/baptistehamon/lsapy/issues/8>`_, PR `#18 <https://github.com/baptistehamon/lsapy/pull/18>`_/PR `#19 <https://github.com/baptistehamon/lsapy/pull/19>`_).
 * The autoupdate schedule of `pre-commit` has been set to weekly (PR `#21 <https://github.com/baptistehamon/lsapy/pull/21>`_)
 * The unused ``introduction.ipynb`` notebook has been removed (issue `#15 <https://github.com/baptistehamon/lsapy/issues/15>`_, PR `#20 <https://github.com/baptistehamon/lsapy/pull/20>`_).
+* The structure around ``SuitabilityFunction``, ``MembershipFunction``, and ``DiscreteFunction`` has been redesigned :
+    * The ``SuitabilityFunction`` has been moved to LSAPy ``core`` module.
+    * The ``MembershipFunction`` and ``DiscreteFunction`` have been moved to the ``function`` module and split into two different files: ``membership.py`` and ``discrete.py``.
 
 v0.1.0-dev2 (2025-05-25)
 ------------------------

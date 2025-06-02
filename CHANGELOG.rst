@@ -6,6 +6,14 @@ v0.1.0 (unreleased)
 -------------------
 Contributor to this version: Baptiste Hamon (@baptistehamon).
 
+Breaking changes
+^^^^^^^^^^^^^^^^
+* Changes in ``SuitabilityFunction``:
+    * ``SuitabilityFunction`` is now an abstract class and must not be instantiated directly.
+    * ``func_method`` and ``func_params`` have been renamed to ``name`` and ``params`` respectively.
+    * ``SuitabilityFunction`` does not support the option to retrieve the implemented function from the ``func_method`` anymore.
+    * ``map`` has been deprecated because of its redundancy with the ``__call__`` method. Changes will be permanent in LSAPy v0.1.0. Call the function directly instead.
+
 Internal changes
 ^^^^^^^^^^^^^^^^
 * Templates for requesting new features, asking question and submitting PR have been added (issue `#11 <https://github.com/baptistehamon/lsapy/issues/11>`_, PR `#12 <https://github.com/baptistehamon/lsapy/pull/12>`_).

@@ -6,14 +6,16 @@ from typing import Any
 
 import matplotlib.pyplot as plt
 import numpy as np
+from attrs import asdict, define, field
 from scipy.optimize import curve_fit
 
-__all__ = ["SuitabilityFunction", "MembershipSuitFunction", "DiscreteSuitFunction"]
+__all__ = ["MembershipSuitFunction", "DiscreteSuitFunction"]
 
 
+@define
 class SuitabilityFunction:
     """
-    Base class for suitability functions.
+    Suitability Function base class.
 
     Suitability function define how the criteria indicator is transformed into a suitability value. The suitability
     function are available for continuous and discrete indicators. For continuous indicators, a membership function
@@ -24,12 +26,11 @@ class SuitabilityFunction:
     ----------
     func : Callable | None, optional
         Function to compute the suitability value.
-    func_method : str | None, optional
-        Name of the function to compute the suitability value. If `func` is not provided and `func_method` is provided,
-        the function will be retrieved from the available implemented equations.
-    func_params : dict[str, Any], optional
-        Parameters of the function. For discrete functions, the keys correspond to the indicator values and
-        the values to its associated suitability values.
+    name : str | None, optional
+        Name of the function to compute the suitability value. By default, the name of the function is used if provided,
+        otherwise it is set to `None`.
+    params : dict[str, Any], optional
+        Parameters of the function.
 
     See Also
     --------
@@ -38,59 +39,37 @@ class SuitabilityFunction:
 
     Examples
     --------
-    >>> func = SuitabilityFunction(func_method="logistic", func_params={"a": 1, "b": 5})
+    >>> from lsapy.functions import logistic
+    >>> sf = SuitabilityFunction(func=logistic, params={"a": 1, "b": 5})
 
     ``SuitabilityFunction`` can also be used for discrete functions.
 
-    >>> func = SuitabilityFunction(func_method="discrete", func_params={1: 0, 2: 0.1, 3: 0.5, 4: 0.9, 5: 1})
+    >>> from lsapy.functions import discrete
+    >>> sf = SuitabilityFunction(func=discrete, params={1: 0, 2: 0.1, 3: 0.5, 4: 0.9, 5: 1})
     """
 
-    def __init__(
-        self, func: Callable | None = None, func_method: str | None = None, func_params: dict[str, Any] = None
-    ):
-        if func_params is not None:
-            if func is None and func_method is None:
-                raise ValueError("If `func_params` is provided, `func` or `func_method` must also be provided.")
-        else:
-            func_params = {}
+    func: Callable | None = field(repr=lambda f: f.__name__ if f else None)
+    name: str | None
+    params: dict[str, Any] | None
 
+    def __init__(self, func: Callable | None = None, name: str | None = None, params: dict[str, Any] = None):
+        if func is not None and not callable(func):
+            raise TypeError("`func` must be a callable function.")
         self.func = func
-        self.func_method = func_method
-        self.func_params = func_params
-        if func is None and func_method is not None:
-            self.func = _get_function_from_name(func_method)
 
-    def __repr__(self):
-        """Return the string representation of the object."""
-        return (
-            f"{self.__class__.__name__}("
-            f"func={self.func.__name__}, "
-            f"func_method='{self.func_method}', "
-            f"func_params={self.func_params})"
-        )
+        if name:
+            self.name = name
+        elif func is not None:
+            self.name = func.__name__
+        else:
+            self.name = None
+
+        self.params = params
 
     def __call__(self, x):
-        """
-        Compute the suitability value.
-
-        Parameters
-        ----------
-        x : any
-            Input values.
-
-        Returns
-        -------
-        any
-            Suitability values.
-
-        Raises
-        ------
-        ValueError
-            If no function has been provided.
-        """
         if self.func is None:
             raise ValueError("No function has been provided.")
-        return self.func(x, **self.func_params)  # TODO: implement vectorization to support list
+        return np.vectorize(self.func, otypes=[np.float32])(x, **self.params)
 
     def map(self, x):
         """
@@ -115,10 +94,19 @@ class SuitabilityFunction:
 
         Examples
         --------
-        >>> func = SuitabilityFunction(func_method="logistic", func_params={"a": 1, "b": 5})
-        >>> func.map(3)
-        np.float64(0.11920292202211755)
+        >>> sf = SuitabilityFunction(func_method="logistic", func_params={"a": 1, "b": 5})
+        >>> sf.map(3)
+        array(0.11920292, dtype=float32)
+
+        .. deprecated:: 0.1.0-dev2
+          `map` will be removed in LSAPy 0.1.0 because it is redundant with the `__call__` method.
+          Please use the `__call__` method directly instead.
         """
+        warnings.warn(
+            "`map` is deprecated and will be removed in LSAPy 0.1.0. Use `__call__` directly instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
         return self(x)
 
     def plot(self, x) -> None:
@@ -134,8 +122,8 @@ class SuitabilityFunction:
         --------
         >>> import numpy as np  # doctest: +SKIP
         <BLANKLINE>
-        >>> func = SuitabilityFunction(func_method="logistic", func_params={"a": 1, "b": 5})
-        >>> func.plot(np.linspace(0, 10, 100))  # doctest: +SKIP
+        >>> sf = SuitabilityFunction(func_method="logistic", func_params={"a": 1, "b": 5})
+        >>> sf.plot(np.linspace(0, 10, 100))  # doctest: +SKIP
         """
         plt.plot(x, self(x))
 
@@ -147,14 +135,10 @@ class SuitabilityFunction:
         Returns
         -------
         dict
-            Dictionary containing the function method and parameters. If both are undefined, an empty dictionary
+            Dictionary containing the function name and parameters. If both are undefined, an empty dictionary
             is returned.
         """
-        if self.func_method is None and self.func_params is None:
-            return {}
-        return {
-            k: v for k, v in {"func_method": self.func_method, "func_params": self.func_params}.items() if v is not None
-        }
+        return {k: v for k, v in asdict(self).items() if v is not None and k not in ["func"]}
 
 
 class MembershipSuitFunction(SuitabilityFunction):

@@ -2,7 +2,7 @@
 
 import xarray as xr
 
-from lsapy.functions import DiscreteSuitFunction, MembershipSuitFunction, SuitabilityFunction
+from lsapy.functions import DiscreteSuitFunction, MembershipFunction, SuitabilityFunction
 
 __all__ = ["SuitabilityCriteria"]
 
@@ -21,7 +21,7 @@ class SuitabilityCriteria:
         Name of the suitability criteria.
     indicator : xr.DataArray
         Indicator on which the criteria is based.
-    func : SuitabilityFunction | MembershipSuitFunction | DiscreteSuitFunction
+    func : SuitabilityFunction | MembershipFunction | DiscreteSuitFunction
         Suitability function describing how the suitability of the criteria is computed.
     weight : int | float | None, optional
         Weight of the criteria used in the aggregation process if a weighted aggregation method is used.
@@ -69,7 +69,7 @@ class SuitabilityCriteria:
         self,
         name: str,
         indicator: xr.Dataset | xr.DataArray,  # TODO: check if it's work with ds
-        func: SuitabilityFunction | MembershipSuitFunction | DiscreteSuitFunction,
+        func: SuitabilityFunction | MembershipFunction | DiscreteSuitFunction,
         weight: int | float | None = 1,
         category: str | None = None,
         long_name: str | None = None,

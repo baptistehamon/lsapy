@@ -9,7 +9,7 @@ import numpy as np
 from attrs import asdict, define, field
 from scipy.optimize import curve_fit
 
-__all__ = ["MembershipSuitFunction", "DiscreteSuitFunction"]
+__all__ = ["MembershipFunction", "DiscreteSuitFunction"]
 
 
 @define
@@ -34,7 +34,7 @@ class SuitabilityFunction:
 
     See Also
     --------
-    MembershipSuitFunction : Membership Suitability Function.
+    MembershipFunction : Membership Suitability Function.
     DiscreteSuitFunction : Discrete Suitability Function.
 
     Examples
@@ -141,7 +141,7 @@ class SuitabilityFunction:
         return {k: v for k, v in asdict(self).items() if v is not None and k not in ["func"]}
 
 
-class MembershipSuitFunction(SuitabilityFunction):
+class MembershipFunction(SuitabilityFunction):
     """
     Membership Suitability Function.
 
@@ -152,38 +152,42 @@ class MembershipSuitFunction(SuitabilityFunction):
     ----------
     func : Callable | None, optional
         Function to compute the suitability value.
-    func_method : str | None, optional
-        Name of the function to compute the suitability value. If `func` is not provided and `func_method` is provided,
-        the function will be retrieved from the available implemented equations.
-    func_params : dict[str, int | float] | None, optional
-        Parameters of the function to compute the suitability value.
+    name : str | None, optional
+        Name of the function to compute the suitability value. By default, the name of the function is used if provided,
+        otherwise it is set to `None`.
+    params : dict[str, int | float] | None, optional
+        Parameters of the function.
 
     See Also
     --------
-    SuitabilityFunction : Suitability Function.
     DiscreteSuitFunction : Discrete Suitability Function.
 
     Examples
     --------
-    >>> func = MembershipSuitFunction(func_method="logistic", func_params={"a": 1, "b": 5})
-    >>> func(3)
-    np.float64(0.11920292202211755)
+    >>> mf = MembershipFunction(name="logistic", params={"a": 1, "b": 5})
+    >>> mf(3)
+    array(0.11920292, dtype=float32)
     """
 
     def __init__(
         self,
         func: Callable | None = None,
-        func_method: str | None = None,
-        func_params: dict[str, int | float] | None = None,
+        name: str | None = None,
+        params: dict[str, int | float] | None = None,
     ):
-        super().__init__(func, func_method, func_params)
+        super().__init__(func, name, params)
+        if func is None and name is not None:
+            try:
+                self.func = _get_function_from_name(name)
+            except Exception:
+                warnings.warn("`name` not found in implemented equations. Setting `func` to None.", stacklevel=2)
 
     @staticmethod
-    def fit(x, y=None, methods: str | list[str] = "all", plot: bool = False):
+    def fit_functions(x, y=None, methods: str | list[str] = "all", plot: bool = False):
         """
         Fit the membership functions to data.
 
-        This methods help to identify the best membership function to use on the data by fitting
+        This method help to identify the best membership function to use on the data by fitting
         the available functions.
         # TODO: check if results should be print or return
 
@@ -207,7 +211,7 @@ class MembershipSuitFunction(SuitabilityFunction):
 
         Examples
         --------
-        >>> MembershipSuitFunction.fit([1, 3, 5, 7, 10])  # doctest: +SKIP
+        >>> MembershipFunction.fit_functions([1, 3, 5, 7, 10])  # doctest: +SKIP
         Skipped fitting for the following methods: sigmoid, vetharaniam2024_eq8.
         <BLANKLINE>
         Best fit: logistic
@@ -219,7 +223,7 @@ class MembershipSuitFunction(SuitabilityFunction):
         By default, the function will fit all available methods. If you want to fit only specific methods, you can
         specify the methods to fit: "all", "sigmoid_like", "gaussian_like", or a list of methods.
 
-        >>> MembershipSuitFunction.fit(
+        >>> MembershipFunction.fit_functions(
         ...     x=[1, 3, 5, 5, 7, 9], y=[0, 0.5, 1, 1, 0.5, 0], methods="gaussian_like"
         ... )  # doctest: +SKIP
         Skipped fitting for the following methods: vetharaniam2024_eq8.
@@ -232,7 +236,7 @@ class MembershipSuitFunction(SuitabilityFunction):
         """
         if y is None:
             y = [0, 0.25, 0.5, 0.75, 1]
-        return _fit_mbs_functions(x, np.array(y), methods, plot)
+        return _fit_membership_func(x, np.array(y), methods, plot)
 
 
 def _prepare_for_fitting(methods: str | list[str] = "all"):
@@ -276,7 +280,7 @@ def _get_function_p0(method: str, x: np.ndarray) -> list[float]:
     return []
 
 
-def _fit_mbs_functions(x, y, methods: str | list[str] = "all", plot: bool = False):
+def _fit_membership_func(x, y, methods: str | list[str] = "all", plot: bool = False):
     skipped = []
     methods, _skipped = _prepare_for_fitting(methods)
     skipped.extend(_skipped)
@@ -329,7 +333,7 @@ class DiscreteSuitFunction(SuitabilityFunction):
     See Also
     --------
     SuitabilityFunction : Suitability Function.
-    MembershipSuitFunction : Membership Suitability Function.
+    MembershipFunction : Membership Suitability Function.
 
     Examples
     --------

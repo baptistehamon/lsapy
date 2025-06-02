@@ -16,6 +16,8 @@ Breaking changes
 * ``MembershipSuitFunction`` has been renamed to ``MembershipFunction``:
     * ``func_method`` and ``func_params`` have been renamed to ``name`` and ``params`` respectively.
     * ``fit`` method has been renamed to ``fit_functions``.
+* ``DiscreteSuitFunction`` has been renamed to ``DiscreteFunction``:
+    * ``func_method`` and ``func_params`` have been renamed to ``name`` and ``params`` respectively.
 
 Internal changes
 ^^^^^^^^^^^^^^^^

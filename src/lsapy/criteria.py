@@ -2,7 +2,7 @@
 
 import xarray as xr
 
-from lsapy.functions import DiscreteSuitFunction, MembershipFunction, SuitabilityFunction
+from lsapy.functions import DiscreteFunction, MembershipFunction
 
 __all__ = ["SuitabilityCriteria"]
 
@@ -69,7 +69,7 @@ class SuitabilityCriteria:
         self,
         name: str,
         indicator: xr.Dataset | xr.DataArray,  # TODO: check if it's work with ds
-        func: SuitabilityFunction | MembershipFunction | DiscreteSuitFunction,
+        func: MembershipFunction | DiscreteFunction,
         weight: int | float | None = 1,
         category: str | None = None,
         long_name: str | None = None,

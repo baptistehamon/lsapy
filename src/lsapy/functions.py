@@ -9,7 +9,7 @@ import numpy as np
 from attrs import asdict, define, field
 from scipy.optimize import curve_fit
 
-__all__ = ["MembershipFunction", "DiscreteSuitFunction"]
+__all__ = ["MembershipFunction", "DiscreteFunction"]
 
 
 @define
@@ -35,7 +35,7 @@ class SuitabilityFunction:
     See Also
     --------
     MembershipFunction : Membership Suitability Function.
-    DiscreteSuitFunction : Discrete Suitability Function.
+    DiscreteFunction : Discrete Suitability Function.
 
     Examples
     --------
@@ -160,7 +160,7 @@ class MembershipFunction(SuitabilityFunction):
 
     See Also
     --------
-    DiscreteSuitFunction : Discrete Suitability Function.
+    DiscreteFunction : Discrete Suitability Function.
 
     Examples
     --------
@@ -317,7 +317,7 @@ def _fit_membership_func(x, y, methods: str | list[str] = "all", plot: bool = Fa
     return _get_function_from_name(f_best), p_best
 
 
-class DiscreteSuitFunction(SuitabilityFunction):
+class DiscreteFunction(SuitabilityFunction):
     """
     Discrete Suitability Function.
 
@@ -326,28 +326,25 @@ class DiscreteSuitFunction(SuitabilityFunction):
 
     Parameters
     ----------
-    func_params : dict[str, int | float] | None, optional
-        Parameters of the function. The keys correspond to the indicator values and the values to its associated
-        suitability values.
+    rules : dict[str, int | float] | None, optional
+        Rules to map the indicator values to suitability values. The keys correspond to the indicator values and the
+        values to its associated suitability values.
 
     See Also
     --------
-    SuitabilityFunction : Suitability Function.
     MembershipFunction : Membership Suitability Function.
 
     Examples
     --------
-    >>> func = DiscreteSuitFunction(func_params={1: 0, 2: 0.1, 3: 0.5, 4: 0.9, 5: 1})
+    >>> func = DiscreteFunction(rules={1: 0, 2: 0.1, 3: 0.5, 4: 0.9, 5: 1})
 
-    ``DiscreteSuitFunction`` also support keys as strings.
+    ``DiscreteFunction`` also support keys as strings.
 
-    >>> func = DiscreteSuitFunction(func_params={"1": 0, "2": 0.1, "3": 0.5, "4": 0.9, "5": 1})
+    >>> func = DiscreteFunction(rules={"1": 0, "2": 0.1, "3": 0.5, "4": 0.9, "5": 1})
     """
 
-    def __init__(self, func_params: dict[str, int | float] | None = None):
-        self.func = discrete
-        self.func_method = "discrete"
-        self.func_params = func_params
+    def __init__(self, rules: dict[str | int, int | float] | None = None):
+        super().__init__(func=discrete, name="discrete", params={"rules": rules})
 
 
 equations: dict[str, dict] = {}

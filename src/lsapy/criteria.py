@@ -111,10 +111,7 @@ class SuitabilityCriteria:
         xr.DataArray
             Criteria suitability.
         """
-        if self.func.func_method == "discrete":  # need to vectorize the discrete function
-            sc: xr.DataArray = xr.apply_ufunc(self.func.map, self.indicator).rename(self.name)
-        else:
-            sc: xr.DataArray = self.func.map(self.indicator).rename(self.name)
+        sc: xr.DataArray = xr.apply_ufunc(self.func.map, self.indicator).rename(self.name)
         return sc.assign_attrs(
             dict(
                 {k: v for k, v in self.attrs.items() if k not in ["name", "func_method", "from_indicator"]},

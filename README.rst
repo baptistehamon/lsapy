@@ -117,6 +117,6 @@ The Python package has been created following the `pyOpenSci Guidebook`_.
     :target: https://github.com/baptistehamon/lsapy/labels/question
     :alt: Link to question issues
 
-.. |pre-commit| .. image:: https://results.pre-commit.ci/badge/github/baptistehamon/lsapy/main.svg
+.. |pre-commit| image:: https://results.pre-commit.ci/badge/github/baptistehamon/lsapy/main.svg
    :target: https://results.pre-commit.ci/latest/github/baptistehamon/lsapy/main
    :alt: pre-commit.ci status

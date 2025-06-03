@@ -64,7 +64,7 @@ refer to the `Contribution`_ section for guidelines on how to get started helpin
 Credits
 -------
 
-The development of `LSAPy` started as part of a PhD, funded by the the `Food Transition 2050`_  Joint Postgraduate School and hosted
+The development of `LSAPy` started as part of a PhD, funded by the `Food Transition 2050`_  Joint Postgraduate School and hosted
 by the `University of Canterbury`_ in New Zealand.
 
 |FT2050| |UC-white| |UC-black|
@@ -117,6 +117,6 @@ The Python package has been created following the `pyOpenSci Guidebook`_.
     :target: https://github.com/baptistehamon/lsapy/labels/question
     :alt: Link to question issues
 
-.. |pre-commit| image:: https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit
-   :target: https://github.com/pre-commit/pre-commit
-   :alt: pre-commit
+.. |pre-commit| .. image:: https://results.pre-commit.ci/badge/github/baptistehamon/lsapy/main.svg
+   :target: https://results.pre-commit.ci/latest/github/baptistehamon/lsapy/main
+   :alt: pre-commit.ci status

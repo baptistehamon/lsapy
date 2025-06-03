@@ -39,8 +39,24 @@ class DiscreteFunction(SuitabilityFunction):
     def __init__(self, rules: dict[str | int, int | float] | None = None):
         super().__init__(func=discrete, name="discrete", params={"rules": rules})
 
+    def __call__(self, x) -> np.ndarray:
+        """
+        Call the discrete suitability function.
 
-def discrete(x, rules: dict[str | int, int | float]) -> float:
+        Parameters
+        ----------
+        x : any
+            Indicator values to map.
+
+        Returns
+        -------
+        np.ndarray
+            Suitability values.
+        """
+        return super().__call__(x)
+
+
+def discrete(x, rules: dict[str | int, int | float]) -> np.ndarray:
     """
     Discrete suitability function.
 
@@ -56,7 +72,7 @@ def discrete(x, rules: dict[str | int, int | float]) -> float:
 
     Returns
     -------
-    float
+    np.ndarray
         Suitability values.
     """
     return np.vectorize(rules.get, otypes=[np.float32])(x, np.nan)

@@ -8,15 +8,15 @@ Contributor to this version: Baptiste Hamon (@baptistehamon).
 
 Breaking changes
 ^^^^^^^^^^^^^^^^
-* Changes in ``SuitabilityFunction``:
+* Changes in ``SuitabilityFunction`` (issue `#15 <https://github.com/baptistehamon/lsapy/issues/15>`_, PR `#23 <https://github.com/baptistehamon/lsapy/pull/23>`_):
     * ``SuitabilityFunction`` is now an abstract class and must not be instantiated directly.
     * ``func_method`` and ``func_params`` have been renamed to ``name`` and ``params`` respectively.
     * ``SuitabilityFunction`` does not support the option to retrieve the implemented function from the ``func_method`` anymore. This is now implemented in the ``MembershipFunction`` class.
     * ``map`` has been deprecated because of its redundancy with the ``__call__`` method. Changes will be permanent in LSAPy v0.1.0. Call the function directly instead.
-* ``MembershipSuitFunction`` has been renamed to ``MembershipFunction``:
+* ``MembershipSuitFunction`` has been renamed to ``MembershipFunction`` (issue `#15 <https://github.com/baptistehamon/lsapy/issues/15>`_, PR `#23 <https://github.com/baptistehamon/lsapy/pull/23>`_):
     * ``func_method`` and ``func_params`` have been renamed to ``name`` and ``params`` respectively.
     * ``fit`` method has been renamed to ``fit_functions``.
-* ``DiscreteSuitFunction`` has been renamed to ``DiscreteFunction``:
+* ``DiscreteSuitFunction`` has been renamed to ``DiscreteFunction`` (issue `#15 <https://github.com/baptistehamon/lsapy/issues/15>`_, PR `#23 <https://github.com/baptistehamon/lsapy/pull/23>`_):
     * ``func_method`` and ``func_params`` have been renamed to ``name`` and ``params`` respectively.
 
 Internal changes

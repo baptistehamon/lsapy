@@ -61,6 +61,28 @@ class MembershipFunction(SuitabilityFunction):
             except Exception:
                 warnings.warn("`name` not found in implemented equations. Setting `func` to None.", stacklevel=2)
 
+    def __call__(self, x) -> np.ndarray:
+        """
+        Call the defined membership function.
+
+        Parameters
+        ----------
+        x : any
+            Input values to map.
+
+        Returns
+        -------
+        np.ndarray
+            Suitability values.
+
+        Examples
+        --------
+        >>> mf = MembershipFunction(name="logistic", params={"a": 1, "b": 5})
+        >>> mf(3)
+        array(0.11920292, dtype=float32)
+        """
+        return super().__call__(x)
+
     @staticmethod
     def fit_functions(x, y=None, methods: str | list[str] = "all", plot: bool = False):
         """

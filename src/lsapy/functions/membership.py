@@ -1,163 +1,26 @@
-"""Suitability Functions definitions."""
+"""Membership Suitability Function definition."""
 
 import warnings
 from collections.abc import Callable
-from typing import Any
 
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.optimize import curve_fit
 
-__all__ = ["SuitabilityFunction", "MembershipSuitFunction", "DiscreteSuitFunction"]
+from lsapy.core.functions import SuitabilityFunction
+
+__all__ = [
+    "MembershipFunction",
+    "logistic",
+    "sigmoid",
+    "vetharaniam2022_eq3",
+    "vetharaniam2022_eq5",
+    "vetharaniam2024_eq8",
+    "vetharaniam2024_eq10",
+]
 
 
-class SuitabilityFunction:
-    """
-    Base class for suitability functions.
-
-    Suitability function define how the criteria indicator is transformed into a suitability value. The suitability
-    function are available for continuous and discrete indicators. For continuous indicators, a membership function
-    is used to transform the indicator into a suitability value. For discrete indicators, a set of rules is mapped
-    on the indicator.
-
-    Parameters
-    ----------
-    func : Callable | None, optional
-        Function to compute the suitability value.
-    func_method : str | None, optional
-        Name of the function to compute the suitability value. If `func` is not provided and `func_method` is provided,
-        the function will be retrieved from the available implemented equations.
-    func_params : dict[str, Any], optional
-        Parameters of the function. For discrete functions, the keys correspond to the indicator values and
-        the values to its associated suitability values.
-
-    See Also
-    --------
-    MembershipSuitFunction : Membership Suitability Function.
-    DiscreteSuitFunction : Discrete Suitability Function.
-
-    Examples
-    --------
-    >>> func = SuitabilityFunction(func_method="logistic", func_params={"a": 1, "b": 5})
-
-    ``SuitabilityFunction`` can also be used for discrete functions.
-
-    >>> func = SuitabilityFunction(func_method="discrete", func_params={1: 0, 2: 0.1, 3: 0.5, 4: 0.9, 5: 1})
-    """
-
-    def __init__(
-        self, func: Callable | None = None, func_method: str | None = None, func_params: dict[str, Any] = None
-    ):
-        if func_params is not None:
-            if func is None and func_method is None:
-                raise ValueError("If `func_params` is provided, `func` or `func_method` must also be provided.")
-        else:
-            func_params = {}
-
-        self.func = func
-        self.func_method = func_method
-        self.func_params = func_params
-        if func is None and func_method is not None:
-            self.func = _get_function_from_name(func_method)
-
-    def __repr__(self):
-        """Return the string representation of the object."""
-        return (
-            f"{self.__class__.__name__}("
-            f"func={self.func.__name__}, "
-            f"func_method='{self.func_method}', "
-            f"func_params={self.func_params})"
-        )
-
-    def __call__(self, x):
-        """
-        Compute the suitability value.
-
-        Parameters
-        ----------
-        x : any
-            Input values.
-
-        Returns
-        -------
-        any
-            Suitability values.
-
-        Raises
-        ------
-        ValueError
-            If no function has been provided.
-        """
-        if self.func is None:
-            raise ValueError("No function has been provided.")
-        return self.func(x, **self.func_params)  # TODO: implement vectorization to support list
-
-    def map(self, x):
-        """
-        Map the suitability function.
-
-        This method converts the input values into suitability values for the defined function.
-
-        Parameters
-        ----------
-        x : any
-            Input values to map.
-
-        Returns
-        -------
-        any
-            Suitability values.
-
-        Raises
-        ------
-        ValueError
-            If no function has been provided.
-
-        Examples
-        --------
-        >>> func = SuitabilityFunction(func_method="logistic", func_params={"a": 1, "b": 5})
-        >>> func.map(3)
-        np.float64(0.11920292202211755)
-        """
-        return self(x)
-
-    def plot(self, x) -> None:
-        """
-        Basic plot of the suitability function.
-
-        Parameters
-        ----------
-        x : any
-            Input values to plot.
-
-        Examples
-        --------
-        >>> import numpy as np  # doctest: +SKIP
-        <BLANKLINE>
-        >>> func = SuitabilityFunction(func_method="logistic", func_params={"a": 1, "b": 5})
-        >>> func.plot(np.linspace(0, 10, 100))  # doctest: +SKIP
-        """
-        plt.plot(x, self(x))
-
-    @property
-    def attrs(self):
-        """
-        Dictionary of the suitability function attributes.
-
-        Returns
-        -------
-        dict
-            Dictionary containing the function method and parameters. If both are undefined, an empty dictionary
-            is returned.
-        """
-        if self.func_method is None and self.func_params is None:
-            return {}
-        return {
-            k: v for k, v in {"func_method": self.func_method, "func_params": self.func_params}.items() if v is not None
-        }
-
-
-class MembershipSuitFunction(SuitabilityFunction):
+class MembershipFunction(SuitabilityFunction):
     """
     Membership Suitability Function.
 
@@ -168,38 +31,64 @@ class MembershipSuitFunction(SuitabilityFunction):
     ----------
     func : Callable | None, optional
         Function to compute the suitability value.
-    func_method : str | None, optional
-        Name of the function to compute the suitability value. If `func` is not provided and `func_method` is provided,
-        the function will be retrieved from the available implemented equations.
-    func_params : dict[str, int | float] | None, optional
-        Parameters of the function to compute the suitability value.
+    name : str | None, optional
+        Name of the function to compute the suitability value. By default, the name of the function is used if provided,
+        otherwise it is set to `None`.
+    params : dict[str, int | float] | None, optional
+        Parameters of the function.
 
     See Also
     --------
-    SuitabilityFunction : Suitability Function.
-    DiscreteSuitFunction : Discrete Suitability Function.
+    DiscreteFunction : Discrete Suitability Function.
 
     Examples
     --------
-    >>> func = MembershipSuitFunction(func_method="logistic", func_params={"a": 1, "b": 5})
-    >>> func(3)
-    np.float64(0.11920292202211755)
+    >>> mf = MembershipFunction(name="logistic", params={"a": 1, "b": 5})
+    >>> mf(3)
+    array(0.11920292, dtype=float32)
     """
 
     def __init__(
         self,
         func: Callable | None = None,
-        func_method: str | None = None,
-        func_params: dict[str, int | float] | None = None,
+        name: str | None = None,
+        params: dict[str, int | float] | None = None,
     ):
-        super().__init__(func, func_method, func_params)
+        super().__init__(func, name, params)
+        if func is None and name is not None:
+            try:
+                self.func = _get_function_from_name(name)
+            except Exception:
+                warnings.warn("`name` not found in implemented equations. Setting `func` to None.", stacklevel=2)
+
+    def __call__(self, x) -> np.ndarray:
+        """
+        Call the defined membership function.
+
+        Parameters
+        ----------
+        x : any
+            Input values to map.
+
+        Returns
+        -------
+        np.ndarray
+            Suitability values.
+
+        Examples
+        --------
+        >>> mf = MembershipFunction(name="logistic", params={"a": 1, "b": 5})
+        >>> mf(3)
+        array(0.11920292, dtype=float32)
+        """
+        return super().__call__(x)
 
     @staticmethod
-    def fit(x, y=None, methods: str | list[str] = "all", plot: bool = False):
+    def fit_functions(x, y=None, methods: str | list[str] = "all", plot: bool = False):
         """
         Fit the membership functions to data.
 
-        This methods help to identify the best membership function to use on the data by fitting
+        This method help to identify the best membership function to use on the data by fitting
         the available functions.
         # TODO: check if results should be print or return
 
@@ -223,7 +112,7 @@ class MembershipSuitFunction(SuitabilityFunction):
 
         Examples
         --------
-        >>> MembershipSuitFunction.fit([1, 3, 5, 7, 10])  # doctest: +SKIP
+        >>> MembershipFunction.fit_functions([1, 3, 5, 7, 10])  # doctest: +SKIP
         Skipped fitting for the following methods: sigmoid, vetharaniam2024_eq8.
         <BLANKLINE>
         Best fit: logistic
@@ -235,7 +124,7 @@ class MembershipSuitFunction(SuitabilityFunction):
         By default, the function will fit all available methods. If you want to fit only specific methods, you can
         specify the methods to fit: "all", "sigmoid_like", "gaussian_like", or a list of methods.
 
-        >>> MembershipSuitFunction.fit(
+        >>> MembershipFunction.fit_functions(
         ...     x=[1, 3, 5, 5, 7, 9], y=[0, 0.5, 1, 1, 0.5, 0], methods="gaussian_like"
         ... )  # doctest: +SKIP
         Skipped fitting for the following methods: vetharaniam2024_eq8.
@@ -248,7 +137,7 @@ class MembershipSuitFunction(SuitabilityFunction):
         """
         if y is None:
             y = [0, 0.25, 0.5, 0.75, 1]
-        return _fit_mbs_functions(x, np.array(y), methods, plot)
+        return _fit_membership_func(x, np.array(y), methods, plot)
 
 
 def _prepare_for_fitting(methods: str | list[str] = "all"):
@@ -292,7 +181,7 @@ def _get_function_p0(method: str, x: np.ndarray) -> list[float]:
     return []
 
 
-def _fit_mbs_functions(x, y, methods: str | list[str] = "all", plot: bool = False):
+def _fit_membership_func(x, y, methods: str | list[str] = "all", plot: bool = False):
     skipped = []
     methods, _skipped = _prepare_for_fitting(methods)
     skipped.extend(_skipped)
@@ -329,39 +218,6 @@ def _fit_mbs_functions(x, y, methods: str | list[str] = "all", plot: bool = Fals
     return _get_function_from_name(f_best), p_best
 
 
-class DiscreteSuitFunction(SuitabilityFunction):
-    """
-    Discrete Suitability Function.
-
-    Discrete functions are used to transform discrete indicator values into suitability values. The discrete functions
-    map the indicator values to a set of rules that define the suitability values.
-
-    Parameters
-    ----------
-    func_params : dict[str, int | float] | None, optional
-        Parameters of the function. The keys correspond to the indicator values and the values to its associated
-        suitability values.
-
-    See Also
-    --------
-    SuitabilityFunction : Suitability Function.
-    MembershipSuitFunction : Membership Suitability Function.
-
-    Examples
-    --------
-    >>> func = DiscreteSuitFunction(func_params={1: 0, 2: 0.1, 3: 0.5, 4: 0.9, 5: 1})
-
-    ``DiscreteSuitFunction`` also support keys as strings.
-
-    >>> func = DiscreteSuitFunction(func_params={"1": 0, "2": 0.1, "3": 0.5, "4": 0.9, "5": 1})
-    """
-
-    def __init__(self, func_params: dict[str, int | float] | None = None):
-        self.func = discrete
-        self.func_method = "discrete"
-        self.func_params = func_params
-
-
 equations: dict[str, dict] = {}
 
 
@@ -395,29 +251,6 @@ def equation(type: str):
         return func
 
     return _decorator
-
-
-@equation("discrete")
-def discrete(x, rules: dict[str | int, int | float]) -> float:
-    """
-    Discrete suitability function.
-
-    This function maps the indicator values to a set of rules that define the suitability values.
-
-    Parameters
-    ----------
-    x : any
-        Indicator values to map.
-    rules : dict[str | int, int | float]
-        Rules to map the indicator values to suitability values. The keys correspond to the indicator values and the
-        values to its associated suitability values.
-
-    Returns
-    -------
-    float
-        Suitability values.
-    """
-    return np.vectorize(rules.get, otypes=[np.float32])(x, np.nan)
 
 
 @equation("sigmoid")

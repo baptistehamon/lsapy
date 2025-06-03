@@ -2,7 +2,7 @@
 
 import xarray as xr
 
-from lsapy.functions import DiscreteSuitFunction, MembershipSuitFunction, SuitabilityFunction
+from lsapy.functions import DiscreteFunction, MembershipFunction
 
 __all__ = ["SuitabilityCriteria"]
 
@@ -21,7 +21,7 @@ class SuitabilityCriteria:
         Name of the suitability criteria.
     indicator : xr.DataArray
         Indicator on which the criteria is based.
-    func : SuitabilityFunction | MembershipSuitFunction | DiscreteSuitFunction
+    func : SuitabilityFunction | MembershipFunction | DiscreteSuitFunction
         Suitability function describing how the suitability of the criteria is computed.
     weight : int | float | None, optional
         Weight of the criteria used in the aggregation process if a weighted aggregation method is used.
@@ -69,7 +69,7 @@ class SuitabilityCriteria:
         self,
         name: str,
         indicator: xr.Dataset | xr.DataArray,  # TODO: check if it's work with ds
-        func: SuitabilityFunction | MembershipSuitFunction | DiscreteSuitFunction,
+        func: MembershipFunction | DiscreteFunction,
         weight: int | float | None = 1,
         category: str | None = None,
         long_name: str | None = None,
@@ -111,10 +111,7 @@ class SuitabilityCriteria:
         xr.DataArray
             Criteria suitability.
         """
-        if self.func.func_method == "discrete":  # need to vectorize the discrete function
-            sc: xr.DataArray = xr.apply_ufunc(self.func.map, self.indicator).rename(self.name)
-        else:
-            sc: xr.DataArray = self.func.map(self.indicator).rename(self.name)
+        sc: xr.DataArray = xr.apply_ufunc(self.func.map, self.indicator).rename(self.name)
         return sc.assign_attrs(
             dict(
                 {k: v for k, v in self.attrs.items() if k not in ["name", "func_method", "from_indicator"]},

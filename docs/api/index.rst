@@ -19,17 +19,19 @@ Constructors
    :toctree: generated
    :nosignatures:
 
-   SuitabilityFunction
+   DiscreteFunction
+   MembershipFunction
    SuitabilityCriteria
    LandSuitability
 
-Membership Functions
---------------------
+Suitability Functions
+---------------------
 
 .. autosummary::
    :toctree: generated
    :nosignatures:
 
+   functions.discrete
    functions.logistic
    functions.sigmoid
    functions.vetharaniam2022_eq3

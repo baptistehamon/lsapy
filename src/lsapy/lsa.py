@@ -40,20 +40,19 @@ class LandSuitability:
     Let first define the ``SuitabilityCriteria`` (we use `xclim` package for the GDD computation):
 
     >>> from lsapy.utils import load_soil_data, load_climate_data
-    >>> from xclim.indicators.atmos import growing_degree_days  # doctest: +SKIP
-    <BLANKLINE>
+    >>> from lsapy.functions import DiscreteFunction, MembershipFunction
+    >>> from xclim.indicators.atmos import growing_degree_days
+
     >>> soil_data = load_soil_data()
     >>> climate_data = load_climate_data()
-    >>> sc = {  # doctest: +SKIP
+    >>> sc = {
     ...     "drainage_class": SuitabilityCriteria(
     ...         name="drainage_class",
     ...         long_name="Drainage Class Suitability",
     ...         weight=3,
     ...         category="soilTerrain",
     ...         indicator=soil_data["DRC"],
-    ...         func=SuitabilityFunction(
-    ...             func_method="discrete", func_params={"rules": {"1": 0, "2": 0.1, "3": 0.5, "4": 0.9, "5": 1}}
-    ...         ),
+    ...         func=DiscreteFunction(rules={"1": 0, "2": 0.1, "3": 0.5, "4": 0.9, "5": 1}),
     ...     ),
     ...     "growing_degree_days": SuitabilityCriteria(
     ...         name="growing_degree_days",
@@ -61,21 +60,26 @@ class LandSuitability:
     ...         weight=1,
     ...         category="climate",
     ...         indicator=growing_degree_days(climate_data["tas"], thresh="10 degC", freq="YS-JUL"),
-    ...         func=SuitabilityFunction(func_method="vetharaniam2022_eq5", func_params={"a": -1.41, "b": 801}),
+    ...         func=MembershipFunction(name="vetharaniam2022_eq5", params={"a": -1.41, "b": 801}),
     ...     ),
     ... }
 
     Now we can define the ``LandSuitability`` :
 
-    >>> ls = LandSuitability(  # doctest: +SKIP
+    >>> ls = LandSuitability(
     ...     name="lsa", short_name="land_suitability", long_name="Land Suitability Analysis", criteria=sc
     ... )
 
     The land suitability can now be computed:
 
-    >>> ls.compute_criteria_suitability(inplace=True)  # doctest: +SKIP
-    >>> ls.compute_category_suitability(method="weighted_mean", keep_criteria=True, inplace=True)  # doctest: +SKIP
-    >>> ls.compute_suitability(method="weighted_mean", by_category=True, keep_all=True, inplace=True)  # doctest: +SKIP
+    >>> ls.compute_criteria_suitability(inplace=True)
+    Computing drainage_class...
+    Computing growing_degree_days...
+    >>> ls.compute_category_suitability(method="weighted_mean", keep_criteria=True, inplace=True)
+    Computing climate...
+    Computing soilTerrain...
+    >>> ls.compute_suitability(method="weighted_mean", by_category=True, keep_all=True, inplace=True)
+    Computing suitability...
     """
 
     def __init__(

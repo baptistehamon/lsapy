@@ -30,3 +30,4 @@ dependencies:
   - sphinx-copybutton
   - sphinx-mdinclude
   - sphinxcontrib-bibtex >=2.6.0
+  - xclim >=0.54.0 # for doctests

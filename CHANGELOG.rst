@@ -18,6 +18,8 @@ Breaking changes
     * ``fit`` method has been renamed to ``fit_functions``.
 * ``DiscreteSuitFunction`` has been renamed to ``DiscreteFunction`` (issue `#15 <https://github.com/baptistehamon/lsapy/issues/15>`_, PR `#23 <https://github.com/baptistehamon/lsapy/pull/23>`_):
     * ``func_method`` and ``func_params`` have been renamed to ``name`` and ``params`` respectively.
+* ``LandSuitability`` has been renamed to ``LandSuitabilityAnalysis``.
+    * ``name`` has been renamed to ``land_use``.
 
 Internal changes
 ^^^^^^^^^^^^^^^^

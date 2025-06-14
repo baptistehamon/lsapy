@@ -22,31 +22,31 @@ You can now perform your LSA:
 .. code-block:: python
 
     # import modules
-    from lsapy import SuitabilityFunction, SuitabilityCriteria, LandSuitability
+    from lsapy import MembershipFunction, DiscreteFunction, SuitabilityCriteria, LandSuitabilityAnalysis
 
     # define your criteria
     criteria = {
         'crit1': SuitabilityCriteria(
             name='criteria1',
             indicator= indicator1, # xarray object
-            suitability_function= SuitabilityFunction("relevant-function")
+            func= MembershipFunction("relevant-membership-function")
         ),
         'crit2': SuitabilityCriteria(
             name='criteria2',
             indicator= indicator2, # xarray object
-            suitability_function= SuitabilityFunction("relevant-function")
+            func= DiscreteFunction("relevant-discrete-function")
         )
         # add all necessary criteria
     }
 
     # define your land suitability
-    ls = LandSuitability(
-        name= 'name_of_your_lsa',
+    lsa = LandSuitabilityAnalysis(
+        land_use= 'land_use_name',
         criteria= criteria,
     )
 
     # run your analysis
-    ls.compute_suitability(params)
+    lsa.compute_suitability(params)
 
 More detailed tutorials and examples can be found in the `User Guide`_.
 

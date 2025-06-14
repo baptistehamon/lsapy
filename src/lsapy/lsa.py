@@ -11,10 +11,10 @@ from shapely.geometry import mapping
 from lsapy.criteria import SuitabilityCriteria
 from lsapy.statistics import spatial_statistics_summary, statistics_summary
 
-__all__ = ["LandSuitability"]
+__all__ = ["LandSuitabilityAnalysis"]
 
 
-class LandSuitability:
+class LandSuitabilityAnalysis:
     """
     Data structure to define and compute land suitability.
 
@@ -24,16 +24,16 @@ class LandSuitability:
 
     Parameters
     ----------
-    name : str
-        A name for the land suitability.
+    land_use : str
+        A name for the land use.
     criteria : dict[str, SuitabilityCriteria]
         A dictionary of suitability criteria where the key is the name of the criteria.
     short_name : str | None, optional
-        A short name for the land suitability. The default is None.
+        A short name for the land suitability analysis. The default is None.
     long_name : str | None, optional
-        A long name for the land suitability. The default is None.
+        A long name for the land suitability analysis. The default is None.
     description : str | None, optional
-        A description for the land suitability. The default is None.
+        A description for the land suitability analysis. The default is None.
 
     Examples
     --------
@@ -64,33 +64,36 @@ class LandSuitability:
     ...     ),
     ... }
 
-    Now we can define the ``LandSuitability`` :
+    Now we can define the ``LandSuitabilityAnalysis`` :
 
-    >>> ls = LandSuitability(
-    ...     name="lsa", short_name="land_suitability", long_name="Land Suitability Analysis", criteria=sc
+    >>> lsa = LandSuitabilityAnalysis(
+    ...     land_use="land_use",
+    ...     short_name="land_suitability_analysis",
+    ...     long_name="Land Suitability Analysis",
+    ...     criteria=sc,
     ... )
 
     The land suitability can now be computed:
 
-    >>> ls.compute_criteria_suitability(inplace=True)
+    >>> lsa.compute_criteria_suitability(inplace=True)
     Computing drainage_class...
     Computing growing_degree_days...
-    >>> ls.compute_category_suitability(method="weighted_mean", keep_criteria=True, inplace=True)
-    Computing climate...
+    >>> lsa.compute_category_suitability(method="weighted_mean", keep_criteria=True, inplace=True)
     Computing soilTerrain...
-    >>> ls.compute_suitability(method="weighted_mean", by_category=True, keep_all=True, inplace=True)
+    Computing climate...
+    >>> lsa.compute_suitability(method="weighted_mean", by_category=True, keep_all=True, inplace=True)
     Computing suitability...
     """
 
     def __init__(
         self,
-        name: str,
+        land_use: str,
         criteria: dict[str, SuitabilityCriteria],
         short_name: str | None = None,
         long_name: str | None = None,
         description: str | None = None,
     ) -> None:
-        self.name = name
+        self.land_use = land_use
         self.criteria = criteria
         self.short_name = short_name
         self.long_name = long_name
@@ -98,7 +101,7 @@ class LandSuitability:
 
         self._sort_criteria_by_weight()  # important if suitability as limited factor
         self._criteria_name_list = [sc.name for sc in self.criteria.values()]
-        self._category_list = list(set([sc.category for sc in self.criteria.values()]))
+        self._category_list = list(dict.fromkeys([sc.category for sc in self.criteria.values()]))
         self._get_params_by_category()
 
     def __repr__(self) -> str:
@@ -118,18 +121,18 @@ class LandSuitability:
     @property
     def attrs(self):
         """
-        Dictionary of attributes of the land suitability.
+        Dictionary of attributes of the land suitability analysis.
 
         Returns
         -------
         dict
-            A dictionary of attributes of the land suitability, including name, criteria, short_name,
+            A dictionary of attributes of the land suitability analysis, including name, criteria, short_name,
             long_name, and description.
         """
         return {
             k: v
             for k, v in {
-                "name": self.name,
+                "land_use": self.land_use,
                 "criteria": self._criteria_name_list,
                 "short_name": self.short_name,
                 "long_name": self.long_name,

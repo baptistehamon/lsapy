@@ -1,4 +1,9 @@
-|logo|
+.. image:: https://raw.githubusercontent.com/baptistehamon/lsapy/main/docs/logos/lsapy/LSAPy_Logo_FullColour.png
+    :class: dark-light
+    :align: center
+    :target: https://github.com/baptistehamon/lsapy
+    :width: 400px
+    :alt: LSAPy Logo
 
 LSAPy: Land Suitability Analysis in Python
 ===========================================
@@ -77,7 +82,7 @@ The Python package has been created following the `pyOpenSci Guidebook`_.
 .. _`University of Canterbury`: https://www.canterbury.ac.nz/
 .. _`pyOpenSci Guidebook`: https://www.pyopensci.org/python-package-guide/
 
-.. |logo| image:: logos/lsapy/LSAPy_Logo_FullColour.png
+.. |logo| image:: https://raw.githubusercontent.com/baptistehamon/lsapy/main/docs/logos/lsapy/LSAPy_Logo_FullColour.png
     :class: dark-light
     :target: https://github.com/baptistehamon/lsapy
     :width: 400px

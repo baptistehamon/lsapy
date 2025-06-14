@@ -1,3 +1,5 @@
+|logo|
+
 LSAPy: Land Suitability Analysis in Python
 ===========================================
 |pypi| |status| |ruff| |pre-commit| |docs| |question| |zenodo|
@@ -74,6 +76,12 @@ The Python package has been created following the `pyOpenSci Guidebook`_.
 .. _`Food Transition 2050`: https://www.foodtransitions2050.ac.nz/
 .. _`University of Canterbury`: https://www.canterbury.ac.nz/
 .. _`pyOpenSci Guidebook`: https://www.pyopensci.org/python-package-guide/
+
+.. |logo| image:: logos/lsapy/LSAPy_Logo_FullColour.png
+    :class: dark-light
+    :target: https://github.com/baptistehamon/lsapy
+    :width: 400px
+    :alt: LSAPy Logo
 
 .. |FT2050| image:: https://raw.githubusercontent.com/baptistehamon/lsapy/main/docs/logos/FT2050-full_colour.png
     :class: dark-light

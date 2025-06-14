@@ -32,6 +32,7 @@ Internal changes
 * The structure around ``SuitabilityFunction``, ``MembershipFunction``, and ``DiscreteFunction`` has been redesigned :
     * The ``SuitabilityFunction`` has been moved to LSAPy ``core`` module.
     * The ``MembershipFunction`` and ``DiscreteFunction`` have been moved to the ``function`` module and split into two different files: ``membership.py`` and ``discrete.py``.
+* LSAPy logo have been added: README and documentation have been updated to use it.
 
 v0.1.0-dev2 (2025-05-25)
 ------------------------

@@ -38,31 +38,32 @@ class SuitabilityCriteria:
     Here is an example using the sample soil data with the drainage class (DRC) as indicator for the criteria.
 
     >>> from lsapy.utils import load_soil_data, load_climate_data
-    >>> from xclim.indicators.atmos import growing_degree_days  # doctest: +SKIP
-    <BLANKLINE>
+    >>> from lsapy.functions import DiscreteFunction, MembershipFunction
+    >>> from xclim.indicators.atmos import growing_degree_days
+
     >>> soil_data = load_soil_data()
-    >>> sc = SuitabilityCriteria(  # doctest: +SKIP
+    >>> sc = SuitabilityCriteria(
     ...     name="drainage_class",
     ...     long_name="Drainage Class Suitability",
     ...     weight=3,
     ...     category="soilTerrain",
     ...     indicator=soil_data["DRC"],
-    ...     func=SuitabilityFunction(
-    ...         func_method="discrete", func_params={"rules": {"1": 0, "2": 0.1, "3": 0.5, "4": 0.9, "5": 1}}
-    ...     ),
+    ...     func=DiscreteFunction(rules={"1": 0, "2": 0.1, "3": 0.5, "4": 0.9, "5": 1}),
     ... )
 
     Here is another example using the sample climate data with the growing degree days (GDD)
     as indicator for the criteria computing using the `xclim` package.
 
-    >>> gdd = growing_degree_days(clim_data["tas"], thresh="10 degC", freq="YS-JUL")  # doctest: +SKIP
-    >>> sc = SuitabilityCriteria( # doctest: +SKIP
-    ...     name = "growing_degree_days"
-    ...     long_name= "Growing Degree Days Suitability",
-    ...     weight= 1,
-    ...     category= "climate",
+    >>> clim_data = load_climate_data()
+    >>> gdd = growing_degree_days(clim_data["tas"], thresh="10 degC", freq="YS-JUL")
+    >>> sc = SuitabilityCriteria(
+    ...     name="growing_degree_days",
+    ...     long_name="Growing Degree Days Suitability",
+    ...     weight=1,
+    ...     category="climate",
     ...     indicator=gdd,
-    ...     func = SuitabilityFunction(func_method='vetharaniam2022_eq5', func_params={'a': -1.41, 'b': 801}))
+    ...     func=MembershipFunction(name="vetharaniam2022_eq5", params={"a": -1.41, "b": 801}),
+    ... )
     """
 
     def __init__(
@@ -111,7 +112,7 @@ class SuitabilityCriteria:
         xr.DataArray
             Criteria suitability.
         """
-        sc: xr.DataArray = xr.apply_ufunc(self.func.map, self.indicator).rename(self.name)
+        sc: xr.DataArray = xr.apply_ufunc(self.func, self.indicator).rename(self.name)
         return sc.assign_attrs(
             dict(
                 {k: v for k, v in self.attrs.items() if k not in ["name", "func_method", "from_indicator"]},

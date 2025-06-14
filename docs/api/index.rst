@@ -22,7 +22,7 @@ Constructors
    DiscreteFunction
    MembershipFunction
    SuitabilityCriteria
-   LandSuitability
+   LandSuitabilityAnalysis
 
 Suitability Functions
 ---------------------

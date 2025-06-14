@@ -94,7 +94,9 @@ class SuitabilityFunction:
 
         Examples
         --------
-        >>> sf = SuitabilityFunction(func_method="logistic", func_params={"a": 1, "b": 5})
+        >>> from lsapy.functions import logistic
+
+        >>> sf = SuitabilityFunction(func=logistic, params={"a": 1, "b": 5})
         >>> sf.map(3)
         array(0.11920292, dtype=float32)
 
@@ -121,8 +123,9 @@ class SuitabilityFunction:
         Examples
         --------
         >>> import numpy as np  # doctest: +SKIP
-        <BLANKLINE>
-        >>> sf = SuitabilityFunction(func_method="logistic", func_params={"a": 1, "b": 5})
+        >>> from lsapy.functions import logistic
+
+        >>> sf = SuitabilityFunction(func=logistic, params={"a": 1, "b": 5})
         >>> sf.plot(np.linspace(0, 10, 100))  # doctest: +SKIP
         """
         plt.plot(x, self(x))

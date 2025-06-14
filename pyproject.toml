@@ -46,7 +46,8 @@ dev = [
   "numpydoc >=1.8.0",
   "pre-commit >=4.0.0",
   "pytest >=8.3.0",
-  "ruff >=0.10.0"
+  "ruff >=0.10.0",
+  "xclim >=0.54.0"
 ]
 docs = [
   # docs & examples

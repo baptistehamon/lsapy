@@ -152,7 +152,7 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"docs/*.py" = ["D100", "D101", "D102", "PLR6301"]
+"docs/*.py" = ["D100", "D101", "D102", "D103", "PLR6301"]
 "src/lsapy/**/__init__.py" = ["F401", "F403"]
 
 [tool.ruff.lint.isort]

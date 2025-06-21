@@ -40,7 +40,7 @@ class LandSuitabilityAnalysis:
     Let first define the ``SuitabilityCriteria`` (we use `xclim` package for the GDD computation):
 
     >>> from lsapy.utils import load_soil_data, load_climate_data
-    >>> from lsapy.functions import DiscreteFunction, MembershipFunction
+    >>> from lsapy.functions import SuitabilityFunction
     >>> from xclim.indicators.atmos import growing_degree_days
 
     >>> soil_data = load_soil_data()
@@ -52,7 +52,9 @@ class LandSuitabilityAnalysis:
     ...         weight=3,
     ...         category="soilTerrain",
     ...         indicator=soil_data["DRC"],
-    ...         func=DiscreteFunction(rules={"1": 0, "2": 0.1, "3": 0.5, "4": 0.9, "5": 1}),
+    ...         func=SuitabilityFunction(
+    ...             name="discrete", params={"rules": {"1": 0, "2": 0.1, "3": 0.5, "4": 0.9, "5": 1}}
+    ...         ),
     ...     ),
     ...     "growing_degree_days": SuitabilityCriteria(
     ...         name="growing_degree_days",
@@ -60,7 +62,7 @@ class LandSuitabilityAnalysis:
     ...         weight=1,
     ...         category="climate",
     ...         indicator=growing_degree_days(climate_data["tas"], thresh="10 degC", freq="YS-JUL"),
-    ...         func=MembershipFunction(name="vetharaniam2022_eq5", params={"a": -1.41, "b": 801}),
+    ...         func=SuitabilityFunction(name="vetharaniam2022_eq5", params={"a": -1.41, "b": 801}),
     ...     ),
     ... }
 

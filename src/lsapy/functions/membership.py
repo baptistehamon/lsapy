@@ -314,24 +314,25 @@ def _check_fitting(fit_on: str | list[str] = "all"):
         if fit_on == "all":
             for t in EQUATION_TYPES:
                 functions.extend(equations[t].keys())
+                fit_on = None
         else:
             fit_on = [fit_on]
-
-    for func in fit_on:
-        if not isinstance(func, str):
-            continue
-        if func in _types:
-            for f in equations[func.replace("_like", "")].keys():
-                if f not in functions:
-                    functions.append(f)
-        else:
-            try:
-                get_function_from_name(func)
-                if func not in functions:
-                    functions.append(func)
-            except Exception:
-                _skipped.append(func)
-                warnings.warn(f"`{func}` not found in implemented equations. Skipped.", stacklevel=3)
+    if fit_on is not None:
+        for func in fit_on:
+            if not isinstance(func, str):
+                continue
+            if func in _types:
+                for f in equations[func.replace("_like", "")].keys():
+                    if f not in functions:
+                        functions.append(f)
+            else:
+                try:
+                    get_function_from_name(func)
+                    if func not in functions:
+                        functions.append(func)
+                except Exception:
+                    _skipped.append(func)
+                    warnings.warn(f"`{func}` not found in implemented equations. Skipped.", stacklevel=3)
 
     for f in ["sigmoid", "vetharaniam2024_eq8"]:
         if f in functions:

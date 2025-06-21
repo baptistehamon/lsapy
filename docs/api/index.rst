@@ -17,10 +17,11 @@ Constructors
 
 .. autosummary::
    :toctree: generated
+   :template: custom_class.rst
    :nosignatures:
+   :recursive:
 
-   DiscreteFunction
-   MembershipFunction
+   SuitabilityFunction
    SuitabilityCriteria
    LandSuitabilityAnalysis
 

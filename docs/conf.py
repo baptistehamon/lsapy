@@ -54,7 +54,7 @@ language = "en"
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "logos/lsapy/branding.md"]
 
 
 # Bibliography stuff (stolen from xclim package)
@@ -79,6 +79,8 @@ bibtex_reference_style = "author_year"
 
 html_title = "LSAPy Documentation"
 html_short_title = "LSAPy"
+html_logo = "logos/lsapy/LSAPy_Logo_FullColour.svg"
+html_favicon = "logos/lsapy/LSAPy_Icon.png"
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
@@ -128,3 +130,7 @@ html_context = {
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
+
+
+def setup(app):
+    app.add_css_file("style.css")

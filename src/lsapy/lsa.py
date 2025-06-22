@@ -162,11 +162,7 @@ class LandSuitabilityAnalysis:
         """
         sc_list = []
         for _, sc in self.criteria.items():
-            print(f"Computing {sc.name}...")
-            if sc.indicator.attrs.get("compute", "") == "done":
-                sc_list.append(sc.indicator.rename(sc.name))
-            else:
-                sc_list.append(sc.compute())
+            sc_list.append(sc.compute())
         ls = xr.merge(sc_list, compat="override", combine_attrs="drop")
         for sc in sc_list:
             ls[sc.name].attrs = sc.attrs

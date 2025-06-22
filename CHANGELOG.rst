@@ -6,18 +6,16 @@ v0.1.0 (unreleased)
 -------------------
 Contributor to this version: Baptiste Hamon (@baptistehamon).
 
+New features
+^^^^^^^^^^^^
+* New function ``membership.fit_membership`` implemented as replacement of the deprecated ``MembershipSuitFunction.fit`` method (issue `#29 <https://github.com/baptistehamon/lsapy/issues/29>`_, PR `#30 <https://github.com/baptistehamon/lsapy/pull/30>`_).
+
 Breaking changes
 ^^^^^^^^^^^^^^^^
-* Changes in ``SuitabilityFunction`` (issue `#15 <https://github.com/baptistehamon/lsapy/issues/15>`_, PR `#23 <https://github.com/baptistehamon/lsapy/pull/23>`_):
-    * ``SuitabilityFunction`` is now an abstract class and must not be instantiated directly.
+* ``MembershipSuitFunction`` and ``DiscreteSuitFunction`` have been removed (issue `#29 <https://github.com/baptistehamon/lsapy/issues/29>`_, PR `#30 <https://github.com/baptistehamon/lsapy/pull/30>`_).
+* Changes in ``SuitabilityFunction`` (issue `#15 <https://github.com/baptistehamon/lsapy/issues/15>`_, PR `#23 <https://github.com/baptistehamon/lsapy/pull/23>`_ & PR `#30 <https://github.com/baptistehamon/lsapy/pull/30>`_):
     * ``func_method`` and ``func_params`` have been renamed to ``name`` and ``params`` respectively.
-    * ``SuitabilityFunction`` does not support the option to retrieve the implemented function from the ``func_method`` anymore. This is now implemented in the ``MembershipFunction`` class.
     * ``map`` has been deprecated because of its redundancy with the ``__call__`` method. Changes will be permanent in LSAPy v0.1.0. Call the function directly instead.
-* ``MembershipSuitFunction`` has been renamed to ``MembershipFunction`` (issue `#15 <https://github.com/baptistehamon/lsapy/issues/15>`_, PR `#23 <https://github.com/baptistehamon/lsapy/pull/23>`_):
-    * ``func_method`` and ``func_params`` have been renamed to ``name`` and ``params`` respectively.
-    * ``fit`` method has been renamed to ``fit_functions``.
-* ``DiscreteSuitFunction`` has been renamed to ``DiscreteFunction`` (issue `#15 <https://github.com/baptistehamon/lsapy/issues/15>`_, PR `#23 <https://github.com/baptistehamon/lsapy/pull/23>`_):
-    * ``func_method`` and ``func_params`` have been renamed to ``name`` and ``params`` respectively.
 * ``LandSuitability`` has been renamed to ``LandSuitabilityAnalysis``. (issue `#15 <https://github.com/baptistehamon/lsapy/issues/15>`_, PR `#26 <https://github.com/baptistehamon/lsapy/pull/26>`_)
     * ``name`` has been renamed to ``land_use``.
 
@@ -29,9 +27,12 @@ Internal changes
 * `Pre-commit` has been setup and `ruff`, `codespell` and `numpydoc` hooks have been added (issue `#8 <https://github.com/baptistehamon/lsapy/issues/8>`_, PR `#18 <https://github.com/baptistehamon/lsapy/pull/18>`_/PR `#19 <https://github.com/baptistehamon/lsapy/pull/19>`_).
 * The autoupdate schedule of `pre-commit` has been set to weekly (PR `#21 <https://github.com/baptistehamon/lsapy/pull/21>`_)
 * The unused ``introduction.ipynb`` notebook has been removed (issue `#15 <https://github.com/baptistehamon/lsapy/issues/15>`_, PR `#20 <https://github.com/baptistehamon/lsapy/pull/20>`_).
-* The structure around ``SuitabilityFunction``, ``MembershipFunction``, and ``DiscreteFunction`` has been redesigned :
-    * The ``SuitabilityFunction`` has been moved to LSAPy ``core`` module.
-    * The ``MembershipFunction`` and ``DiscreteFunction`` have been moved to the ``function`` module and split into two different files: ``membership.py`` and ``discrete.py``.
+* The structure around ``SuitabilityFunction`` (PR `#30 <https://github.com/baptistehamon/lsapy/pull/30>`_):
+    * The ``SuitabilityFunction`` has been moved to LSAPy ``function._suitability`` module.
+    * The membership functions have been moved to the ``function.membership`` module.
+    * The discrete function has been moved to the ``function._discrete`` module.
+    * The ``equation`` decorator has been rename to ``declare_equation`` and moved to the ``core.function`` module.
+    * The ``get_function_from_name`` function has been moved to the ``core.function`` module.
 * LSAPy logo have been added: README and documentation have been updated to use it (PR `#27 <https://github.com/baptistehamon/lsapy/pull/27>`_)
 
 v0.1.0-dev2 (2025-05-25)

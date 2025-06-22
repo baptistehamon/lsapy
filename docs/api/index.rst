@@ -17,7 +17,6 @@ Constructors
 
 .. autosummary::
    :toctree: generated
-   :template: custom_class.rst
    :nosignatures:
    :recursive:
 

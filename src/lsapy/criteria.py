@@ -1,5 +1,9 @@
 """Suitability Criteria definition."""
 
+from __future__ import annotations
+
+from collections.abc import Callable
+
 import xarray as xr
 
 from lsapy.functions import SuitabilityFunction
@@ -31,7 +35,11 @@ class SuitabilityCriteria:
     long_name : str | None, optional
         A long name for the criteria. The default is None.
     description : str | None, optional
-        A description for the criteria. The default is None. # TODO: check default behavior.
+        A description for the criteria. The default is None.
+    comment : str | None, optional
+        Additional information about the criteria.
+    is_computed : bool, optional
+        If the indicator data already contains the computed suitability values. Default is False.
 
     Examples
     --------
@@ -69,12 +77,14 @@ class SuitabilityCriteria:
     def __init__(
         self,
         name: str,
-        indicator: xr.Dataset | xr.DataArray,  # TODO: check if it's work with ds
-        func: SuitabilityFunction,
+        indicator: xr.DataArray,
+        func: SuitabilityFunction | Callable = None,
         weight: int | float | None = 1,
         category: str | None = None,
         long_name: str | None = None,
         description: str | None = None,
+        comment: str | None = None,
+        is_computed: bool = False,
     ) -> None:
         self.name = name
         self.indicator = indicator
@@ -83,6 +93,8 @@ class SuitabilityCriteria:
         self.category = category
         self.long_name = long_name
         self.description = description
+        self.comment = comment
+        self.is_computed = is_computed
         self._from_indicator = _get_indicator_description(indicator)
 
     def __repr__(self) -> str:
@@ -90,7 +102,7 @@ class SuitabilityCriteria:
         attrs = []
         attrs.append(f"name='{self.name}'")
         attrs.append(f"indicator={self.indicator.name}")
-        attrs.append(f"func={self.func}")
+        attrs.append(f"func={self.func if self.func is not None else 'unknown'}")
         attrs.append(f"weight={self.weight}")
         if self.category is not None:
             attrs.append(f"category='{self.category}'")
@@ -98,6 +110,10 @@ class SuitabilityCriteria:
             attrs.append(f"long_name='{self.long_name}'")
         if self.description is not None:
             attrs.append(f"description='{self.description}'")
+        if self.comment is not None:
+            attrs.append(f"comment='{self.comment}'")
+        if self.is_computed:
+            attrs.append("is_computed=True")
         return f"{self.__class__.__name__}({', '.join(attrs) if attrs else ''})"
 
     def compute(self) -> xr.DataArray:
@@ -112,11 +128,23 @@ class SuitabilityCriteria:
         xr.DataArray
             Criteria suitability.
         """
-        sc: xr.DataArray = xr.apply_ufunc(self.func, self.indicator).rename(self.name)
-        return sc.assign_attrs(
+        if self.is_computed:
+            sc = self.indicator
+        elif self.func is None:
+            raise ValueError("The suitability function is not defined. Please provide a valid function.")
+        else:
+            sc: xr.DataArray = xr.apply_ufunc(self.func, self.indicator)
+        return sc.rename(self.name).assign_attrs(
             dict(
-                {k: v for k, v in self.attrs.items() if k not in ["name", "func_method", "from_indicator"]},
-                **{"history": f"func_method: {self.func}; from_indicator: [{self._from_indicator}]", "compute": "done"},
+                {
+                    k: v
+                    for k, v in self.attrs.items()
+                    if k not in ["name", "func_method", "from_indicator", "is_computed"]
+                },
+                **{
+                    "history": f"func_method: {self.func if self.func is not None else 'unknown'}; "
+                    f"from_indicator: [{self._from_indicator}]"
+                },
             )
         )
 
@@ -138,8 +166,9 @@ class SuitabilityCriteria:
                 "category": self.category,
                 "long_name": self.long_name,
                 "description": self.description,
-                "func_method": self.func,
+                "func_method": self.func if self.func is not None else "unknown",
                 "from_indicator": self._from_indicator,
+                "is_computed": self.is_computed,
             }.items()
             if v is not None
         }

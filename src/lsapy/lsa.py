@@ -78,8 +78,6 @@ class LandSuitabilityAnalysis:
     The land suitability can now be computed:
 
     >>> lsa.compute_criteria_suitability(inplace=True)
-    Computing drainage_class...
-    Computing growing_degree_days...
     >>> lsa.compute_category_suitability(method="weighted_mean", keep_criteria=True, inplace=True)
     Computing soilTerrain...
     Computing climate...
@@ -162,11 +160,7 @@ class LandSuitabilityAnalysis:
         """
         sc_list = []
         for _, sc in self.criteria.items():
-            print(f"Computing {sc.name}...")
-            if sc.indicator.attrs.get("compute", "") == "done":
-                sc_list.append(sc.indicator.rename(sc.name))
-            else:
-                sc_list.append(sc.compute())
+            sc_list.append(sc.compute())
         ls = xr.merge(sc_list, compat="override", combine_attrs="drop")
         for sc in sc_list:
             ls[sc.name].attrs = sc.attrs

@@ -33,7 +33,7 @@ Internal changes
     * The discrete function has been moved to the ``function._discrete`` module.
     * The ``equation`` decorator has been rename to ``declare_equation`` and moved to the ``core.function`` module.
     * The ``get_function_from_name`` function has been moved to the ``core.function`` module.
-* Changes on ``SuitabilityCriteria``:
+* Changes on ``SuitabilityCriteria`` (issue `#15 <https://github.com/baptistehamon/lsapy/issues/15>`_, PR `#31 <https://github.com/baptistehamon/lsapy/pull/31>`_):
     * It now has a ``comment`` and ``is_computed`` attributes.
     * ``func`` parameter is now optional, useful when the criteria is already computed.
 * LSAPy logo have been added: README and documentation have been updated to use it (PR `#27 <https://github.com/baptistehamon/lsapy/pull/27>`_)

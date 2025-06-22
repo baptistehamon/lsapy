@@ -2,7 +2,7 @@
 
 import xarray as xr
 
-from lsapy.functions import DiscreteFunction, MembershipFunction
+from lsapy.functions import SuitabilityFunction
 
 __all__ = ["SuitabilityCriteria"]
 
@@ -38,7 +38,7 @@ class SuitabilityCriteria:
     Here is an example using the sample soil data with the drainage class (DRC) as indicator for the criteria.
 
     >>> from lsapy.utils import load_soil_data, load_climate_data
-    >>> from lsapy.functions import DiscreteFunction, MembershipFunction
+    >>> from lsapy.functions import SuitabilityFunction
     >>> from xclim.indicators.atmos import growing_degree_days
 
     >>> soil_data = load_soil_data()
@@ -48,7 +48,7 @@ class SuitabilityCriteria:
     ...     weight=3,
     ...     category="soilTerrain",
     ...     indicator=soil_data["DRC"],
-    ...     func=DiscreteFunction(rules={"1": 0, "2": 0.1, "3": 0.5, "4": 0.9, "5": 1}),
+    ...     func=SuitabilityFunction(name="discrete", params={"rules": {"1": 0, "2": 0.1, "3": 0.5, "4": 0.9, "5": 1}}),
     ... )
 
     Here is another example using the sample climate data with the growing degree days (GDD)
@@ -62,7 +62,7 @@ class SuitabilityCriteria:
     ...     weight=1,
     ...     category="climate",
     ...     indicator=gdd,
-    ...     func=MembershipFunction(name="vetharaniam2022_eq5", params={"a": -1.41, "b": 801}),
+    ...     func=SuitabilityFunction(name="vetharaniam2022_eq5", params={"a": -1.41, "b": 801}),
     ... )
     """
 
@@ -70,7 +70,7 @@ class SuitabilityCriteria:
         self,
         name: str,
         indicator: xr.Dataset | xr.DataArray,  # TODO: check if it's work with ds
-        func: MembershipFunction | DiscreteFunction,
+        func: SuitabilityFunction,
         weight: int | float | None = 1,
         category: str | None = None,
         long_name: str | None = None,

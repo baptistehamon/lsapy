@@ -18,9 +18,9 @@ Constructors
 .. autosummary::
    :toctree: generated
    :nosignatures:
+   :recursive:
 
-   DiscreteFunction
-   MembershipFunction
+   SuitabilityFunction
    SuitabilityCriteria
    LandSuitabilityAnalysis
 

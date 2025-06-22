@@ -29,19 +29,19 @@ You can now perform your LSA:
 .. code-block:: python
 
     # import modules
-    from lsapy import MembershipFunction, DiscreteFunction, SuitabilityCriteria, LandSuitabilityAnalysis
+    from lsapy import LandSuitabilityAnalysis, SuitabilityCriteria, SuitabilityFunction
 
     # define your criteria
     criteria = {
         'crit1': SuitabilityCriteria(
             name='criteria1',
             indicator= indicator1, # xarray object
-            func= MembershipFunction("relevant-membership-function")
+            func=SuitabilityFunction(name="function_name", params={'param1': value1, 'param2': value2})
         ),
         'crit2': SuitabilityCriteria(
             name='criteria2',
             indicator= indicator2, # xarray object
-            func= DiscreteFunction("relevant-discrete-function")
+            func= SuitabilityFunction(name="another_function_name", params={'param1': value1, 'param2': value2})
         )
         # add all necessary criteria
     }

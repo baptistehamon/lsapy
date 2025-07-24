@@ -75,14 +75,9 @@ class LandSuitabilityAnalysis:
     ...     criteria=sc,
     ... )
 
-    The land suitability can now be computed:
+    The land suitability analysis can now be run:
 
-    >>> lsa.compute_criteria_suitability(inplace=True)
-    >>> lsa.compute_category_suitability(method="weighted_mean", keep_criteria=True, inplace=True)
-    Computing soilTerrain...
-    Computing climate...
-    >>> lsa.compute_suitability(method="weighted_mean", by_category=True, keep_all=True, inplace=True)
-    Computing suitability...
+    >>> lsa.run(inplace=True)
     """
 
     def __init__(
@@ -181,6 +176,55 @@ class LandSuitabilityAnalysis:
         Notes
         -----
         To avoid biais in LSA categories outputs, it was decided to apply the same aggregation method to all categories.
+
+        Examples
+        --------
+        Let first define the ``SuitabilityCriteria`` (we use `xclim` package for the GDD computation):
+
+        >>> from lsapy.utils import load_soil_data, load_climate_data
+        >>> from lsapy.functions import SuitabilityFunction
+        >>> from xclim.indicators.atmos import growing_degree_days
+
+        >>> soil_data = load_soil_data()
+        >>> climate_data = load_climate_data()
+        >>> sc = {
+        ...     "drainage_class": SuitabilityCriteria(
+        ...         name="drainage_class",
+        ...         long_name="Drainage Class Suitability",
+        ...         weight=3,
+        ...         category="soilTerrain",
+        ...         indicator=soil_data["DRC"],
+        ...         func=SuitabilityFunction(
+        ...             name="discrete", params={"rules": {"1": 0, "2": 0.1, "3": 0.5, "4": 0.9, "5": 1}}
+        ...         ),
+        ...     ),
+        ...     "growing_degree_days": SuitabilityCriteria(
+        ...         name="growing_degree_days",
+        ...         long_name="Growing Degree Days Suitability",
+        ...         weight=1,
+        ...         category="climate",
+        ...         indicator=growing_degree_days(climate_data["tas"], thresh="10 degC", freq="YS-JUL"),
+        ...         func=SuitabilityFunction(name="vetharaniam2022_eq5", params={"a": -1.41, "b": 801}),
+        ...     ),
+        ... }
+
+        Now we can define the ``LandSuitabilityAnalysis`` :
+
+        >>> lsa = LandSuitabilityAnalysis(
+        ...     land_use="land_use",
+        ...     short_name="land_suitability_analysis",
+        ...     long_name="Land Suitability Analysis",
+        ...     criteria=sc,
+        ... )
+
+        The land suitability analysis can now be run:
+
+        >>> lsa.run(
+        ...     suitability_type="overall",
+        ...     agg_methods={"category": "weighted_geomean", "overall": "mean"},
+        ...     by_category=True,
+        ...     inplace=True,
+        ... )
         """
 
         def _pre_agg(suitability_type, by_category):

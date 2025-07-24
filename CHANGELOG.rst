@@ -18,6 +18,8 @@ Breaking changes
     * ``map`` has been deprecated because of its redundancy with the ``__call__`` method. Changes will be permanent in LSAPy v0.1.0. Call the function directly instead.
 * ``LandSuitability`` has been renamed to ``LandSuitabilityAnalysis``. (issue `#15 <https://github.com/baptistehamon/lsapy/issues/15>`_, PR `#26 <https://github.com/baptistehamon/lsapy/pull/26>`_)
     * ``name`` has been renamed to ``land_use``.
+    * ``compute_criteria_suitability``, ``compute_category_suitability``, and ``compute_suitability`` methods have been removed and the method ``run`` has been implemented as replacement.
+    * ``mask``, ``statistics`` and ``spatial_statsistics`` methods have been removed.
 
 Internal changes
 ^^^^^^^^^^^^^^^^

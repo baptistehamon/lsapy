@@ -1,26 +1,24 @@
 """Land Suitability definition."""
 
+from __future__ import annotations
+
+import warnings
 from typing import Any
 
-import geopandas as gpd
 import numpy as np
-import pandas as pd
 import xarray as xr
-from shapely.geometry import mapping
 
 from lsapy.criteria import SuitabilityCriteria
-from lsapy.statistics import spatial_statistics_summary, statistics_summary
 
 __all__ = ["LandSuitabilityAnalysis"]
 
 
 class LandSuitabilityAnalysis:
     """
-    Data structure to define and compute land suitability.
+    Data structure to define and run land suitability analysis.
 
-    Land suitability is defined by a set of suitability criteria that are combined to compute the
-    suitability and this class encompasses a wide range of functionalities to compute and analyze
-    land suitability.
+    The land suitability analysis is defined by a set of suitability criteria that are combined to
+    compute the suitability.
 
     Parameters
     ----------
@@ -34,6 +32,8 @@ class LandSuitabilityAnalysis:
         A long name for the land suitability analysis. The default is None.
     description : str | None, optional
         A description for the land suitability analysis. The default is None.
+    comment : str | None, optional
+        Additional information about the land suitability analysis.
 
     Examples
     --------
@@ -75,14 +75,9 @@ class LandSuitabilityAnalysis:
     ...     criteria=sc,
     ... )
 
-    The land suitability can now be computed:
+    The land suitability analysis can now be run:
 
-    >>> lsa.compute_criteria_suitability(inplace=True)
-    >>> lsa.compute_category_suitability(method="weighted_mean", keep_criteria=True, inplace=True)
-    Computing soilTerrain...
-    Computing climate...
-    >>> lsa.compute_suitability(method="weighted_mean", by_category=True, keep_all=True, inplace=True)
-    Computing suitability...
+    >>> lsa.run(inplace=True)
     """
 
     def __init__(
@@ -92,16 +87,18 @@ class LandSuitabilityAnalysis:
         short_name: str | None = None,
         long_name: str | None = None,
         description: str | None = None,
+        comment: str | None = None,
     ) -> None:
         self.land_use = land_use
         self.criteria = criteria
         self.short_name = short_name
         self.long_name = long_name
         self.description = description
+        self.comment = comment
 
         self._sort_criteria_by_weight()  # important if suitability as limited factor
-        self._criteria_name_list = [sc.name for sc in self.criteria.values()]
-        self._category_list = list(dict.fromkeys([sc.category for sc in self.criteria.values()]))
+        self._criteria_list = [sc.name for sc in self.criteria.values()]
+        self.category = list(dict.fromkeys([sc.category for sc in self.criteria.values()]))
         self._get_params_by_category()
 
     def __repr__(self) -> str:
@@ -133,7 +130,7 @@ class LandSuitabilityAnalysis:
             k: v
             for k, v in {
                 "land_use": self.land_use,
-                "criteria": self._criteria_name_list,
+                "criteria": self._criteria_list,
                 "short_name": self.short_name,
                 "long_name": self.long_name,
                 "description": self.description,
@@ -141,419 +138,308 @@ class LandSuitabilityAnalysis:
             if v is not None
         }
 
-    def compute_criteria_suitability(self, inplace: bool | None = False) -> None | xr.Dataset:
+    def run(
+        self,
+        suitability_type: str = "overall",
+        agg_methods: str | dict[str, str] = "mean",
+        by_category: bool | None = None,
+        keep_vars: bool | None = True,
+        inplace=False,
+    ):
         """
-        Compute the suitability of each criteria.
-
-        The suitability of each criteria is computed individually. Criteria that have already been computed
-        are skipped.
+        Run the land suitability analysis.
 
         Parameters
         ----------
-        inplace : bool | None, optional
+        suitability_type : str, optional
+            The type of suitability to compute. Options are 'criteria', 'category', or 'overall'.
+            The default is 'overall'.
+        agg_methods : str | dict[str, str], optional
+            The aggregation method to use for the suitability computation. If a string, it applies the same method
+            to compute the category and overall suitability. If a dictionary, the keys 'category' and 'overall'
+            are used to specify the aggregation method to use for each type of suitability. The default is 'mean'.
+        by_category : bool | None, optional
+            If True, compute the overall suitability aggregating categories suitability. If False, use the criteria
+            suitability. The default behavior uses categories suitability if categories are found in criteria, otherwise
+            it uses the criteria suitability.
+        keep_vars : bool | None, optional
+            If True, return all the variables computed as part of the computation process, otherwise return only the
+            data defined by the `suitability_type`. The default is True.
+        inplace : bool, optional
             If True, compute the suitability in place. The default is False.
 
         Returns
         -------
         None | xr.Dataset
-            If inplace is True, return None. Otherwise, return the computed suitability as a Dataset.
+            If `inplace` is False, return the computed suitability as a Dataset. If `inplace` is True, return None.
+
+        Notes
+        -----
+        To avoid biais in LSA categories outputs, it was decided to apply the same aggregation method to all categories.
+
+        Examples
+        --------
+        Let first define the ``SuitabilityCriteria`` (we use `xclim` package for the GDD computation):
+
+        >>> from lsapy.utils import load_soil_data, load_climate_data
+        >>> from lsapy.functions import SuitabilityFunction
+        >>> from xclim.indicators.atmos import growing_degree_days
+
+        >>> soil_data = load_soil_data()
+        >>> climate_data = load_climate_data()
+        >>> sc = {
+        ...     "drainage_class": SuitabilityCriteria(
+        ...         name="drainage_class",
+        ...         long_name="Drainage Class Suitability",
+        ...         weight=3,
+        ...         category="soilTerrain",
+        ...         indicator=soil_data["DRC"],
+        ...         func=SuitabilityFunction(
+        ...             name="discrete", params={"rules": {"1": 0, "2": 0.1, "3": 0.5, "4": 0.9, "5": 1}}
+        ...         ),
+        ...     ),
+        ...     "growing_degree_days": SuitabilityCriteria(
+        ...         name="growing_degree_days",
+        ...         long_name="Growing Degree Days Suitability",
+        ...         weight=1,
+        ...         category="climate",
+        ...         indicator=growing_degree_days(climate_data["tas"], thresh="10 degC", freq="YS-JUL"),
+        ...         func=SuitabilityFunction(name="vetharaniam2022_eq5", params={"a": -1.41, "b": 801}),
+        ...     ),
+        ... }
+
+        Now we can define the ``LandSuitabilityAnalysis`` :
+
+        >>> lsa = LandSuitabilityAnalysis(
+        ...     land_use="land_use",
+        ...     short_name="land_suitability_analysis",
+        ...     long_name="Land Suitability Analysis",
+        ...     criteria=sc,
+        ... )
+
+        The land suitability analysis can now be run:
+
+        >>> lsa.run(
+        ...     suitability_type="overall",
+        ...     agg_methods={"category": "weighted_geomean", "overall": "mean"},
+        ...     by_category=True,
+        ...     inplace=True,
+        ... )
         """
-        sc_list = []
-        for _, sc in self.criteria.items():
-            sc_list.append(sc.compute())
-        ls = xr.merge(sc_list, compat="override", combine_attrs="drop")
-        for sc in sc_list:
-            ls[sc.name].attrs = sc.attrs
-        ls.attrs = self.attrs
-        if inplace:
-            self.data = ls
-        else:
-            return ls
 
-    def compute_category_suitability(
-        self,
-        method: str,
-        keep_criteria: bool | None = False,
-        inplace: bool | None = False,
-        limit_var: bool | None = False,
-    ) -> xr.Dataset:
-        """
-        Compute suitability by category.
+        def _pre_agg(suitability_type, by_category):
+            """Prepare the aggregation variables and methods based on defined parameters."""
+            agg_on = {}
 
-        The suitability of each category is computed by aggregating the suitability of the criteria
-        that belong to the category. The method support several aggregation methods.
+            if suitability_type == "overall":
+                if by_category is None and self.category == [None]:
+                    by_category = False
+                elif by_category is None:
+                    by_category = True
 
-        Parameters
-        ----------
-        method : str
-            The method to aggregate the criteria suitability. Options are 'mean' (default), 'weighted_mean',
-            'geomean', 'weighted_geomean', and 'limit_factor'.
-        keep_criteria : bool | None, optional
-            If True, keep the criteria in the output Dataset. The default is False.
-        inplace : bool | None, optional
-            If True, compute the suitability in place. The default is False.
-        limit_var : bool | None, optional
-            If method is 'limit_factor', whether to return the variable that is the limiting factor.
-            The default is False.
+                if by_category:
+                    agg_on = {"suitability": self.category}
+                else:
+                    agg_on = {"suitability": self._criteria_list}
 
-        Returns
-        -------
-        xr.Dataset
-            The computed suitability by category.
-        """
-        if not hasattr(self, "data"):
-            ds = self.compute_criteria_suitability()
-        else:
-            ds = self.data
+            if suitability_type == "category" or by_category:
+                if self.category == [None] and suitability_type == "overall":
+                    warnings.warn(
+                        "No categories defined. Computing suitability on criteria instead.",
+                        UserWarning,
+                        stacklevel=2,
+                    )
+                    agg_on.update({"suitability": self._criteria_list})
+                elif self.category == [None]:
+                    warnings.warn(
+                        "No categories defined. Skipping category suitability computation.",
+                        UserWarning,
+                        stacklevel=2,
+                    )
+                else:
+                    agg_on = {**self.criteria_by_category, **agg_on}
 
-        out = []
-        out_attrs = []
-        for category in self._category_list:
-            print(f"Computing {category}...")
-            sc_list = [sc for sc in self.criteria.values() if sc.category == category]
-            res = _aggregate_vars(
-                ds[self._criteria_by_category[category]],
-                method=method,
-                weights=[sc.weight for sc in sc_list],
-                limit_var=limit_var,
+            return agg_on, by_category
+
+        suitability_type = suitability_type.lower()
+
+        if suitability_type not in ["criteria", "category", "overall"]:
+            raise ValueError(
+                f"'suitability_type' must be one of 'criteria', 'category', or 'overall'. Got '{suitability_type}'."
             )
-            if isinstance(res, xr.Dataset):
-                res = res.rename({"limiting_factor": f"{category}", "limiting_var": f"{category}_var"})
-            else:
-                res = res.rename(f"{category}_suitability")
-            res.attrs.update({"long_name": f"{category.capitalize()} Suitability"})
-            out.append(res)
-            out_attrs.append(res.attrs)
-        out = xr.merge(out, compat="override", combine_attrs="drop")
-        if keep_criteria:
-            out = xr.merge([ds, out], compat="override", combine_attrs="drop")
-            for sc in ds.data_vars:  # add attributes of criteria
-                out[sc].attrs = ds[sc].attrs
-        for i, category in enumerate(self._category_list):  # add attributes of category suitability
-            out[f"{category}_suitability"].attrs = out_attrs[i]
 
-        out.attrs.update(self.attrs)
-        if inplace:
-            self.data = out
+        ds = self._run_criteria()
+
+        if suitability_type in ["category", "overall"]:
+            agg_on, by_category = _pre_agg(suitability_type, by_category)
+
+            if agg_on != {}:
+                if isinstance(agg_methods, str):
+                    agg_methods = {"category": agg_methods, "suitability": agg_methods}
+                elif "overall" in agg_methods.keys():
+                    suit_method = agg_methods.pop("overall")
+                    agg_methods = {**agg_methods, "suitability": suit_method}
+                elif not isinstance(agg_methods, dict):
+                    raise ValueError(f"'agg_method' must be a string or a dictionary. Got {type(agg_methods)}.")
+
+                if "category" not in agg_methods.keys() and (by_category or suitability_type == "category"):
+                    raise ValueError("No aggregation method provided for 'category'.")
+                elif suitability_type == "category" or by_category:
+                    cat_method = agg_methods.pop("category")
+                    agg_methods = {
+                        **{k: cat_method for k in self.category},
+                        **agg_methods,
+                    }
+
+                if "suitability" not in agg_methods.keys() and suitability_type == "overall":
+                    raise ValueError("No aggregation method provided for 'overall'.")
+
+                ds = self._aggregate(
+                    ds,
+                    agg_on=agg_on,
+                    methods=agg_methods,
+                    keep_vars=keep_vars,
+                    kwargs=self._format_agg_kwargs(agg_methods, agg_on),
+                )
+
+        if not inplace:
+            return ds
         else:
-            return out
+            if hasattr(self, "data"):
+                warnings.warn("Existing data found and will be overwritten.", UserWarning, stacklevel=2)
+            self.data = ds
 
-    def compute_suitability(
+    def _run_criteria(
         self,
-        method: str | dict[str, str] = "mean",
-        by_category: bool | None = False,
-        keep_all: bool | None = False,
-        inplace: bool | None = False,
-        limit_var: bool | None = False,
     ) -> xr.Dataset:
         """
-        Compute the land suitability.
-
-        The land suitability is computed by aggregating the suitability of the criteria. The method support
-        several aggregation methods.
-
-        Parameters
-        ----------
-        method : str | dict[str, str], optional
-            The method to aggregate the criteria suitability. Options are 'mean' (default), 'weighted_mean',
-            'geomean', 'weighted_geomean', and 'limit_factor'. If a dictionary is passed, the key 'category' is
-            used to aggregate the criteria suitability and the key 'overall' is used to aggregate the category
-            suitability.
-        by_category : bool | None, optional
-            If True, compute the suitability by category. The default is False.
-        keep_all : bool | None, optional
-            If True, keep all the computed data. The default is False.
-        inplace : bool | None, optional
-            If True, compute the suitability in place. The default is False.
-        limit_var : bool | None, optional
-            If method is 'limit_factor', whether to return the variable that is the limiting factor.
-            The default is False.
+        Compute the suitability of each criteria.
 
         Returns
         -------
         xr.Dataset
-            Computed land suitability.
+            A Dataset containing the computed suitability for each criteria.
         """
-        if isinstance(method, str):
-            cat_method, suit_method = method, method
-        elif isinstance(method, dict):
-            cat_method = method.get("category", "mean")
-            suit_method = method.get("overall", "mean")
-        else:
-            raise ValueError("Method must be a string or a dictionary.")
+        out = []
+        for sc in self.criteria.values():
+            out.append(sc.compute())
+        out = xr.merge(out, compat="override", combine_attrs="drop")
 
-        if not hasattr(self, "data"):
-            if by_category:
-                ds = self.compute_category_suitability(
-                    method=cat_method, keep_criteria=True, inplace=False, limit_var=limit_var
-                )
-            else:
-                ds = self.compute_criteria_suitability(inplace=False)
-        else:
-            ds = self.data
-
-        if by_category:
-            weights = [self.weights_by_category[category] for category in self._category_list]
-            on_vars = [f"{category}_suitability" for category in self._category_list]
-        else:
-            weights = [sc.weight for sc in self.criteria.values()]
-            on_vars = self._criteria_name_list
-
-        print("Computing suitability...")
-        out = _aggregate_vars(ds[on_vars], method=suit_method, weights=weights, limit_var=limit_var).rename(
-            "suitability"
-        )
-        out.attrs.update({"long_name": "Suitability"})
-        out_attrs = out.attrs
-
-        if keep_all:
-            out = xr.merge([ds, out], compat="override", combine_attrs="drop")
-            for sc in ds.data_vars:  # add attributes of criteria
-                out[sc].attrs = ds[sc].attrs
-            out["suitability"].attrs = out_attrs
-
+        # Reassign attributes to each criteria
+        for sc in out.data_vars:
+            out[sc].attrs = {k: v for k, v in self.criteria[sc].attrs.items() if k != "is_computed"}
         out.attrs.update(self.attrs)
-        if inplace:
-            self.data = out
-        else:
-            return out
+        return out
 
     def _sort_criteria_by_weight(self) -> dict[str, SuitabilityCriteria]:
         self.criteria = dict(sorted(self.criteria.items(), key=lambda item: item[1].weight, reverse=True))
 
     def _get_params_by_category(self):
-        self._get_criteria_by_category()
-        self._get_weights_by_category()
-
-    def _get_criteria_by_category(self) -> dict[str, list[str]]:
-        self._criteria_by_category = {category: [] for category in self._category_list}
+        self.criteria_by_category = {category: [] for category in self.category}
         for sc in self.criteria.values():
-            self._criteria_by_category[sc.category].append(sc.name)
+            self.criteria_by_category[sc.category].append(sc.name)
 
-    def _get_weights_by_category(self) -> dict[str, float | int]:
-        self.weights_by_category = {category: [] for category in self._category_list}
-        for category in self._category_list:
+        self.weights_by_category = {category: [] for category in self.category}
+        for category in self.category:
             self.weights_by_category[category] = sum(
                 [sc.weight for sc in self.criteria.values() if sc.category == category]
             )
 
-    def mask(
-        self,
-        mask: xr.DataArray | gpd.GeoDataFrame,
-        inplace: bool | None = False,
-        spatial_dims: tuple[str, str] | None = None,
-        crs: str | None = None,
-        invert: bool = False,
-        **kwargs,
-    ) -> xr.DataArray | xr.Dataset:
+    def _format_agg_kwargs(self, agg_methods: str | dict[str, str], agg_on: dict[str, list[str]]) -> dict[str, Any]:
         """
-        Mask the suitability data.
-
-        Returns suitability data where the mask is True.
-        xr.DataArray or gpd.GeoDataFrame are supported as mask.
+        Format the keyword arguments for the reduction function based on the LandSuitabilityAnalysis object and dataset.
 
         Parameters
         ----------
-        mask : xr.DataArray | gpd.GeoDataFrame
-            The mask to apply to the suitability data. If GeoDataFrame, data falls within the geometries are kept.
-        inplace : bool | None, optional
-            If True, apply the mask in place. The default is False.
-        spatial_dims : tuple[str, str] | None, optional
-            If the mask is a GeoDataFrame, the spatial dimensions of the data. The default is None.
-        crs : str | None, optional
-            If the mask is a GeoDataFrame, the CRS of the data. The default is None.
-        invert : bool, optional
-            If True, invert the mask. The default is False.
-        **kwargs : dict
-            Additional keyword arguments to pass to `rio.clip` if the mask is a GeoDataFrame or to `xr.where`
-            if the mask is a DataArray.
+        agg_methods : str | dict[str, str]
+            The aggregation methods to apply. If a string, it applies the same method for all aggregations.
+            If a dictionary, keys are aggregated variable names and values are the associated aggregation methods.
+        agg_on : dict[str, list[str]]
+            A dictionary where keys are new variable names and values are lists of variable names to aggregate.
 
         Returns
         -------
-        xr.DataArray | xr.Dataset
-            Masked suitability data.
-
-        Raises
-        ------
-        ValueError
-            If suitability has not been computed.
+        kwargs : dict[str, Any]
+            A dictionary of keyword arguments to pass to the aggregation function for each variable.
         """
-        if not hasattr(self, "data"):
-            raise ValueError("Suitability must be computed first.")
+        kwargs = {}
+        for k, v in agg_on.items():
+            k_method = agg_methods if isinstance(agg_methods, str) else agg_methods[k]
 
-        if inplace:
-            self.data = _mask_data(self.data, mask, spatial_dims=spatial_dims, crs=crs, invert=invert, **kwargs)
-        else:
-            return _mask_data(self.data, mask, spatial_dims=spatial_dims, crs=crs, invert=invert, **kwargs)
+            if k_method in ["mean", "geomean"]:
+                kwargs[k] = {}
+            elif k_method in ["weighted_mean", "weighted_geomean"]:
+                if k not in self.category and any([i in self.category for i in v]):
+                    kwargs[k] = {"weights": [self.weights_by_category[cat] for cat in v]}
+                else:
+                    kwargs[k] = {"weights": [self.criteria[sc].weight for sc in v]}
+            elif k_method == "limiting_factor":
+                kwargs[k] = {"limiting_var": True}
 
-    def statistics(
-        self,
-        on_vars: list | None = None,
-        on_dims: list | None = None,
-        on_dim_values: dict[str, Any] | None = None,
-        bins: list | np.ndarray | None = None,
-        bins_labels: list | None = None,
-        all_bins: bool | None = False,
-        cell_area: tuple[float | str, str] | None = None,
-        dropna: bool | None = False,
-        **kwargs,
-    ) -> pd.DataFrame:
+        return kwargs
+
+    @staticmethod
+    def _aggregate(
+        ds: xr.Dataset,
+        agg_on: dict[str, list[str]],
+        methods: str | dict[str, str],
+        keep_vars: bool | None = False,
+        kwargs: dict[str, Any] | None = None,
+    ):
         """
-        Generate a summary statistics of the data.
-
-        Returns a pandas DataFrame of data according to the given parameters.
-        The statistics includes count, mean, std, min, 25%, 50%, 75%, and max.
-        Bins can be provided to further group the data into intervals.
+        Aggregate variables based on specified methods.
 
         Parameters
         ----------
-        on_vars : list, optional
-            Variables on which the statistics are calculated. If None (default), all variables are kept.
-        on_dims : list, optional
-            Dimensions on which the statistics are calculated. If None (default), all dimensions are kept.
-            Spatial dimensions (i.e., `lon` or `x` and `lat` or `y`) are removed by default.
-        on_dim_values : sequence, optional
-            Values of dimensions to be kept in the summary. If None (default), all values are kept.
-        bins : list or np.ndarray, optional
-            Bins defining data intervals. If None (default), no binning is performed.
-        bins_labels : list, optional
-            Labels for the bins. If None (default), bins values are used as labels.
-            The length of the list must be equal to the number of bins. Ignored if `bins` is None.
-        all_bins : bool, optional
-            If True, a additional bin corresponding to the bounds of `bins` is added to the summary.Default is False.
-            Ignored if `bins` is None.
-        cell_area : tuple of float or int and str, optional
-            Add a column to the summary with the given associated area calculated based on the count statistic
-            variable. The tuple must contain the area value and the unit of the area.
-        dropna : bool, optional
-            If True, dimensions with NaN values are removed. Default is False.
-        **kwargs : dict, optional
-            Additional keyword arguments passed to `pd.cut` used to bin the data.
+        ds : xr.Dataset
+            The input dataset.
+        agg_on : dict[str, list[str]]
+            A dictionary where keys are new variable names and values are lists of variable names to aggregate.
+        methods : str or dict[str, str]
+            The aggregation methods to apply. If a string, it applies the same method for all aggregations.
+            If a dictionary, keys are aggregated variable names and values are the associated aggregation methods.
+        keep_vars : bool, optional
+            If True, keeps the original variables in the output dataset.
+        kwargs : dict[str, Any], optional
+            Additional keyword arguments to pass to the aggregation function for each variable.
 
         Returns
         -------
-        pd.DataFrame
-            A DataFrame with the statistics for the defined dimensions and variables, including:
-            count, mean, std, min, 25%, 50%, 75%, and max.
-
-        Raises
-        ------
-        ValueError
-            If suitability has not been computed.
+        xr.Dataset
+            A dataset with the aggregated variables. If `keep_vars` is True, all original variables are kept.
+            Otherwise, only the aggregated variables are returned.
         """
-        if not hasattr(self, "data"):
-            raise ValueError("Suitability must be computed first.")
+        if methods is None:
+            raise ValueError("Method must be specified.")
+        elif isinstance(methods, str):
+            methods = {k: methods for k in agg_on.keys()}
+        elif not isinstance(methods, dict):
+            raise TypeError("Method must be a string or a dictionary of strings.")
 
-        return statistics_summary(
-            self.data,
-            on_vars=on_vars,
-            on_dims=on_dims,
-            on_dim_values=on_dim_values,
-            bins=bins,
-            bins_labels=bins_labels,
-            all_bins=all_bins,
-            cell_area=cell_area,
-            dropna=dropna,
-            **kwargs,
-        )
+        for k, v in agg_on.items():
+            if kwargs and k in kwargs:
+                kwargs_k = kwargs[k]
+            else:
+                kwargs_k = {}
 
-    def spatial_statistics(
-        self,
-        areas: gpd.GeoDataFrame,
-        name: str | None = "area",
-        on_vars: list | None = None,
-        on_dims: list | None = None,
-        on_dim_values: dict[str, Any] | None = None,
-        bins: np.ndarray | None = None,
-        bins_labels: list | None = None,
-        all_bins: bool | None = False,
-        cell_area: tuple[float | str, str] | None = None,
-        dropna: bool | None = False,
-        mask_kwargs: dict = None,
-        stats_kwargs: dict = None,
-    ) -> pd.DataFrame:
-        """
-        Generate a spatial summary statistics of the data.
+            out = _aggregate_vars(ds, method=methods[k], vars=v, **kwargs_k)
 
-        Returns a pandas DataFrame of data consireding the given areas based on `statistic_summary` function.
-        The summary includes count, mean, std, min, 25%, 50%, 75%, and max.
-        Bins can be provided to further group the data into intervals.
+            if methods[k] == "limiting_factor" and isinstance(out, xr.Dataset):
+                ds[k] = out["limiting_factor"]
+                ds[f"{k}_limvar"] = out["limiting_var"].assign_attrs(
+                    {"long_name": f"{k.capitalize()} Limiting Factor Variable"}
+                )
 
-        Parameters
-        ----------
-        areas : gpd.GeoDataFrame
-            Areas to be used as spatial masks.
-        name : str, optional
-            Name of the area column in the output DataFrame. Default is 'area'.
-        on_vars : list, optional
-            Variables on which the statistics are calculated. If None (default), all variables are kept.
-        on_dims : list, optional
-            Dimensions on which the statistics are calculated. If None (default), all dimensions are kept.
-            Spatial dimensions (i.e., `lon` or `x` and `lat` or `y`) are removed by default.
-        on_dim_values : sequence, optional
-            Values of dimensions to be kept in the summary. If None (default), all values are kept.
-        bins : list or np.ndarray, optional
-            Bins defining data intervals. If None (default), no binning is performed.
-        bins_labels : list, optional
-            Labels for the bins. If None (default), bins values are used as labels.
-            The length of the list must be equal to the number of bins. Ignored if `bins` is None.
-        all_bins : bool, optional
-            If True, a additional bin corresponding to the bounds of `bins` is added to the summary. Default is False.
-            Ignored if `bins` is None.
-        cell_area : tuple of float or int and str, optional
-            Add a column to the summary with the given associated area calculated based on the count statistic
-            variable. The tuple must contain the area value and the unit of the area.
-        dropna : bool, optional
-            If True, dimensions with NaN values are removed. Default is False.
-        mask_kwargs : dict, optional
-            Additional keyword arguments passed to `regionmask.from_geopandas`.
-        stats_kwargs : dict, optional
-            Additional keyword arguments passed to `statistics_summary`.
+            else:
+                ds[k] = out
 
-        Returns
-        -------
-        pd.DataFrame
-            A DataFrame with the statistics for the defined areas, dimensions and variables, including:
-            count, mean, std, min, 25%, 50%, 75%, and max.
-        """
-        if not hasattr(self, "data"):
-            raise ValueError("Suitability must be computed first.")
+            ds[k].attrs.update({"long_name": f"{k.capitalize()} Suitability"})
 
-        return spatial_statistics_summary(
-            self.data,
-            areas,
-            name=name,
-            on_vars=on_vars,
-            on_dims=on_dims,
-            on_dim_values=on_dim_values,
-            bins=bins,
-            bins_labels=bins_labels,
-            all_bins=all_bins,
-            cell_area=cell_area,
-            dropna=dropna,
-            mask_kwargs=mask_kwargs,
-            stats_kwargs=stats_kwargs,
-        )
+        if keep_vars:
+            return ds
 
-
-def _mask_data(
-    data: xr.DataArray | xr.Dataset,
-    mask: xr.DataArray | gpd.GeoDataFrame,
-    spatial_dims: tuple[str, str] | None = None,
-    crs: str | None = None,
-    invert: bool = False,
-    **kwargs,
-) -> xr.DataArray | xr.Dataset:
-    if isinstance(mask, gpd.GeoDataFrame):
-        mask = mask.to_crs(crs)
-        data = data.rio.set_spatial_dims(*spatial_dims).rio.write_crs(crs)
-        return data.rio.clip(mask.geometry.apply(mapping), invert=invert, **kwargs)
-    elif isinstance(mask, xr.DataArray):
-        if invert:
-            mask = ~mask
-        return data.where(mask, **kwargs)
-    else:
-        raise ValueError("mask must be a GeoDataFrame or DataArray")
+        vars_to_keep = [k for k in agg_on.keys() if k not in [i for e in agg_on.values() for i in e]]
+        return ds[[i for v in vars_to_keep for i in ([v, f"{v}_limvar"] if methods[v] == "limiting_factor" else [v])]]
 
 
 def vars_weighted_mean(ds: xr.Dataset, vars=None, weights=None) -> xr.DataArray:
@@ -732,7 +618,7 @@ def _aggregate_vars(
         return vars_geomean(ds, vars=vars)
     elif method.lower() == "weighted_geomean":
         return vars_weighted_geomean(ds, vars=vars, weights=weights)
-    elif method.lower() == "limit_factor":
+    elif method.lower() == "limiting_factor":
         return limiting_factor(ds, vars=vars, **kwargs)
     else:
-        raise ValueError(f"Method '{method}' not recognized.")
+        raise ValueError(f"Aggregation method '{method}' not recognized.")

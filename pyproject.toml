@@ -67,7 +67,7 @@ Homepage = "https://github.com/baptistehamon/lsapy"
 Issues = "https://github.com/baptistehamon/lsapy/issues"
 
 [tool.bumpversion]
-current_version = "0.1.0-dev2"
+current_version = "0.1.0-dev3"
 commit = true
 commit_args = "--no-verify --signoff"
 tag = false

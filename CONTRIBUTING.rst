@@ -112,8 +112,7 @@ Packaging and Deployment
 
 .. note::
 
-    This section comes largely from the `xclim Contributing guidelines`_. Small edits have been made to match the
-    development stage of `LSAPy`.
+    This section comes largely from the `xclim Contributing guidelines`_. Small edits have been made to match `LSAPy` project.
 
 This section serves as a reminder for the maintainers on how to prepare the library for a tagged version and how to deploy packages to TestPyPI and PyPI.
 
@@ -135,7 +134,23 @@ For PyPI releases/stable versions, ensure that the last version bumping command 
 
 With this performed, we can tag a version that will act as the GitHub-provided stable source archive. **Be sure to only tag from the `main` branch when all changes from PRs have been merged!** The commands needed are:
 
-Tagging and releasing on GitHub still have to made `via` the GitHub interface. The tag name should be the same as the version number (e.g., ``v1.2.3``).
+.. code-block:: shell
+
+    git tag v1.2.3
+    git push --tags
+
+.. note::
+
+    All tags pushed to GitHub will trigger a build and publish a package to TestPyPI by default.
+
+The Automated Approach
+~~~~~~~~~~~~~~~~~~~~~~
+
+The simplest way to package `LSAPy` is to "publish" a version on GitHub. GitHub CI Actions are presently configured to build the library and publish the packages on PyPI automatically.
+
+.. warning::
+
+    A published version on PyPI can never be overwritten. Be sure to verify that the package published at https://test.pypi.org/project/lsapy/ matches expectations before publishing a version on GitHub.
 
 The Manual Approach
 ~~~~~~~~~~~~~~~~~~~

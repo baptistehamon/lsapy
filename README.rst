@@ -53,7 +53,7 @@ You can now perform your LSA:
     )
 
     # run your analysis
-    lsa.compute_suitability(params)
+    lsa.run(params)
 
 More detailed tutorials and examples can be found in the `User Guide`_.
 

@@ -110,9 +110,9 @@ The Python package has been created following the `pyOpenSci Guidebook`_.
     :target: https://pypi.python.org/pypi/lsapy
     :alt: Python Package Index Build
 
-.. |status| image:: https://www.repostatus.org/badges/latest/wip.svg
-    :target: https://www.repostatus.org/#wip
-    :alt: Project Status: WIP - Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.
+.. |status| image:: https://www.repostatus.org/badges/latest/active.svg
+    :target: https://www.repostatus.org/#active
+    :alt: Project Status: Active - The project has reached a stable, usable state and is being actively developed.
 
 .. |zenodo| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.15015111.svg
     :target: https://doi.org/10.5281/zenodo.15015111

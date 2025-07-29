@@ -114,6 +114,7 @@ checks = [
   "ES01", # No extended summary found
   "EX01", # No examples section found
   "SA01", # No see also section found
+  "SA04", # Missing description for See also
 ]
 exclude = [
   # don't report on objects that match any of these regex

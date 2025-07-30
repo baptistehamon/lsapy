@@ -23,7 +23,6 @@ def declare_equation(ftype: str, alt_name: str | None = None) -> Callable:
         A decorator function that registers the equation.
     """
 
-    # TODO: Support alternative names for equations
     def _decorator(func: callable):
         if ftype not in equations:
             equations[ftype] = {}

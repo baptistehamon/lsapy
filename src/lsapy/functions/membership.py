@@ -24,12 +24,15 @@ EQUATION_TYPES = ["sigmoid", "gaussian"]
 @declare_equation("sigmoid")
 def logistic(x, a, b):
     r"""
-    Logistic function.
+    Logistic function capped to 1.
+
+    This function should be used on sigmoid-like suitability data. The function can be used on both
+    positive and negative values of `x`, as well as on increasing and decreasing sigmoid-like data.
 
     Parameters
     ----------
     x : any
-        Input values to map.
+        Input values.
     a : float | int
         Steepness of the function parameter.
     b : float | int
@@ -38,11 +41,11 @@ def logistic(x, a, b):
     Returns
     -------
     float
-        Suitability values.
+        Output values.
 
     Notes
     -----
-    The logistic function is defined as:
+    The function is defined as:
 
     .. math::
 
@@ -54,17 +57,24 @@ def logistic(x, a, b):
 @declare_equation("sigmoid")
 def sigmoid(x):
     r"""
-    Sigmoid function.
+    Logistic sigmoid function.
+
+    This function is a special case of the logistic function with `a=1` and `b=0`, thus can be used on both
+    positive and negative values of `x`, however only for increasing sigmoid-like data.
 
     Parameters
     ----------
     x : any
-        Input values to map.
+        Input values.
 
     Returns
     -------
     float
-        Suitability values.
+        Output values.
+
+    See Also
+    --------
+    :func:`logistic`
 
     Notes
     -----
@@ -77,17 +87,18 @@ def sigmoid(x):
     return logistic(x, 1, 0)
 
 
-@declare_equation("sigmoid", "VTR22_3")
+@declare_equation("sigmoid", "VTR22_eq3")
 def vetharaniam2022_eq3(x, a, b):
     r"""
     Sigmoid like function.
 
-    # TODO: add a more detailed description.
+    This function is equivalent to the logistic function and thus can be used on both positive and negative values of
+    `x`, as well as on increasing and decreasing sigmoid-like data.
 
     Parameters
     ----------
     x : any
-        Input values to map.
+        Input values.
     a : float | int
         Steepness of the function parameter.
     b : float | int
@@ -96,11 +107,18 @@ def vetharaniam2022_eq3(x, a, b):
     Returns
     -------
     float
-        Suitability values.
+        Output values.
+
+    See Also
+    --------
+    :func:`logistic`
 
     Notes
     -----
-    The sigmoid like function is defined as:
+    Alternative name: `VTR22_eq3`.
+    This function has been implemented to support reproductiblity of the original paper. However, as it is equivalent to
+    the more commonly used `logistic` function, it is recommended to use the `logistic` function instead.
+    This function is defined as:
 
     .. math::
 
@@ -113,17 +131,18 @@ def vetharaniam2022_eq3(x, a, b):
     return np.exp(a * (x - b)) / (1 + np.exp(a * (x - b)))
 
 
-@declare_equation("sigmoid", "VTR22_5")
+@declare_equation("sigmoid", "VTR22_eq5")
 def vetharaniam2022_eq5(x, a, b):
     r"""
     Sigmoid like function.
 
-    # TODO: add a more detailed description.
+    This function is a modified version of the logistic function that can for both increasing and decreasing
+    sigmoid-like data, but only for positive values of `x`.
 
     Parameters
     ----------
     x : any
-        Input values to map.
+        Input values.
     a : float | int
         Steepness of the function parameter.
     b : float | int
@@ -132,10 +151,11 @@ def vetharaniam2022_eq5(x, a, b):
     Returns
     -------
     float
-        Suitability values.
+        Output values.
 
     Notes
     -----
+    Alternative name: `VTR22_eq5`.
     The sigmoid like function is defined as:
 
     .. math::
@@ -149,23 +169,24 @@ def vetharaniam2022_eq5(x, a, b):
     return 1 / (1 + np.exp(a * (np.sqrt(x) - np.sqrt(b))))
 
 
-@declare_equation("gaussian", "VTR24_8")
+@declare_equation("gaussian", "VTR24_eq8")
 def vetharaniam2024_eq8(x, a, b, c):
     r"""
     Gaussian like function.
 
-    # TODO: add a more detailed description.
+    This function should be used on Gaussian-like data, either positive or negative, and allows
+    to have a plateau at around the midpoint.
 
     Parameters
     ----------
     x : any
         Input values to map.
     a : float | int
-        Steepness of the function parameter.
+        Steepness of the function parameter. Should be a positive number.
     b : float | int
         Value of the function's midpoint.
     c : float | int
-        Scaling parameter.
+        Scaling parameter. Should be a even number. If negative, the function will be flipped.
 
     Returns
     -------
@@ -174,6 +195,7 @@ def vetharaniam2024_eq8(x, a, b, c):
 
     Notes
     -----
+    Alternative name: `VTR24_eq8`.
     The Gaussian like function is defined as:
 
     .. math::
@@ -187,31 +209,33 @@ def vetharaniam2024_eq8(x, a, b, c):
     return np.exp(-a * np.power(x - b, c))
 
 
-@declare_equation("gaussian", "VTR24_10")
+@declare_equation("gaussian", "VTR24_eq10")
 def vetharaniam2024_eq10(x, a, b, c):
     r"""
     Gaussian like function.
 
-    # TODO: add a more detailed description.
+    This function should be used on Gaussian-like data and allows asymmetric distribution. However,
+    it only works for positive values of `x`.
 
     Parameters
     ----------
     x : any
-        Input values to map.
+        Input values.
     a : float | int
         Steepness of the function parameter.
     b : float | int
         Value of the function's midpoint.
     c : float | int
-        Scaling parameter.
+        Scaling parameter. Should be a positive number.
 
     Returns
     -------
     float
-        Suitability values.
+        Output values.
 
     Notes
     -----
+    Alternative name: `VTR24_eq10`.
     The Gaussian like function is defined as:
 
     .. math::
@@ -290,7 +314,7 @@ def fit_membership(x, y=None, fit_on: str | list[str] = "all", plot: bool = Fals
             warnings.warn(f"Failed to fit `{func}`. Skipped.", stacklevel=2)
 
     if all([f in skipped for f in functions]):
-        warnings.warn(f"No methods to fit. fitting for the following methods: {', '.join(skipped)}.", stacklevel=2)
+        warnings.warn(f"No methods to fit. Skipping: {', '.join(skipped)}.", stacklevel=2)
         return None, None
 
     if plot:

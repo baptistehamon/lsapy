@@ -2,6 +2,15 @@
 Changelog
 =========
 
+v0.2.0 (unreleased)
+-------------------
+Contributor to this version: Baptiste Hamon (@baptistehamon).
+
+New features
+^^^^^^^^^^^^
+* Functions alternative names can now be used in ``SuitabilityFunction`` (PR `#43 <https://github.com/baptistehamon/lsapy/pull/43>`_).
+* The documentation of membership functions has been improved (PR `#43 <https://github.com/baptistehamon/lsapy/pull/43>`_).
+
 v0.1.1 (2025-07-26)
 -------------------
 Contributor to this version: Baptiste Hamon (@baptistehamon).

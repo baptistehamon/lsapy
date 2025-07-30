@@ -87,7 +87,7 @@ def sigmoid(x):
     return logistic(x, 1, 0)
 
 
-@declare_equation("sigmoid", "VTR22_3")
+@declare_equation("sigmoid", "VTR22_eq3")
 def vetharaniam2022_eq3(x, a, b):
     r"""
     Sigmoid like function.
@@ -115,6 +115,7 @@ def vetharaniam2022_eq3(x, a, b):
 
     Notes
     -----
+    Alternative name: `VTR22_eq3`.
     This function has been implemented to support reproductiblity of the original paper. However, as it is equivalent to
     the more commonly used `logistic` function, it is recommended to use the `logistic` function instead.
     This function is defined as:
@@ -130,7 +131,7 @@ def vetharaniam2022_eq3(x, a, b):
     return np.exp(a * (x - b)) / (1 + np.exp(a * (x - b)))
 
 
-@declare_equation("sigmoid", "VTR22_5")
+@declare_equation("sigmoid", "VTR22_eq5")
 def vetharaniam2022_eq5(x, a, b):
     r"""
     Sigmoid like function.
@@ -154,6 +155,7 @@ def vetharaniam2022_eq5(x, a, b):
 
     Notes
     -----
+    Alternative name: `VTR22_eq5`.
     The sigmoid like function is defined as:
 
     .. math::
@@ -167,7 +169,7 @@ def vetharaniam2022_eq5(x, a, b):
     return 1 / (1 + np.exp(a * (np.sqrt(x) - np.sqrt(b))))
 
 
-@declare_equation("gaussian", "VTR24_8")
+@declare_equation("gaussian", "VTR24_eq8")
 def vetharaniam2024_eq8(x, a, b, c):
     r"""
     Gaussian like function.
@@ -193,6 +195,7 @@ def vetharaniam2024_eq8(x, a, b, c):
 
     Notes
     -----
+    Alternative name: `VTR24_eq8`.
     The Gaussian like function is defined as:
 
     .. math::
@@ -206,7 +209,7 @@ def vetharaniam2024_eq8(x, a, b, c):
     return np.exp(-a * np.power(x - b, c))
 
 
-@declare_equation("gaussian", "VTR24_10")
+@declare_equation("gaussian", "VTR24_eq10")
 def vetharaniam2024_eq10(x, a, b, c):
     r"""
     Gaussian like function.
@@ -232,6 +235,7 @@ def vetharaniam2024_eq10(x, a, b, c):
 
     Notes
     -----
+    Alternative name: `VTR24_eq10`.
     The Gaussian like function is defined as:
 
     .. math::

@@ -30,9 +30,16 @@ class SuitabilityFunction:
     func : Callable | None, optional
         Function to compute the suitability value.
     name : str | None, optional
-        Name of the implemented function to use. If `func` is provided, this parameter is ignored.
+        Name of the implemented function to use (see Notes for available functions).
+        If `func` is provided, this parameter is ignored.
     params : dict[str, Any], optional
         Parameters of the function.
+
+    Notes
+    -----
+    The implemented functions are (in parentheses the alternative names): ``discrete``, ``logistic``, ``sigmoid``,
+    ``vetharaniam2022_eq3`` (VTR22_eq3), ``vetharaniam2022_eq5`` (VTR22_eq5), ``vetharaniam2024_eq8`` (VTR24_eq8),
+    ``vetharaniam2024_eq10`` (VTR24_eq10).
 
     Examples
     --------

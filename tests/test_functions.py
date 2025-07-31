@@ -1,10 +1,14 @@
-"""Tests for discrete and membership functions."""
+"""Tests for discrete, membership and suitability functions."""
 
 from __future__ import annotations
 
 import numpy as np
+import pytest
 
 import lsapy.functions as func
+from lsapy.core.functions import _alt_names, equations  # noqa: PLC2701
+
+EQUATIONS = [v for t in equations.values() for v in t.keys()]
 
 
 class TestDiscrete:
@@ -180,7 +184,6 @@ class TestVetharaniam24Eq10:
         val1 = func.vetharaniam2024_eq8(7, 0.5, 5, 2)  # x > b
         val2 = func.vetharaniam2024_eq8(7, 2, 5, 2)
         assert val2 < val1
-        assert val2 < val1
         # if a == 0, then vetharaniam2024_eq10(x) == 1
         assert func.vetharaniam2024_eq8(-100, 0, 0, 2) == 1
         assert func.vetharaniam2024_eq8(0, 0, 0, 2) == 1
@@ -196,3 +199,27 @@ class TestVetharaniam24Eq10:
         val1 = func.vetharaniam2024_eq10(x, a, b, 2)
         val2 = func.vetharaniam2024_eq10(x, a, b, 4)
         assert val2 < val1
+
+
+class TestSuitabilityFunction:
+    def test_names(self):
+        # test equations names
+        for name in EQUATIONS:
+            sf = func.SuitabilityFunction(name=name)
+            assert callable(sf.func), f"Function {name} is not callable"
+            assert sf.func.__name__ == name, f"Function name mismatch for {name}"
+        # test alternative names
+        for k, v in _alt_names.items():
+            sf = func.SuitabilityFunction(name=k)
+            assert sf.func.__name__ == v, f"wrong function returned for {k} alternative name"
+
+    def test_invalid_function(self):
+        for f in [1, "string", {}]:
+            with pytest.raises(TypeError):
+                func.SuitabilityFunction(func=f)
+
+    def test_callable(self):
+        sf = func.SuitabilityFunction(name="discrete", params={"rules": {1: 0, 2: 0.1, 3: 0.5, 4: 0.9, 5: 1}})
+        assert sf(3) == 0.5
+        sf = func.SuitabilityFunction(name="logistic", params={"a": 1, "b": 5})
+        assert sf(5) == 0.5

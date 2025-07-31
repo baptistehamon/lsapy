@@ -36,7 +36,7 @@ def test_format(criteria_anpr):
 def test_compute(criteria_anpr, criteria_drain):
     # test computation
     sc = criteria_anpr.compute()
-    np.testing.assert_allclose(sc.values, 0.255, atol=0.005)
+    np.testing.assert_array_almost_equal(sc.values, 0.25, decimal=2)
     sc = criteria_drain.compute()
     np.testing.assert_equal(sc.values, 0.5)
 

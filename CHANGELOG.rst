@@ -11,6 +11,10 @@ New features
 * Functions alternative names can now be used in ``SuitabilityFunction`` (PR `#43 <https://github.com/baptistehamon/lsapy/pull/43>`_).
 * The documentation of membership functions has been improved (PR `#43 <https://github.com/baptistehamon/lsapy/pull/43>`_).
 
+Breaking changes
+^^^^^^^^^^^^^^^^
+* The deprecated ``SuitabilityFunction.map`` method has been removed (PR `#44 <https://github.com/baptistehamon/lsapy/pull/44>`_).
+
 v0.1.1 (2025-07-26)
 -------------------
 Contributor to this version: Baptiste Hamon (@baptistehamon).

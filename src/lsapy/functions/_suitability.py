@@ -105,46 +105,6 @@ class SuitabilityFunction:
         """
         return {k: v for k, v in {"func": self.func, "params": self.params}.items() if v is not None}
 
-    def map(self, x):
-        """
-        Map the suitability function.
-
-        This method converts the input values into suitability values for the defined function.
-
-        Parameters
-        ----------
-        x : any
-            Input values to map.
-
-        Returns
-        -------
-        any
-            Suitability values.
-
-        Raises
-        ------
-        ValueError
-            If no function has been provided.
-
-        Examples
-        --------
-        >>> from lsapy.functions import logistic
-
-        >>> sf = SuitabilityFunction(func=logistic, params={"a": 1, "b": 5})
-        >>> sf.map(3)
-        array(0.11920292, dtype=float32)
-
-        .. deprecated:: 0.1.0-dev2
-          `map` will be removed in LSAPy 0.1.0 because it is redundant with the `__call__` method.
-          Please use the `__call__` method directly instead.
-        """
-        warnings.warn(
-            "`map` is deprecated and will be removed in LSAPy 0.1.0. Use `__call__` directly instead.",
-            FutureWarning,
-            stacklevel=2,
-        )
-        return self(x)
-
     def plot(self, x) -> None:
         """
         Basic plot of the suitability function.

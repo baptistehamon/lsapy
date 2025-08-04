@@ -127,3 +127,14 @@ def criteria_drain(drainage, sf_drain) -> SuitabilityCriteria:
     return SuitabilityCriteria(
         name="drainage_class", category="soilTerrain", indicator=drainage, weight=2, func=sf_drain
     )
+
+
+@pytest.fixture
+def criteria(criteria_anpr, criteria_gdd, criteria_prd, criteria_drain) -> dict[str, SuitabilityCriteria]:
+    """Returns a dictionary of all suitability criteria."""
+    return {
+        "annual_precipitation": criteria_anpr,
+        "growing_degree_days": criteria_gdd,
+        "potential_rooting_depth": criteria_prd,
+        "drainage_class": criteria_drain,
+    }

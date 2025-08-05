@@ -43,9 +43,11 @@ dev = [
   "ipykernel",
   "ipython >=9.0.0",
   "matplotlib >=3.9.0",
+  "nbval >=0.11.0",
   "numpydoc >=1.8.0",
   "pre-commit >=4.0.0",
   "pytest >=8.3.0",
+  "pytest-cov >=6.0.0",
   "ruff >=0.10.0",
   "xclim >=0.54.0"
 ]

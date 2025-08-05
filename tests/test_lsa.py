@@ -86,6 +86,9 @@ class TestLandSuitabilityAnalysis:
         # test no aggregation method for overall
         with pytest.raises(ValueError, match="No aggregation method provided for 'overall'."):
             lsa.run("overall", agg_methods={"category": "mean"})
+        # test wrong agg_methods type
+        with pytest.raises(TypeError, match="'agg_methods' must be a string or a dictionary. Got <class 'list'>."):
+            lsa.run("overall", agg_methods=["mean", "geomean"])
 
     def test_run_criteria(self, lsa):
         res = lsa.run("criteria")
@@ -140,9 +143,13 @@ class TestLandSuitabilityAnalysis:
         assert res.attrs["short_name"] == lsa.short_name
         assert res.attrs["long_name"] == lsa.long_name
         assert res.attrs["description"] == lsa.description
-        # # test values
+        # test values
         np.testing.assert_array_almost_equal(res.climate.values, 0.57, decimal=2)
         np.testing.assert_array_almost_equal(res.soilTerrain.values, 0.69, decimal=2)
+        # test if no category in criteria, should return criteria
+        lsa.category = [None]  # force no category
+        res = lsa.run("category", agg_methods="weighted_geomean")
+        assert res.equals(lsa.run("criteria"))
 
     def test_run_overall(self, lsa):
         res = lsa.run("overall", agg_methods="weighted_geomean")
@@ -163,6 +170,12 @@ class TestLandSuitabilityAnalysis:
         # test with by_category=False, should return aggregation of criteria
         res = lsa.run("overall", agg_methods="weighted_mean", by_category=False)
         np.testing.assert_array_almost_equal(res.suitability.values, 0.68, decimal=2)
+        # test with by_category=[True, None] but without category in criteria
+        lsa.category = [None]  # force no category
+        res = lsa.run("overall", agg_methods="weighted_mean", by_category=True)
+        np.testing.assert_array_almost_equal(res.suitability.values, 0.68, decimal=2)
+        res = lsa.run("overall", agg_methods="weighted_mean")
+        np.testing.assert_array_almost_equal(res.suitability.values, 0.68, decimal=2)
 
     def test_run_keep_vars(self, lsa):
         # test with keep_vars=False, default=True
@@ -180,3 +193,18 @@ class TestLandSuitabilityAnalysis:
         res = lsa.run("criteria", inplace=True)
         assert res is None
         assert lsa.data.equals(lsa.run("criteria", inplace=False))
+        # test inplace if existing data
+        lsa.data = xr.Dataset()
+        res = lsa.run("criteria", inplace=True)
+        assert res is None
+
+    def test_aggregate(self, lsa):
+        lsa.run("criteria", inplace=True)
+        # test limiting factor
+        res = lsa._aggregate(
+            lsa.data, agg_on={"climate": ["growing_degree_days", "annual_precipitation"]}, methods="limiting_factor"
+        )
+        assert isinstance(res, xr.Dataset)
+        # test wrong methods type
+        with pytest.raises(TypeError, match="'methods' must be a string or a dictionary of strings."):
+            lsa._aggregate(lsa.data, agg_on={"climate": ["growing_degree_days", "annual_precipitation"]}, methods=1)

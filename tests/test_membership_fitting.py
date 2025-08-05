@@ -36,16 +36,15 @@ class TestRMSE:
 
 class TestCheckFitting:
     def test_all(self):
-        # should skip sigmoid
+        # should skip sigmoid and vetharaniam2024_eq8
         valid, skipped = _check_fitting()
         assert valid == [
             "logistic",
             "vetharaniam2022_eq3",
             "vetharaniam2022_eq5",
-            "vetharaniam2024_eq8",
             "vetharaniam2024_eq10",
         ]
-        assert skipped == ["sigmoid"]
+        assert skipped == ["sigmoid", "vetharaniam2024_eq8"]
 
     def test_type_like(self):
         valid, skipped = _check_fitting("sigmoid_like")
@@ -101,8 +100,9 @@ class TestGetBestFit:
 
 class TestFitMembership:
     def test_simple(self):
+        # test simple cas with plotting
         x = [-10, -6.5, -5, -3.5, 0]
-        f, p = fit_membership(x, fit_on="all")
+        f, p = fit_membership(x, fit_on="all", plot=True)
         assert f == func.logistic
         np.testing.assert_array_almost_equal(p, [0.76, -5], decimal=2)
 

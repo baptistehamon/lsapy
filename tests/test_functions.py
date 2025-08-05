@@ -6,9 +6,30 @@ import numpy as np
 import pytest
 
 import lsapy.functions as func
-from lsapy.core.functions import _alt_names, equations  # noqa: PLC2701
+from lsapy.core.functions import (
+    _alt_names,  # noqa: PLC2701
+    equations,
+    get_function_from_name,
+)
 
 EQUATIONS = [v for t in equations.values() for v in t.keys()]
+
+
+class TestGetFunctionFromName:
+    def test_valid_name(self):
+        # Test with a valid function name
+        res = get_function_from_name("discrete")
+        assert callable(res), "Function 'discrete' is not callable"
+
+    def test_invalid_name(self):
+        # Test with an invalid function name
+        with pytest.raises(ValueError, match="Equation `invalid_function` not implemented."):
+            get_function_from_name("invalid_function")
+
+    def test_alternative_name(self):
+        # Test with an alternative name
+        res = get_function_from_name("VTR24_eq8")
+        assert callable(res), "Function 'VTR24_eq8' is not callable"
 
 
 class TestDiscrete:
@@ -202,7 +223,21 @@ class TestVetharaniam24Eq10:
 
 
 class TestSuitabilityFunction:
-    def test_names(self):
+    def test_init(self):
+        # test empty
+        with pytest.raises(
+            ValueError, match="Either `func` or `name` must be provided to define the suitability function."
+        ):
+            func.SuitabilityFunction()
+        # test invalid name
+        with pytest.raises(TypeError, match="`name` must be a string when `func` is not provided."):
+            func.SuitabilityFunction(name=1)
+        # test invalid function
+        with pytest.raises(TypeError, match="`func` must be a callable function."):
+            func.SuitabilityFunction(func=1)
+        # test when func and name are both provided
+        with pytest.warns(UserWarning, match="`name` is ignored when `func` is provided"):
+            func.SuitabilityFunction(func=func.discrete, name="discrete")
         # test equations names
         for name in EQUATIONS:
             sf = func.SuitabilityFunction(name=name)
@@ -213,13 +248,26 @@ class TestSuitabilityFunction:
             sf = func.SuitabilityFunction(name=k)
             assert sf.func.__name__ == v, f"wrong function returned for {k} alternative name"
 
-    def test_invalid_function(self):
-        for f in [1, "string", {}]:
-            with pytest.raises(TypeError):
-                func.SuitabilityFunction(func=f)
+    def test_attrs(self):
+        # test attrs from func with params
+        sf = func.SuitabilityFunction(func=func.discrete, params={"rules": {1: 0, 2: 0.1}})
+        assert sf.attrs == {"func": func.discrete, "params": {"rules": {1: 0, 2: 0.1}}}
+        # test attrs from name without params
+        sf = func.SuitabilityFunction(name="discrete")
+        assert sf.attrs == {"func": func.discrete}
 
     def test_callable(self):
         sf = func.SuitabilityFunction(name="discrete", params={"rules": {1: 0, 2: 0.1, 3: 0.5, 4: 0.9, 5: 1}})
         assert sf(3) == 0.5
-        sf = func.SuitabilityFunction(name="logistic", params={"a": 1, "b": 5})
-        assert sf(5) == 0.5
+        sf = func.SuitabilityFunction(name="sigmoid")
+        assert sf(0) == 0.5
+        # test if func=None
+        sf.func = None
+        with pytest.raises(ValueError, match="No function has been provided."):
+            sf(3)
+
+    def test_plot(self):
+        # test plot with discrete function
+        sf = func.SuitabilityFunction(name="discrete", params={"rules": {1: 0, 2: 0.1, 3: 0.5, 4: 0.9, 5: 1}})
+        x = np.arange(1, 6)
+        sf.plot(x)

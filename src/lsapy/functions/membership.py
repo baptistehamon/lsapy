@@ -320,7 +320,6 @@ def fit_membership(x, y=None, fit_on: str | list[str] = "all", plot: bool = Fals
     if plot:
         plt.scatter(x, y, c="r")
         plt.legend()
-        plt.show()
 
     f_best, p_best = _get_best_fit([m for m in functions if m not in skipped], rms_errors, f_params, verbose=verbose)
     return get_function_from_name(f_best), p_best
@@ -367,9 +366,9 @@ def _check_fitting(fit_on: str | list[str] = "all"):
             if f == "vetharaniam2024_eq8":
                 warnings.warn("Fitting does not support `vetharaniam2024_eq8`. Skipped.", stacklevel=3)
 
-        if len(functions) == 0:
-            raise ValueError("No functions to fit. Try to modify `fit_on` parameter.")
-        return functions, _skipped
+    if len(functions) == 0:
+        raise ValueError("No functions to fit. Try to modify `fit_on` parameter.")
+    return functions, _skipped
 
 
 def _get_function_p0(func: str, x: np.ndarray) -> list[float]:

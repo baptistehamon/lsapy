@@ -103,17 +103,14 @@ class LandSuitabilityAnalysis:
 
     def __repr__(self) -> str:
         """Return a string representation of the land suitability."""
-        if hasattr(self, "data"):
-            return self.data.__repr__()
-        else:
-            attrs = []
-            for k, v in self.attrs.items():
-                if isinstance(v, str):
-                    v_ = f"'{v}'"
-                else:
-                    v_ = v
-                attrs.append(f"{k}={v_}")
-            return f"{self.__class__.__name__}({', '.join(attrs) if attrs else ''})"
+        attrs = []
+        for k, v in self.attrs.items():
+            if isinstance(v, str):
+                v_ = f"'{v}'"
+            else:
+                v_ = v
+            attrs.append(f"{k}={v_}")
+        return f"{self.__class__.__name__}({', '.join(attrs) if attrs else ''})"
 
     @property
     def attrs(self):
@@ -276,11 +273,11 @@ class LandSuitabilityAnalysis:
             if agg_on != {}:
                 if isinstance(agg_methods, str):
                     agg_methods = {"category": agg_methods, "suitability": agg_methods}
+                elif not isinstance(agg_methods, dict):
+                    raise TypeError(f"'agg_methods' must be a string or a dictionary. Got {type(agg_methods)}.")
                 elif "overall" in agg_methods.keys():
                     suit_method = agg_methods.pop("overall")
                     agg_methods = {**agg_methods, "suitability": suit_method}
-                elif not isinstance(agg_methods, dict):
-                    raise ValueError(f"'agg_method' must be a string or a dictionary. Got {type(agg_methods)}.")
 
                 if "category" not in agg_methods.keys() and (by_category or suitability_type == "category"):
                     raise ValueError("No aggregation method provided for 'category'.")
@@ -409,12 +406,10 @@ class LandSuitabilityAnalysis:
             A dataset with the aggregated variables. If `keep_vars` is True, all original variables are kept.
             Otherwise, only the aggregated variables are returned.
         """
-        if methods is None:
-            raise ValueError("Method must be specified.")
-        elif isinstance(methods, str):
+        if isinstance(methods, str):
             methods = {k: methods for k in agg_on.keys()}
         elif not isinstance(methods, dict):
-            raise TypeError("Method must be a string or a dictionary of strings.")
+            raise TypeError("'methods' must be a string or a dictionary of strings.")
 
         for k, v in agg_on.items():
             if kwargs and k in kwargs:

@@ -63,8 +63,8 @@ Below is the steps to follow for contributing to the project.
 
     .. code-block:: shell
 
-        pytest --no-cov --nbval docs/notebooks/ # to run notebooks
-        pytest --no-cov --doctest-modules src/lsapy/ # to run doctests
+        pytest --nbval docs/notebooks/ # to run notebooks
+        pytest --doctest-modules src/lsapy/ # to run doctests
         pytest # for all unit tests, excluding doctests and notebooks.
 
 #. Commit your changes and push your branch.

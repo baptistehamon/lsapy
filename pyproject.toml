@@ -41,7 +41,7 @@ dev = [
   "codespell >=2.4.1",
   "flit >=3.11",
   "ipykernel",
-  "ipython >=9.0.0",
+  "ipython >=8.20.0",
   "matplotlib >=3.9.0",
   "nbval >=0.11.0",
   "numpydoc >=1.8.0",
@@ -53,6 +53,8 @@ dev = [
 ]
 docs = [
   # docs & examples
+  "ipykernel",
+  "matplotlib >=3.9.0",
   "nbsphinx >=0.9.5",
   "pybtex >=0.24.0",
   "pydata-sphinx-theme >=0.16.0",

@@ -98,7 +98,7 @@ values = [
 ]
 
 [tool.codespell]
-skip = "docs/notebooks/*.ipynb, docs/references.bib"
+skip = '*docs/_build, *docs/*.bib'
 
 [tool.flit.sdist]
 include = [

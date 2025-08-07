@@ -26,6 +26,8 @@ repos:
     rev: v2.4.1
     hooks:
       - id: codespell
+        additional_dependencies: [ 'tomli']
+        args: [ '--toml=pyproject.toml']
   - repo: https://github.com/numpy/numpydoc
     rev: v1.9.0
     hooks:

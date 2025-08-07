@@ -50,20 +50,45 @@ Below is the steps to follow for contributing to the project.
         # To run pre-commit hooks manually:
         pre-commit run --all-files
 
-    Instead of ``pre-commit``, you can check individual hooks manually with `ruff`:
+    This will automatically format your code and fix any linting issues.
+    Instead of ``pre-commit``, you can check your changes using `nox`:
+
+        .. code-block:: shell
+
+            nox -s lint  # to run all linters and formatters
+
+    Or check individual hooks manually:
 
         .. code-block:: shell
 
             ruff check --fix --show-fixes src/lsapy/
             ruff format src/lsapy/
+            codespell src/lsapy/ tests/ docs/
+            numpydoc src/lsapy/**/*.py
 
-    This will automatically format your code and fix any linting issues.
-
-#. The last step before committing is to run the tests:
+#. The next step is to ensure your changes do not introduce any breaking issues using ``pytest``:
 
     .. code-block:: shell
 
-        pytest --doctest-modules src/lsapy/ # to run doctests
+        pytest --nbval docs/notebooks/ # for only notebooks
+        pytest --doctest-modules src/lsapy/ # for only doctests
+        pytest # for all unit tests, excluding doctests and notebooks.
+
+    Alternatively, you can run all tests using `nox`:
+
+        .. code-block:: shell
+
+            nox -s tests  # for all unit tests, excluding doctests and notebooks
+            nox -s notebooks doctests  # for notebooks and doctests
+            nox # to run all unit tests, doctests, and notebooks
+
+#. Finally, you need to make sure that the documentation will build correctly on ReadTheDocs. You can do this as follows:
+
+    .. code-block:: shell
+
+        make -C docs html
+        # or
+        nox -s docs
 
 #. Commit your changes and push your branch.
 

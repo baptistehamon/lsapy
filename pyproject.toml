@@ -20,6 +20,10 @@ classifiers = [
     "Intended Audience :: Science/Research",
     "Natural Language :: English",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Operating System :: OS Independent",
     "Topic :: Scientific/Engineering :: GIS",
 ]
@@ -40,17 +44,22 @@ dev = [
   "bump-my-version >=1.1.4",
   "codespell >=2.4.1",
   "flit >=3.11",
-  "ipykernel",
-  "ipython >=9.0.0",
+  "h5netcdf >=1.4.0",
+  "ipython >=8.20.0",
   "matplotlib >=3.9.0",
+  "nbval >=0.11.0",
+  "nox >=2024.10.09",
   "numpydoc >=1.8.0",
   "pre-commit >=4.0.0",
   "pytest >=8.3.0",
+  "pytest-cov >=6.0.0",
   "ruff >=0.10.0",
   "xclim >=0.54.0"
 ]
 docs = [
   # docs & examples
+  "ipykernel",
+  "matplotlib >=3.9.0",
   "nbsphinx >=0.9.5",
   "pybtex >=0.24.0",
   "pydata-sphinx-theme >=0.16.0",
@@ -94,7 +103,7 @@ values = [
 ]
 
 [tool.codespell]
-skip = "docs/notebooks/*.ipynb, docs/references.bib"
+skip = '*docs/_build, *docs/*.bib'
 
 [tool.flit.sdist]
 include = [
@@ -155,6 +164,7 @@ ignore = [
 [tool.ruff.lint.per-file-ignores]
 "docs/*.py" = ["D100", "D101", "D102", "D103", "PLR6301"]
 "src/lsapy/**/__init__.py" = ["F401", "F403"]
+"tests/**/test*.py" = ["D101", "D102", "D103", "PLR2004", "PLR6301", "S101"]
 
 [tool.ruff.lint.isort]
 case-sensitive = true
@@ -172,3 +182,17 @@ convention = "numpy"
 [tool.ruff.lint.pylint]
 max-args = 15
 max-branches = 20
+
+[tool.pytest.ini_options]
+addopts = [
+  "-ra",
+  "--color=yes"
+]
+log_cli_level = "INFO"
+filterwarnings = ["ignore::UserWarning"]
+testpaths = [
+  "tests"
+]
+pythonpath = [
+  "src"
+]

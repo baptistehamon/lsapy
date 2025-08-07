@@ -15,6 +15,12 @@ Breaking changes
 ^^^^^^^^^^^^^^^^
 * The deprecated ``SuitabilityFunction.map`` method has been removed (PR `#44 <https://github.com/baptistehamon/lsapy/pull/44>`_).
 
+Internal changes
+^^^^^^^^^^^^^^^^
+* Tests have been added for current implemented `LSAPy` functionalities (issue `#7 <https://github.com/baptistehamon/lsapy/issues/7>`_, PR `#46 <https://github.com/baptistehamon/lsapy/pull/46>`_).
+* ``pytest`` and ``nox`` can now be used to run the tests (issue `#7 <https://github.com/baptistehamon/lsapy/issues/7>`_, PR `#46 <https://github.com/baptistehamon/lsapy/pull/46>`_)
+* A GitHub Actions workflow has been added to run the tests (issue `#8 <https://github.com/baptistehamon/lsapy/issues/8>`_, PR `#46 <https://github.com/baptistehamon/lsapy/pull/46>`_)
+
 v0.1.1 (2025-07-26)
 -------------------
 Contributor to this version: Baptiste Hamon (@baptistehamon).

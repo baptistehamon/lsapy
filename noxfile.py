@@ -27,7 +27,20 @@ def doctests(session):
 @nox.session
 def lint(session):
     session.install(".[dev]")
-    session.run("pre-commit", "run", "-a")
+    # run pre-commit hooks manually to bypass no-commit-to-branch
+    # leading to a failure in CI
+    session.run("pre-commit", "run", "check-json", "-a")
+    session.run("pre-commit", "run", "check-merge-conflict", "-a")
+    session.run("pre-commit", "run", "check-toml", "-a")
+    session.run("pre-commit", "run", "check-yaml", "-a")
+    session.run("pre-commit", "run", "end-of-file-fixer", "-a")
+    session.run("pre-commit", "run", "name-tests-test", "-a")
+    session.run("pre-commit", "run", "pretty-format-json", "-a")
+    session.run("pre-commit", "run", "trailing-whitespace", "-a")
+    session.run("pre-commit", "run", "ruff-check", "-a")
+    session.run("pre-commit", "run", "ruff-format", "-a")
+    session.run("pre-commit", "run", "codespell", "-a")
+    session.run("pre-commit", "run", "numpydoc-validation", "-a")
 
 
 @nox.session

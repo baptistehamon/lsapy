@@ -3,28 +3,22 @@
 
 import nox
 
-nox.options.sessions = (
-    "tests",
-    "notebooks",
-    "doctests",
-    "lint",
-    "docs",
-)
+nox.options.sessions = ("tests", "notebooks", "doctests")
 
 
-@nox.session(venv_backend="conda", python=["3.10", "3.11", "3.12", "3.13"], tags=["testing"])
+@nox.session(venv_backend="conda", python=["3.10", "3.11", "3.12", "3.13"])
 def tests(session):
     session.install(".[dev]", "h5netcdf", "netCDF4")
     session.run("pytest")
 
 
-@nox.session(tags=["testing"])
+@nox.session
 def notebooks(session):
     session.install(".[docs]")
     session.run("pytest", "--nbval-lax", "docs/notebooks")
 
 
-@nox.session(tags=["testing"])
+@nox.session
 def doctests(session):
     session.install(".[docs]")
     session.run("pytest", "--doctest-modules", "src/lsapy")

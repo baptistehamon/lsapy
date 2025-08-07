@@ -20,6 +20,7 @@ dependencies:
   - matplotlib >=3.9.0
   - nbsphinx >=0.9.5
   - nbval >=0.11.0
+  - nox >=2024.10.09
   - numpydoc >=1.8.0
   - pre-commit >=4.0.0
   - pybtex >=0.24.0

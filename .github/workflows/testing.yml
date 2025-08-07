@@ -48,7 +48,7 @@ jobs:
             - name: Doctests
               if: ${{ matrix.os == 'ubuntu-latest' &&  matrix.python-version == '3.12' }}
               run: |
-                nox -s doctest
+                nox -s doctests
             - name: Test notebooks
               if: ${{ matrix.os == 'ubuntu-latest' &&  matrix.python-version == '3.12' }}
               run: |

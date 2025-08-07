@@ -14,13 +14,13 @@ def tests(session):
 
 @nox.session
 def notebooks(session):
-    session.install(".[docs]")
+    session.install(".[dev]")
     session.run("pytest", "--nbval", "docs/notebooks")
 
 
 @nox.session
 def doctests(session):
-    session.install(".[docs]")
+    session.install(".[dev]")
     session.run("pytest", "--doctest-modules", "src/lsapy")
 
 

@@ -15,11 +15,13 @@ dependencies:
   - bump-my-version >=1.1.4
   - codespell >=2.4.1
   - flit >=3.11
+  - h5netcdf >=1.4.0
   - ipykernel
   - ipython >=8.20.0
   - matplotlib >=3.9.0
   - nbsphinx >=0.9.5
   - nbval >=0.11.0
+  - netcdf4
   - nox >=2024.10.09
   - numpydoc >=1.8.0
   - pre-commit >=4.0.0

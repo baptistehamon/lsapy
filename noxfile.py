@@ -15,7 +15,7 @@ def tests(session):
 @nox.session
 def notebooks(session):
     session.install(".[docs]")
-    session.run("pytest", "--nbval-lax", "docs/notebooks")
+    session.run("pytest", "--nbval", "docs/notebooks")
 
 
 @nox.session

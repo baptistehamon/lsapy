@@ -281,14 +281,14 @@ def fit_membership(x, y=None, fit_on: str | list[str] = "all", plot: bool = Fals
     --------
     >>> from lsapy.functions.membership import fit_membership
     >>> fit_membership([1, 3, 5, 7, 10])  # doctest: +ELLIPSIS
-    (<function vetharaniam2022_eq5 at 0x...>, array([-2.78959209,  4.86485647]))
+    (<function vetharaniam2022_eq5 at 0x...>, array([-2.789...,  4.864...]))
 
     By default, the function will fit all available membership equations. If you want to fit only specific equations,
     you can specify it using the `fit_on` parameter: "all", "sigmoid_like", "gaussian_like", or a list of equations.
     The default `y` values can also be changed.
 
     >>> fit_membership(x=[1, 3, 5, 5, 7, 9], y=[0, 0.5, 1, 1, 0.5, 0], fit_on="gaussian_like")  # doctest: +ELLIPSIS
-    (<function vetharaniam2024_eq10 at 0x...>, array([0.38213219, 4.97273138, 0.93922461]))
+    (<function vetharaniam2024_eq10 at 0x...>, array([0.382..., 4.972..., 0.939...]))
     """
     if y is None:
         y = [0, 0.25, 0.5, 0.75, 1]

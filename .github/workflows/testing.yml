@@ -52,9 +52,6 @@ jobs:
                 nox -s coverage
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            - name: Report coverage
-              if: ${{ matrix.os == 'ubuntu-latest' &&  matrix.python-version == '3.12' }}
-              uses: coverallsapp/github-action@v2
             - name: Doctests
               if: ${{ matrix.os == 'ubuntu-latest' &&  matrix.python-version == '3.12' }}
               run: |

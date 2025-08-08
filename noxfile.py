@@ -14,8 +14,9 @@ def tests(session):
 
 @nox.session
 def coverage(session):
-    session.install(".[dev]", "h5netcdf", "netCDF4")
+    session.install(".[dev]", "h5netcdf", "netCDF4", "coveralls")
     session.run("pytest", "--cov=lsapy", "--cov-report=term-missing")
+    session.run("coveralls")
 
 
 @nox.session

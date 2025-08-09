@@ -34,23 +34,28 @@ You can now perform your LSA:
 
     # define your criteria
     criteria = {
-        'crit1': SuitabilityCriteria(
-            name='criteria1',
-            indicator= indicator1, # xarray object
-            func=SuitabilityFunction(name="function_name", params={'param1': value1, 'param2': value2})
+        "crit1": SuitabilityCriteria(
+            name="criteria1",
+            indicator=indicator1,  # xarray object
+            func=SuitabilityFunction(
+                name="function_name", params={"param1": value1, "param2": value2}
+            ),
         ),
-        'crit2': SuitabilityCriteria(
-            name='criteria2',
-            indicator= indicator2, # xarray object
-            func= SuitabilityFunction(name="another_function_name", params={'param1': value1, 'param2': value2})
-        )
+        "crit2": SuitabilityCriteria(
+            name="criteria2",
+            indicator=indicator2,  # xarray object
+            func=SuitabilityFunction(
+                name="another_function_name",
+                params={"param1": value1, "param2": value2},
+            ),
+        ),
         # add all necessary criteria
     }
 
     # define your land suitability
     lsa = LandSuitabilityAnalysis(
-        land_use= 'land_use_name',
-        criteria= criteria,
+        land_use="land_use_name",
+        criteria=criteria,
     )
 
     # run your analysis

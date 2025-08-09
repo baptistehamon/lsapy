@@ -3,6 +3,11 @@ name: Testing
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - CHANGELOG.rst
+      - README.rst
+      - pyproject.toml
+      - src/xclim/__init__.py
   pull_request:
 
 jobs:

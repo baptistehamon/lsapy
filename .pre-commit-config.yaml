@@ -15,6 +15,7 @@ repos:
         args: [ '--pytest-test-first' ]
       - id: pretty-format-json
         args: ['--autofix', '--no-sort-keys']
+        exclude: '.ipynb'
       - id: trailing-whitespace
   - repo: https://github.com/adrienverge/yamllint
     rev: v1.37.1

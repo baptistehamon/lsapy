@@ -22,12 +22,15 @@ body:
     id: description
     attributes:
       label: Description
-      description: Describe what you were trying to get done. Tell us what happened, what went wrong, and what you expected to happen.
+      description:
+        Describe what you were trying to get done. Tell us what happened, what went wrong,
+        and what you expected to happen.
   - type: textarea
     id: steps-to-reproduce
     attributes:
       label: Steps To Reproduce
-      description: Paste the command(s) you ran and the output. If there was a crash, please include the traceback below.
+      description:
+        Paste the command(s) you ran and the output. If there was a crash, please include the traceback below.
   - type: textarea
     id: additional-context
     attributes:
@@ -44,7 +47,9 @@ body:
     id: terms
     attributes:
       label: Code of Conduct
-      description: By submitting this issue, you agree to follow LSAPy's [Code of Conduct](https://lsapy.readthedocs.io/en/latest/community/code_of_conduct.html).
+      description:
+        By submitting this issue, you agree to follow LSAPy's
+        [Code of Conduct](https://lsapy.readthedocs.io/en/latest/community/code_of_conduct.html).
       options:
         - label: I agree to follow this project's Code of Conduct
           required: true

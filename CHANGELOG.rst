@@ -10,6 +10,7 @@ New features
 ^^^^^^^^^^^^
 * Functions alternative names can now be used in ``SuitabilityFunction`` (PR `#43 <https://github.com/baptistehamon/lsapy/pull/43>`_).
 * The documentation of membership functions has been improved (PR `#43 <https://github.com/baptistehamon/lsapy/pull/43>`_).
+* `LSAPy` officially supports Python>=3.10 and is OS independent (PR `#46 <https://github.com/baptistehamon/lsapy/pull/46>`_).
 
 Breaking changes
 ^^^^^^^^^^^^^^^^
@@ -17,9 +18,18 @@ Breaking changes
 
 Internal changes
 ^^^^^^^^^^^^^^^^
-* Tests have been added for current implemented `LSAPy` functionalities (issue `#7 <https://github.com/baptistehamon/lsapy/issues/7>`_, PR `#46 <https://github.com/baptistehamon/lsapy/pull/46>`_).
-* ``pytest`` and ``nox`` can now be used to run the tests (issue `#7 <https://github.com/baptistehamon/lsapy/issues/7>`_, PR `#46 <https://github.com/baptistehamon/lsapy/pull/46>`_)
-* A GitHub Actions workflow has been added to run the tests (issue `#8 <https://github.com/baptistehamon/lsapy/issues/8>`_, PR `#46 <https://github.com/baptistehamon/lsapy/pull/46>`_)
+* * Tests have been added for current implemented `LSAPy` functionalities (issue `#7 <https://github.com/baptistehamon/lsapy/issues/7>`_, PR `#46 <https://github.com/baptistehamon/lsapy/pull/46>`_).
+    * ``pytest`` is used as the testing framework to run all unit tests, doctests and test notebooks.
+    * ``nox`` has been set up and is used to run tests in CI workflows.
+* A CI GitHub Actions workflow has been added (issue `#8 <https://github.com/baptistehamon/lsapy/issues/8>`_, PR `#46 <https://github.com/baptistehamon/lsapy/pull/46>`_)
+    * The CI run tests on Python 3.10 to 3.13, on Ubuntu, macOS and Windows.
+    * The coverage, doctests and notebooks tests are run on Ubuntu under Python 3.12.
+* New pre-commit hooks have been added and package pyproject have been updated (PR `#58 <https://github.com/baptistehamon/lsapy/pull/58>`_)
+    * New hooks: ``yamllint``, ``vulture``, ``nbstripout``, ``pygrep-hooks``, ``mdformat``, ``blackdoc``, ``formatbibtex``, ``gitleaks`` and ``meta``.
+    * Update dependencies: remove unused ``Shapely`` and add deps for new hooks.
+    * Add deptry config to track dependencies.
+    * Update package metadata: keywords, classifiers (python versions) and project urls.
+    * Update package sdist files.
 
 v0.1.1 (2025-07-26)
 -------------------

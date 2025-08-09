@@ -12,19 +12,19 @@ maintainers = [
 ]
 readme = "README.rst"
 requires-python = ">=3.10"
-keywords = ["LSAPy", "Land Suitability Analysis", "Spatial Analysis", "GIS", "Geography"]
+keywords = ["LSAPy", "Land Suitability Analysis", "Geospatial Analysis", "GIS", "Geography"]
 license = {file = "LICENSE"}
 classifiers = [
-    "Development Status :: 2 - Pre-Alpha",
+    "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
     "Natural Language :: English",
+    "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
-    "Operating System :: OS Independent",
     "Topic :: Scientific/Engineering :: GIS",
 ]
 dynamic = ["description", "version"]
@@ -34,13 +34,13 @@ dependencies = [
   "pandas >=2.2.0",
   "regionmask >=0.13.0",
   "scipy >=1.15.0",
-  "Shapely >=2.0.0",
   "xarray >=2024.10.0"
 ]
 
 [project.optional-dependencies]
 dev = [
-  # dev tools
+  # dev tools and testing
+  "blackdoc >=0.3.9",
   "bump-my-version >=1.1.4",
   "codespell >=2.4.1",
   "coverage[toml] >=7.7.0",
@@ -55,7 +55,9 @@ dev = [
   "pytest >=8.3.0",
   "pytest-cov >=6.0.0",
   "ruff >=0.10.0",
-  "xclim >=0.54.0"
+  "vulture >=2.14",
+  "xclim >=0.54.0",
+  "yamllint >=1.37.1"
 ]
 docs = [
   # docs & examples
@@ -73,8 +75,10 @@ docs = [
 all = ["lsapy[dev]", "lsapy[docs]"]
 
 [project.urls]
-Homepage = "https://github.com/baptistehamon/lsapy"
+Homepage = "https://lsapy.readthedocs.io/en/stable/"
+Source = "https://github.com/baptistehamon/lsapy"
 Issues = "https://github.com/baptistehamon/lsapy/issues"
+Zenodo = "https://doi.org/10.5281/zenodo.15015110"
 
 [tool.bumpversion]
 current_version = "0.1.2-dev2"
@@ -106,16 +110,37 @@ values = [
 [tool.codespell]
 skip = '*docs/_build, *docs/*.bib'
 
+[tool.deptry]
+extend_exclude = ["docs"]
+# ignore_notebooks = true
+pep621_dev_dependency_groups = ["all", "dev", "docs"]
+
+[tool.deptry.per_rule_ignores]
+DEP002 = ["h5netcdf"]
+DEP004 = ["matplotlib", "pytest", "nox", "lsapy"]
+
 [tool.flit.sdist]
 include = [
+  "CHANGELOG.rst",
+  "CONTRIBUTING.rst",
   "LICENSE",
   "README.rst",
-  "src/lsapy/*.py",
+  "docs/**/*.jpg",
+  "docs/**/*.png",
+  "docs/**/*.rst",
+  "docs/Makefile",
+  "docs/conf.py",
+  "docs/make.bat",
+  "src/lsapy/**/*.py",
+  "test/**/*.py",
+  "noxfile.py",
 ]
 exclude = [
   "**/__pycache__/**",
   "**/*.py[co]",
-  ".*"
+  ".*",
+  "ci/*",
+  "docs/_*"
 ]
 
 [tool.numpydoc_validation]
@@ -131,6 +156,20 @@ exclude = [
   '\.__repr__$',
   # any object starting with an underscore is a private object
   '\._\w+'
+]
+
+[tool.pytest.ini_options]
+addopts = [
+  "-ra",
+  "--color=yes"
+]
+log_cli_level = "INFO"
+filterwarnings = ["ignore::UserWarning"]
+testpaths = [
+  "tests"
+]
+pythonpath = [
+  "src"
 ]
 
 [tool.ruff]
@@ -184,16 +223,9 @@ convention = "numpy"
 max-args = 15
 max-branches = 20
 
-[tool.pytest.ini_options]
-addopts = [
-  "-ra",
-  "--color=yes"
-]
-log_cli_level = "INFO"
-filterwarnings = ["ignore::UserWarning"]
-testpaths = [
-  "tests"
-]
-pythonpath = [
-  "src"
-]
+[tool.vulture]
+exclude = []
+ignore_names = []
+min_confidence = 90
+paths = ["src/lsapy", "tests"]
+sort_by_size = true

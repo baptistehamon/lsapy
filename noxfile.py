@@ -44,10 +44,23 @@ def lint(session):
     session.run("pre-commit", "run", "name-tests-test", "-a")
     session.run("pre-commit", "run", "pretty-format-json", "-a")
     session.run("pre-commit", "run", "trailing-whitespace", "-a")
+    session.run("pre-commit", "run", "yamllint", "-a")
     session.run("pre-commit", "run", "ruff-check", "-a")
     session.run("pre-commit", "run", "ruff-format", "-a")
     session.run("pre-commit", "run", "codespell", "-a")
     session.run("pre-commit", "run", "numpydoc-validation", "-a")
+    session.run("pre-commit", "run", "vulture", "-a")
+    session.run("pre-commit", "run", "nbstripout", "-a")
+    session.run("pre-commit", "run", "python-check-blanket-type-ignore", "-a")
+    session.run("pre-commit", "run", "python-no-eval", "-a")
+    session.run("pre-commit", "run", "python-no-log-warn", "-a")
+    session.run("pre-commit", "run", "python-use-type-annotations", "-a")
+    session.run("pre-commit", "run", "rst-directive-colons", "-a")
+    session.run("pre-commit", "run", "rst-inline-touching-normal", "-a")
+    session.run("pre-commit", "run", "text-unicode-replacement-char", "-a")
+    session.run("pre-commit", "run", "mdformat", "-a")
+    session.run("pre-commit", "run", "blackdoc", "-a")
+    session.run("pre-commit", "run", "formatbibtex", "-a")
 
 
 @nox.session

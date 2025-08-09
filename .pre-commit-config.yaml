@@ -81,6 +81,10 @@ repos:
     rev: v8.28.0
     hooks:
       - id: gitleaks
+  - repo: meta
+    hooks:
+      - id: check-hooks-apply
+      - id: check-useless-excludes
 
 ci:
   autofix_commit_msg: |

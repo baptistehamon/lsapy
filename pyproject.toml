@@ -34,13 +34,12 @@ dependencies = [
   "pandas >=2.2.0",
   "regionmask >=0.13.0",
   "scipy >=1.15.0",
-  "Shapely >=2.0.0",
   "xarray >=2024.10.0"
 ]
 
 [project.optional-dependencies]
 dev = [
-  # dev tools
+  # dev tools and testing
   "blackdoc >=0.3.9",
   "bump-my-version >=1.1.4",
   "codespell >=2.4.1",

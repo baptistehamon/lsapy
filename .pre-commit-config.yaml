@@ -51,6 +51,17 @@ repos:
       - id: nbstripout
         files: '.ipynb'
         args: [ '--extra-keys=metadata.kernelspec' ]
+  - repo: https://github.com/pre-commit/pygrep-hooks
+    rev: v1.10.0
+    hooks:
+#      - id: python-check-blanket-noqa
+      - id: python-check-blanket-type-ignore
+      - id: python-no-eval
+      - id: python-no-log-warn
+      - id: python-use-type-annotations
+      - id: rst-directive-colons
+      - id: rst-inline-touching-normal
+      - id: text-unicode-replacement-char
 
 ci:
   autofix_commit_msg: |

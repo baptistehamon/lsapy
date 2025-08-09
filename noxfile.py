@@ -51,6 +51,13 @@ def lint(session):
     session.run("pre-commit", "run", "numpydoc-validation", "-a")
     session.run("pre-commit", "run", "vulture", "-a")
     session.run("pre-commit", "run", "nbstripout", "-a")
+    session.run("pre-commit", "run", "python-check-blanket-type-ignore", "-a")
+    session.run("pre-commit", "run", "python-no-eval", "-a")
+    session.run("pre-commit", "run", "python-no-log-warn", "-a")
+    session.run("pre-commit", "run", "python-use-type-annotations", "-a")
+    session.run("pre-commit", "run", "rst-directive-colons", "-a")
+    session.run("pre-commit", "run", "rst-inline-touching-normal", "-a")
+    session.run("pre-commit", "run", "text-unicode-replacement-char", "-a")
 
 
 @nox.session

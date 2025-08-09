@@ -7,8 +7,7 @@
 
 LSAPy: Land Suitability Analysis in Python
 ===========================================
-|pypi| |status| |ruff| |pre-commit| |docs| |testing|
-|question| |zenodo|
+|pypi| |python-versions| |status| |testing| |coverage| |ruff| |pre-commit| |docs| |question| |zenodo|
 
 `LSAPy` stands for Land Suitability Analysis (LSA) in Python. Its objective is to make conducting
 LSA in Python easier and more accessible to users. It provides a set of objects built around
@@ -138,3 +137,11 @@ The Python package has been created following the `pyOpenSci Guidebook`_.
 .. |testing| image:: https://github.com/baptistehamon/lsapy/actions/workflows/testing.yml/badge.svg
     :target: https://github.com/baptistehamon/lsapy/actions/workflows/testing.yml
     :alt: Testing Status
+
+.. |coverage| image:: https://coveralls.io/repos/github/baptistehamon/lsapy/badge.svg
+    :target: https://coveralls.io/github/baptistehamon/lsapy
+    :alt: Coverage Status (Coveralls)
+
+.. |python-versions| image:: https://img.shields.io/pypi/pyversions/lsapy
+        :target: https://pypi.python.org/pypi/lsapy
+        :alt: Supported Python Versions

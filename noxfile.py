@@ -50,6 +50,7 @@ def lint(session):
     session.run("pre-commit", "run", "codespell", "-a")
     session.run("pre-commit", "run", "numpydoc-validation", "-a")
     session.run("pre-commit", "run", "vulture", "-a")
+    session.run("pre-commit", "run", "nbstripout", "-a")
 
 
 @nox.session

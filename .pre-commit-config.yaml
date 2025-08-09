@@ -44,6 +44,12 @@ repos:
     rev: 'v2.14'
     hooks:
       - id: vulture
+  - repo: https://github.com/kynan/nbstripout
+    rev: 0.8.1
+    hooks:
+      - id: nbstripout
+        files: '.ipynb'
+        args: [ '--extra-keys=metadata.kernelspec' ]
 
 ci:
   autofix_commit_msg: |

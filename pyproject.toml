@@ -12,19 +12,19 @@ maintainers = [
 ]
 readme = "README.rst"
 requires-python = ">=3.10"
-keywords = ["LSAPy", "Land Suitability Analysis", "Spatial Analysis", "GIS", "Geography"]
+keywords = ["LSAPy", "Land Suitability Analysis", "Geospatial Analysis", "GIS", "Geography"]
 license = {file = "LICENSE"}
 classifiers = [
-    "Development Status :: 2 - Pre-Alpha",
+    "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
     "Natural Language :: English",
+    "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
-    "Operating System :: OS Independent",
     "Topic :: Scientific/Engineering :: GIS",
 ]
 dynamic = ["description", "version"]
@@ -76,8 +76,10 @@ docs = [
 all = ["lsapy[dev]", "lsapy[docs]"]
 
 [project.urls]
-Homepage = "https://github.com/baptistehamon/lsapy"
+Homepage = "https://lsapy.readthedocs.io/en/stable/"
+Source = "https://github.com/baptistehamon/lsapy"
 Issues = "https://github.com/baptistehamon/lsapy/issues"
+Zenodo = "https://doi.org/10.5281/zenodo.15015110"
 
 [tool.bumpversion]
 current_version = "0.1.2-dev2"

@@ -44,6 +44,7 @@ def lint(session):
     session.run("pre-commit", "run", "name-tests-test", "-a")
     session.run("pre-commit", "run", "pretty-format-json", "-a")
     session.run("pre-commit", "run", "trailing-whitespace", "-a")
+    session.run("pre-commit", "run", "yamllint", "-a")
     session.run("pre-commit", "run", "ruff-check", "-a")
     session.run("pre-commit", "run", "ruff-format", "-a")
     session.run("pre-commit", "run", "codespell", "-a")

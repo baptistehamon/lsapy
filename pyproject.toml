@@ -55,7 +55,8 @@ dev = [
   "pytest >=8.3.0",
   "pytest-cov >=6.0.0",
   "ruff >=0.10.0",
-  "xclim >=0.54.0"
+  "xclim >=0.54.0",
+  "yamllint >=1.37.1"
 ]
 docs = [
   # docs & examples

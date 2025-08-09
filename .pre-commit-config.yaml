@@ -77,6 +77,10 @@ repos:
     rev: 0.1.4
     hooks:
       - id: formatbibtex
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.28.0
+    hooks:
+      - id: gitleaks
 
 ci:
   autofix_commit_msg: |

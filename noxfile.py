@@ -58,6 +58,7 @@ def lint(session):
     session.run("pre-commit", "run", "rst-directive-colons", "-a")
     session.run("pre-commit", "run", "rst-inline-touching-normal", "-a")
     session.run("pre-commit", "run", "text-unicode-replacement-char", "-a")
+    session.run("pre-commit", "run", "mdformat", "-a")
 
 
 @nox.session

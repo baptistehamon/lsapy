@@ -55,6 +55,7 @@ dev = [
   "pytest >=8.3.0",
   "pytest-cov >=6.0.0",
   "ruff >=0.10.0",
+  "vulture >=2.14",
   "xclim >=0.54.0",
   "yamllint >=1.37.1"
 ]
@@ -198,3 +199,10 @@ testpaths = [
 pythonpath = [
   "src"
 ]
+
+[tool.vulture]
+exclude = []
+ignore_names = []
+min_confidence = 90
+paths = ["src/lsapy", "tests"]
+sort_by_size = true

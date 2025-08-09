@@ -22,8 +22,8 @@ repos:
       - id: yamllint
         args: [ '--config-file=.yamllint.yml' ]
   - repo: https://github.com/astral-sh/ruff-pre-commit
-  # Use ruff as a substitute for black, flake8, isort,
-  # pyupgrade.
+  # Use ruff as a substitute for black, flake8, isort, pyupgrade,
+  # pylint.
     rev: v0.12.7
     hooks:
       - id: ruff-check
@@ -40,6 +40,10 @@ repos:
     hooks:
       - id: numpydoc-validation
         exclude: ^docs/|^tests/|noxfile\.py
+  - repo: https://github.com/jendrikseipp/vulture
+    rev: 'v2.14'
+    hooks:
+      - id: vulture
 
 ci:
   autofix_commit_msg: |

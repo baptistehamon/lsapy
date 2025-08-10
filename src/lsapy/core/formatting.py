@@ -50,34 +50,23 @@ def sc_repr(sc) -> str:
     max_rows = OPTIONS["display_max_rows"]
     max_width = OPTIONS["display_width"]
 
-    exclude_attrs = ["name", "weight", "category", "from_indicator", "is_computed"]
-    attrs = {k: v for k, v in sc.attrs.items() if k not in exclude_attrs}
-
-    col_width = _calculate_col_width([f"{k}:" for k in attrs.keys()] + ["Dimensions"])
-    name_col = pretty_print("    Name", col_width)
+    col_width = _calculate_col_width([f"{k}:" for k in sc.attrs.keys()] + ["Dimensions"])
 
     summary = [f"<SuitabilityCriteria> {sc.name!r}{sc_params_repr(sc)}"]
 
     if sc.func:
-        summary.extend(
-            [
-                "Function:",
-                f"    {maybe_truncate(sf_short_repr(sc.func), max_width)}",
-                # f"{name_col}{sc.func.func.__name__} "
-                # f"{pretty_print("    Parameters", col_width)}{sc.func.params!r} "
-            ]
-        )
+        summary.extend(["Function:", f"    {maybe_truncate(sf_repr(sc.func), max_width)}"])
 
     dims = pretty_print("    Dimensions", col_width)
     summary.extend(
         [
             "Indicator:",
-            f"{name_col}{sc.indicator.name} ",
+            f"{pretty_print('    Name', col_width)}{sc.indicator.name} ",
             data_repr(sc.indicator, col_width, max_width),
             f"{dims}{dim_summary_limited(sc.indicator.sizes, len(dims) + 1, max_rows)} ",
         ]
     )
 
-    summary.append(attrs_repr(attrs, max_rows=max_rows))
+    summary.append(attrs_repr(sc.attrs, max_rows=max_rows))
 
     return "\n".join(summary)

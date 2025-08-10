@@ -40,7 +40,7 @@ repos:
     rev: v1.9.0
     hooks:
       - id: numpydoc-validation
-        exclude: ^docs/|^tests/|noxfile\.py
+        exclude: ^docs/|^tests/|noxfile.py|^src/lsapy/core/formatting.py
   - repo: https://github.com/jendrikseipp/vulture
     rev: 'v2.14'
     hooks:

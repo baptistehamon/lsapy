@@ -9,6 +9,7 @@ from typing import Any
 import matplotlib.pyplot as plt
 import numpy as np
 
+import lsapy.core.formatting as fmt
 from lsapy.core.functions import get_function_from_name
 
 __all__ = [
@@ -89,8 +90,7 @@ class SuitabilityFunction:
         return np.vectorize(func, otypes=[np.float32])(x)
 
     def __repr__(self):
-        """Return the string representation of the object."""
-        return f"{self.__class__.__name__}(func={self.func.__name__}, params={self.params})"
+        return fmt.sf_repr(self)
 
     @property
     def attrs(self) -> dict[str, Any]:

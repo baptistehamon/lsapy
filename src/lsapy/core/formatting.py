@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+import functools
+
 from xarray.core.formatting import (
     _calculate_col_width,  # noqa: PLC2701
+    _mapping_repr,  # noqa: PLC2701
     attrs_repr,
     dim_summary_limited,
     inline_variable_array_repr,
@@ -67,6 +70,65 @@ def sc_repr(sc) -> str:
         ]
     )
 
-    summary.append(attrs_repr(sc.attrs, max_rows=max_rows))
+    summary.append(attrs_repr(sc.attrs, col_width=col_width, max_rows=max_rows))
 
+    return "\n".join(summary)
+
+
+def summarize_criteria(
+    name,
+    criteria,
+    col_width: int,
+    max_width: int | None = None,
+):
+    """Summarize a criteria in one line, e.g., for the LandSuitabilityAnalysis.__repr__."""
+    if max_width is None:
+        max_width_options = OPTIONS["display_width"]
+        if not isinstance(max_width_options, int):
+            raise TypeError(f"`max_width` value of `{max_width}` is not a valid int")
+        else:
+            max_width = max_width_options
+
+    first_col = pretty_print(f"    {criteria.name} ", col_width)
+    wgt = f"(w={criteria.weight}) "
+
+    front_str = f"{first_col}{wgt}"
+
+    if criteria.category:
+        cat = f"{criteria.category} "
+    else:
+        cat = ""
+
+    if criteria.func:
+        func = f"{sf_short_repr(criteria.func)} "
+    else:
+        func = ""
+
+    details_width = max_width - len(front_str)
+    details_str = maybe_truncate(f"{cat}{func}", details_width)
+
+    return front_str + details_str
+
+
+criteria_repr = functools.partial(
+    _mapping_repr,
+    title="Criteria",
+    summarizer=summarize_criteria,
+    expand_option_name="display_expand_data_vars",
+)
+
+
+def lsa_repr(lsa):
+    """Return a string representation of a LandSuitabilityAnalysis."""
+    max_rows = OPTIONS["display_max_rows"]
+
+    col_width = _calculate_col_width(
+        [sc.name for sc in lsa.criteria.values()] + [k for k in lsa.attrs.keys()],
+    )
+
+    summary = [f"<LandSuitabilityAnalysis> {lsa.land_use!r}"]
+
+    summary.append(criteria_repr(lsa.criteria, col_width=col_width, max_rows=max_rows))
+
+    summary.append(attrs_repr(lsa.attrs, col_width=col_width, max_rows=max_rows))
     return "\n".join(summary)

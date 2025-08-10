@@ -116,6 +116,30 @@ class SuitabilityCriteria:
         """Return a string representation of the suitability criteria."""
         return fmt.sc_repr(self)
 
+    @property
+    def attrs(self) -> dict[Any, Any]:
+        """
+        Dictionary of the suitability criteria attributes.
+
+        Returns
+        -------
+        dict
+            Dictionary containing the suitability criteria attributes.
+        """
+        return self._attrs
+
+    @attrs.setter
+    def attrs(self, value: Mapping[Any, Any]) -> None:
+        """
+        Set the attributes of the suitability criteria.
+
+        Parameters
+        ----------
+        value : Mapping[Any, Any]
+            Mapping of attributes to set for the suitability criteria.
+        """
+        self._attrs = dict(value)
+
     def compute(self) -> xr.DataArray:
         """
         Compute the suitability of the criteria.
@@ -147,30 +171,6 @@ class SuitabilityCriteria:
                 },
             )
         )
-
-    @property
-    def attrs(self) -> dict[Any, Any]:
-        """
-        Dictionary of the suitability criteria attributes.
-
-        Returns
-        -------
-        dict
-            Dictionary containing the suitability criteria attributes.
-        """
-        return self._attrs
-
-    @attrs.setter
-    def attrs(self, value: Mapping[Any, Any]) -> None:
-        """
-        Set the attributes of the suitability criteria.
-
-        Parameters
-        ----------
-        value : Mapping[Any, Any]
-            Mapping of attributes to set for the suitability criteria.
-        """
-        self._attrs = dict(value)
 
 
 def _get_indicator_description(indicator: xr.Dataset | xr.DataArray) -> str:

@@ -158,19 +158,16 @@ class SuitabilityCriteria:
             raise ValueError("The suitability function is not defined. Please provide a valid function.")
         else:
             sc: xr.DataArray = xr.apply_ufunc(self.func, self.indicator)
-        return sc.rename(self.name).assign_attrs(
-            dict(
-                {
-                    k: v
-                    for k, v in self.attrs.items()
-                    if k not in ["name", "func_method", "from_indicator", "is_computed"]
-                },
-                **{
-                    "history": f"func_method: {self.func if self.func is not None else 'unknown'}; "
-                    f"from_indicator: [{self._from_indicator}]"
-                },
-            )
+
+        attrs = {"weight": self.weight}
+        if self.category:
+            attrs["category"] = self.category
+        attrs.update(self._attrs)
+        attrs["history"] = (
+            f"func_method: {self.func if self.func is not None else 'unknown'}; "
+            f"from_indicator: [{self._from_indicator}]"
         )
+        return sc.rename(self.name).assign_attrs(attrs)
 
 
 def _get_indicator_description(indicator: xr.Dataset | xr.DataArray) -> str:

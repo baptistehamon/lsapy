@@ -20,6 +20,7 @@ def lsa(criteria) -> LandSuitabilityAnalysis:
         description="This is a test land use.",
         comment="An optional comment.",
         criteria=criteria,
+        attrs={"another_attr": "value"},
     )
 
 
@@ -51,26 +52,36 @@ class TestLandSuitabilityAnalysis:
         assert lsa.weights_by_category == {"climate": 4, "soilTerrain": 4}
 
     def test_attrs(self, lsa):
-        assert lsa.land_use == "land_use"
-        assert lsa.short_name == "test_land_use"
-        assert lsa.long_name == "Test Land Use"
-        assert lsa.description == "This is a test land use."
-        assert lsa.comment == "An optional comment."
-        assert lsa.category == ["climate", "soilTerrain"]
-        assert lsa._criteria_list == [
-            "growing_degree_days",
-            "potential_rooting_depth",
-            "drainage_class",
-            "annual_precipitation",
-        ]
+        # test when provided when creating the lsa
+        assert lsa.attrs["long_name"] == "Test Land Use"
+        assert lsa.attrs["description"] == "This is a test land use."
+        assert lsa.attrs["comment"] == "An optional comment."
+        assert lsa.attrs["another_attr"] == "value"
+        lsa = LandSuitabilityAnalysis(land_use="land_use", criteria=lsa.criteria)
+        assert lsa.attrs == {}
+        lsa.attrs = {
+            "long_name": "Test Land Use",
+            "description": "This is a test land use.",
+            "comment": "An optional comment.",
+        }
+        assert lsa.attrs["long_name"] == "Test Land Use"
+        assert lsa.attrs["description"] == "This is a test land use."
+        assert lsa.attrs["comment"] == "An optional comment."
 
     def test_repr(self, lsa):
         expected_repr = (
-            "LandSuitabilityAnalysis(land_use='land_use', "
-            "criteria=['growing_degree_days', 'potential_rooting_depth', "
-            "'drainage_class', 'annual_precipitation'], "
-            "short_name='test_land_use', long_name='Test Land Use', "
-            "description='This is a test land use.')"
+            "<LandSuitabilityAnalysis> 'land_use'\n"
+            "Criteria:\n"
+            "    growing_degree_days      (w=3) climate vetharaniam2022_eq5(a=-0.55, b=1350) \n"
+            "    potential_rooting_depth  (w=2) soilTerrain vetharaniam2022_eq5(a=-9.8, b=...\n"
+            "    drainage_class           (w=2) soilTerrain discrete(rules={1: 0, 2: 0.1, ...\n"
+            "    annual_precipitation     (w=1) climate vetharaniam2022_eq5(a=-0.71, b=1100) \n"
+            "Attributes:\n"
+            "    short_name:               test_land_use\n"
+            "    long_name:                Test Land Use\n"
+            "    description:              This is a test land use.\n"
+            "    comment:                  An optional comment.\n"
+            "    another_attr:             value"
         )
         assert repr(lsa) == expected_repr
 
@@ -101,9 +112,9 @@ class TestLandSuitabilityAnalysis:
         assert all([c in res.data_vars for c in lsa._criteria_list])
         assert res.attrs["criteria"] == lsa._criteria_list
         assert res.attrs["land_use"] == lsa.land_use
-        assert res.attrs["short_name"] == lsa.short_name
-        assert res.attrs["long_name"] == lsa.long_name
-        assert res.attrs["description"] == lsa.description
+        assert res.attrs["short_name"] == "test_land_use"
+        assert res.attrs["long_name"] == "Test Land Use"
+        assert res.attrs["description"] == "This is a test land use."
         # test values
         np.testing.assert_array_almost_equal(res.growing_degree_days.values, 0.75, decimal=2)
         np.testing.assert_array_almost_equal(res.potential_rooting_depth.values, 0.95, decimal=2)
@@ -140,9 +151,9 @@ class TestLandSuitabilityAnalysis:
         assert all([c in res.data_vars for c in lsa.category])
         assert res.attrs["land_use"] == lsa.land_use
         assert res.attrs["criteria"] == lsa._criteria_list
-        assert res.attrs["short_name"] == lsa.short_name
-        assert res.attrs["long_name"] == lsa.long_name
-        assert res.attrs["description"] == lsa.description
+        assert res.attrs["short_name"] == "test_land_use"
+        assert res.attrs["long_name"] == "Test Land Use"
+        assert res.attrs["description"] == "This is a test land use."
         # test values
         np.testing.assert_array_almost_equal(res.climate.values, 0.57, decimal=2)
         np.testing.assert_array_almost_equal(res.soilTerrain.values, 0.69, decimal=2)
@@ -162,9 +173,9 @@ class TestLandSuitabilityAnalysis:
         assert "suitability" in res.data_vars
         assert res.attrs["land_use"] == lsa.land_use
         assert res.attrs["criteria"] == lsa._criteria_list
-        assert res.attrs["short_name"] == lsa.short_name
-        assert res.attrs["long_name"] == lsa.long_name
-        assert res.attrs["description"] == lsa.description
+        assert res.attrs["short_name"] == "test_land_use"
+        assert res.attrs["long_name"] == "Test Land Use"
+        assert res.attrs["description"] == "This is a test land use."
         # test values
         np.testing.assert_array_almost_equal(res.suitability.values, 0.63, decimal=2)
         # test with by_category=False, should return aggregation of criteria

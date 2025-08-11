@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
+from typing import Any
 
 import xarray as xr
 
+import lsapy.core.formatting as fmt
 from lsapy.functions import SuitabilityFunction
 
 __all__ = ["SuitabilityCriteria"]
@@ -33,11 +35,15 @@ class SuitabilityCriteria:
     category : str | None, optional
         Category of the criteria. The default is None.
     long_name : str | None, optional
-        A long name for the criteria. The default is None.
+        A long name for the criteria. The default is None. If provided, it will be stored as an attribute.
     description : str | None, optional
-        A description for the criteria. The default is None.
+        A description for the criteria. The default is None. If provided, it will be stored as an attribute.
     comment : str | None, optional
-        Additional information about the criteria.
+        Additional information about the criteria. The default is None.
+        If provided, it will be stored as an attribute.
+    attrs : Mapping[Any, Any] | None, optional
+        Arbitrary metadata to store with the criteria, in addition to the attributes
+        `long_name`, `description`, and `comment`. The default is None.
     is_computed : bool, optional
         If the indicator data already contains the computed suitability values. Default is False.
 
@@ -84,6 +90,7 @@ class SuitabilityCriteria:
         long_name: str | None = None,
         description: str | None = None,
         comment: str | None = None,
+        attrs: Mapping[Any, Any] | None = None,
         is_computed: bool = False,
     ) -> None:
         self.name = name
@@ -91,30 +98,47 @@ class SuitabilityCriteria:
         self.func = func
         self.weight = weight
         self.category = category
-        self.long_name = long_name
-        self.description = description
-        self.comment = comment
+
+        self._attrs = {}
+        if long_name:
+            self._attrs["long_name"] = long_name
+        if description:
+            self._attrs["description"] = description
+        if comment:
+            self._attrs["comment"] = comment
+        if attrs and isinstance(attrs, Mapping):
+            self._attrs.update(attrs)
+
         self.is_computed = is_computed
         self._from_indicator = _get_indicator_description(indicator)
 
     def __repr__(self) -> str:
-        """Return a string representation for a particular criteria."""
-        attrs = []
-        attrs.append(f"name='{self.name}'")
-        attrs.append(f"indicator={self.indicator.name}")
-        attrs.append(f"func={self.func if self.func is not None else 'unknown'}")
-        attrs.append(f"weight={self.weight}")
-        if self.category is not None:
-            attrs.append(f"category='{self.category}'")
-        if self.long_name is not None:
-            attrs.append(f"long_name='{self.long_name}'")
-        if self.description is not None:
-            attrs.append(f"description='{self.description}'")
-        if self.comment is not None:
-            attrs.append(f"comment='{self.comment}'")
-        if self.is_computed:
-            attrs.append("is_computed=True")
-        return f"{self.__class__.__name__}({', '.join(attrs) if attrs else ''})"
+        """Return a string representation of the suitability criteria."""
+        return fmt.sc_repr(self)
+
+    @property
+    def attrs(self) -> dict[Any, Any]:
+        """
+        Dictionary of the suitability criteria attributes.
+
+        Returns
+        -------
+        dict
+            Dictionary containing the suitability criteria attributes.
+        """
+        return self._attrs
+
+    @attrs.setter
+    def attrs(self, value: Mapping[Any, Any]) -> None:
+        """
+        Set the attributes of the suitability criteria.
+
+        Parameters
+        ----------
+        value : Mapping[Any, Any]
+            Mapping of attributes to set for the suitability criteria.
+        """
+        self._attrs = dict(value)
 
     def compute(self) -> xr.DataArray:
         """
@@ -134,44 +158,16 @@ class SuitabilityCriteria:
             raise ValueError("The suitability function is not defined. Please provide a valid function.")
         else:
             sc: xr.DataArray = xr.apply_ufunc(self.func, self.indicator)
-        return sc.rename(self.name).assign_attrs(
-            dict(
-                {
-                    k: v
-                    for k, v in self.attrs.items()
-                    if k not in ["name", "func_method", "from_indicator", "is_computed"]
-                },
-                **{
-                    "history": f"func_method: {self.func if self.func is not None else 'unknown'}; "
-                    f"from_indicator: [{self._from_indicator}]"
-                },
-            )
+
+        attrs = {"weight": self.weight}
+        if self.category:
+            attrs["category"] = self.category
+        attrs.update(self._attrs)
+        attrs["history"] = (
+            f"func_method: {self.func if self.func is not None else 'unknown'}; "
+            f"from_indicator: [{self._from_indicator}]"
         )
-
-    @property
-    def attrs(self) -> dict:
-        """
-        Dictionary of the criteria attributes.
-
-        Returns
-        -------
-        dict
-            Dictionary with the criteria attributes.
-        """
-        return {
-            k: v
-            for k, v in {
-                "name": self.name,
-                "weight": self.weight,
-                "category": self.category,
-                "long_name": self.long_name,
-                "description": self.description,
-                "func_method": self.func if self.func is not None else "unknown",
-                "from_indicator": self._from_indicator,
-                "is_computed": self.is_computed,
-            }.items()
-            if v is not None
-        }
+        return sc.rename(self.name).assign_attrs(attrs)
 
 
 def _get_indicator_description(indicator: xr.Dataset | xr.DataArray) -> str:

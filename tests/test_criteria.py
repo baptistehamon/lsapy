@@ -14,45 +14,67 @@ from lsapy.criteria import _get_indicator_description  # noqa: PLC2701
 class TestSuitabilityCriteria:
     def test_repr(self, criteria_anpr, criteria_drain):
         # test for annual precipitation criteria
-        criteria_anpr.long_name = "Annual Precipitation"
-        criteria_anpr.description = "This is the annual precipitation criteria."
-        anpr_repr = repr(criteria_anpr)
-
-        assert "SuitabilityCriteria(" in anpr_repr
-        assert "name='annual_precipitation'" in anpr_repr
-        assert "indicator=prcptot" in anpr_repr
-        assert f"func={repr(criteria_anpr.func)}" in anpr_repr
-        assert "weight=1" in anpr_repr
-        assert "category='climate'" in anpr_repr
-        assert "long_name='Annual Precipitation'" in anpr_repr
-        assert "description='This is the annual precipitation criteria.'" in anpr_repr
+        criteria_anpr.attrs.update(
+            {
+                "long_name": "Annual Precipitation",
+                "description": "This is the annual precipitation criteria.",
+                "comment": "Some comment about annual precipitation.",
+            }
+        )
+        expected_repr = (
+            "<SuitabilityCriteria> 'annual_precipitation'(weight: 1, category: climate)\n"
+            "Function:\n"
+            "    SuitabilityFunction(func=vetharaniam2022_eq5, params={'a': -0.71, 'b': 1100})\n"
+            "Indicator:\n"
+            "    Name          prcptot \n"
+            "    Data          int32 500B 1000 1000 1000 1000 1000 ... 1000 1000 1000 1000\n"
+            "    Dimensions    lat: 5, lon: 5, time: 5 \n"
+            "Attributes:\n    long_name:     Annual Precipitation\n"
+            "    description:   This is the annual precipitation criteria.\n"
+            "    comment:       Some comment about annual precipitation."
+        )
+        assert repr(criteria_anpr) == expected_repr
 
         # test for drainage criteria
-        criteria_drain.comment = "Some comment about drainage."
-        criteria_drain.is_computed = True
-        drain_repr = repr(criteria_drain)
+        expected_repr = (
+            "<SuitabilityCriteria> 'drainage_class'(weight: 2, category: soilTerrain)\n"
+            "Function:\n"
+            "    SuitabilityFunction(func=discrete, params={'rules': {1: 0, 2: 0.1, 3: 0.5, 4:...\n"
+            "Indicator:\n"
+            "    Name        drainage \n"
+            "    Data        float64 200B 3.0 3.0 3.0 3.0 3.0 3.0 ... 3.0 3.0 3.0 3.0 3.0 3.0\n"
+            "    Dimensions  lat: 5, lon: 5 \n"
+            "Attributes:\n"
+            "    *empty*"
+        )
+        assert repr(criteria_drain) == expected_repr
 
-        assert "SuitabilityCriteria(" in drain_repr
-        assert "name='drainage_class'" in drain_repr
-        assert "indicator=drainage" in drain_repr
-        assert f"func={repr(criteria_drain.func)}" in drain_repr
-        assert "weight=2" in drain_repr
-        assert "category='soilTerrain'" in drain_repr
-        assert "comment='Some comment about drainage.'" in drain_repr
-        assert "is_computed=True" in drain_repr
+    def test_attrs(self, criteria_anpr, annual_precip, sf_anpr):
+        assert criteria_anpr.attrs == {}
+        criteria_anpr.attrs = {
+            "long_name": "Annual Precipitation",
+            "description": "This is the annual precipitation criteria.",
+            "comment": "Some comment about annual precipitation.",
+        }
+        assert criteria_anpr.attrs["long_name"] == "Annual Precipitation"
+        assert criteria_anpr.attrs["description"] == "This is the annual precipitation criteria."
+        assert criteria_anpr.attrs["comment"] == "Some comment about annual precipitation."
 
-    def test_attrs(self, criteria_anpr, sf_anpr):
-        sc = criteria_anpr.compute()
-
-        assert sc.name == "annual_precipitation"
-        assert sc.attrs["weight"] == 1
-        assert sc.attrs["category"] == "climate"
-        assert f"func_method: {repr(sf_anpr)}" in sc.attrs["history"]
-        assert "from_indicator:" in sc.attrs["history"]
-        assert "name: prcptot" in sc.attrs["history"]
-        assert "units: mm" in sc.attrs["history"]
-        assert "standard_name: lwe_thickness_of_precipitation_amount" in sc.attrs["history"]
-        assert "long_name: Total accumulated precipitation" in sc.attrs["history"]
+        # test when provided when creating the criteria
+        sc = SuitabilityCriteria(
+            name="annual_precipitation",
+            category="climate",
+            indicator=annual_precip,
+            func=sf_anpr,
+            long_name="Annual Precipitation",
+            description="This is the annual precipitation criteria.",
+            comment="Some comment about annual precipitation.",
+            attrs={"another_attr": "value"},
+        )
+        assert sc.attrs["long_name"] == "Annual Precipitation"
+        assert sc.attrs["description"] == "This is the annual precipitation criteria."
+        assert sc.attrs["comment"] == "Some comment about annual precipitation."
+        assert sc.attrs["another_attr"] == "value"
 
     def test_format(self, criteria_anpr):
         sc = criteria_anpr.compute()
@@ -64,6 +86,11 @@ class TestSuitabilityCriteria:
         np.testing.assert_equal(sc.lat.values, np.arange(5))
         np.testing.assert_equal(sc.lon.values, np.arange(5))
         np.testing.assert_equal(sc.time.values, pd.date_range("2000-01-01", periods=5, freq="YS"))
+
+        # test output attrs
+        for k in criteria_anpr.attrs:
+            assert k in sc.attrs
+            assert sc.attrs[k] == criteria_anpr.attrs[k]
 
     def test_compute_func(self, criteria_anpr, criteria_drain):
         # test suitability function computation

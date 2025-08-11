@@ -11,14 +11,17 @@ New features
 * Functions alternative names can now be used in ``SuitabilityFunction`` (PR `#43 <https://github.com/baptistehamon/lsapy/pull/43>`_).
 * The documentation of membership functions has been improved (PR `#43 <https://github.com/baptistehamon/lsapy/pull/43>`_).
 * `LSAPy` officially supports Python>=3.10 and is OS independent (PR `#46 <https://github.com/baptistehamon/lsapy/pull/46>`_).
+* ``repr`` methods of ``SuitabilityFunction``, ``SuitabilityCriteria`` and ``LandSuitabilityAnalysis`` have been modified to provide more user-friendly information (issue `#55 <https://github.com/baptistehamon/lsapy/issues/55>`_, PR `#59 <https://github.com/baptistehamon/lsapy/pull/59>`_).
+* A setter has been added to ``attrs`` method of ``SuitabilityCriteria`` and ``LandSuitabilityAnalysis`` (issue `#55 <https://github.com/baptistehamon/lsapy/issues/55>`_, PR `#59 <https://github.com/baptistehamon/lsapy/pull/59>`_).
 
 Breaking changes
 ^^^^^^^^^^^^^^^^
 * The deprecated ``SuitabilityFunction.map`` method has been removed (PR `#44 <https://github.com/baptistehamon/lsapy/pull/44>`_).
+* ``short_name``, ``long_name``, ``description`` and ``comment`` attributes of ``SuitabilityCriteria`` and ``LandSuitabilityAnalysis`` have been removed and are now store in the ``attrs`` attribute. (issue `#55 <https://github.com/baptistehamon/lsapy/issues/55>`_, PR `#59 <https://github.com/baptistehamon/lsapy/pull/59>`_).
 
 Internal changes
 ^^^^^^^^^^^^^^^^
-* * Tests have been added for current implemented `LSAPy` functionalities (issue `#7 <https://github.com/baptistehamon/lsapy/issues/7>`_, PR `#46 <https://github.com/baptistehamon/lsapy/pull/46>`_).
+* Tests have been added for current implemented `LSAPy` functionalities (issue `#7 <https://github.com/baptistehamon/lsapy/issues/7>`_, PR `#46 <https://github.com/baptistehamon/lsapy/pull/46>`_).
     * ``pytest`` is used as the testing framework to run all unit tests, doctests and test notebooks.
     * ``nox`` has been set up and is used to run tests in CI workflows.
 * A CI GitHub Actions workflow has been added (issue `#8 <https://github.com/baptistehamon/lsapy/issues/8>`_, PR `#46 <https://github.com/baptistehamon/lsapy/pull/46>`_)
@@ -30,6 +33,7 @@ Internal changes
     * Add deptry config to track dependencies.
     * Update package metadata: keywords, classifiers (python versions) and project urls.
     * Update package sdist files.
+* The ``lsapy.core.formatting`` module has been added and contains ``repr`` formatting functions (issue `#55 <https://github.com/baptistehamon/lsapy/issues/55>`_, PR `#59 <https://github.com/baptistehamon/lsapy/pull/59>`_).
 
 v0.1.1 (2025-07-26)
 -------------------

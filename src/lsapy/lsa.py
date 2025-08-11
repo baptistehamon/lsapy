@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import warnings
+from collections.abc import Mapping
 from typing import Any
 
 import numpy as np
 import xarray as xr
 
+from lsapy.core.formatting import lsa_repr
 from lsapy.criteria import SuitabilityCriteria
 
 __all__ = ["LandSuitabilityAnalysis"]
@@ -27,13 +29,20 @@ class LandSuitabilityAnalysis:
     criteria : dict[str, SuitabilityCriteria]
         A dictionary of suitability criteria where the key is the name of the criteria.
     short_name : str | None, optional
-        A short name for the land suitability analysis. The default is None.
+        A short name for the land suitability analysis. The default is None. If provided,
+        it will be stored as an attribute.
     long_name : str | None, optional
-        A long name for the land suitability analysis. The default is None.
+        A long name for the land suitability analysis. The default is None. If provided,
+        it will be stored as an attribute.
     description : str | None, optional
-        A description for the land suitability analysis. The default is None.
+        A description for the land suitability analysis. The default is None. If provided,
+        it will be stored as an attribute.
     comment : str | None, optional
-        Additional information about the land suitability analysis.
+        Additional information about the land suitability analysis. The default is None.
+        If provided, it will be stored as an attribute.
+    attrs : Mapping[Any, Any] | None, optional
+        Arbitrary metadata to store with the land suitability analysis, in addition to the attributes
+        `short_name`, `long_name`, `description`, and `comment`. The default is None.
 
     Examples
     --------
@@ -88,13 +97,22 @@ class LandSuitabilityAnalysis:
         long_name: str | None = None,
         description: str | None = None,
         comment: str | None = None,
+        attrs: Mapping[Any, Any] | None = None,
     ) -> None:
         self.land_use = land_use
         self.criteria = criteria
-        self.short_name = short_name
-        self.long_name = long_name
-        self.description = description
-        self.comment = comment
+
+        self._attrs = {}
+        if short_name:
+            self._attrs["short_name"] = short_name
+        if long_name:
+            self._attrs["long_name"] = long_name
+        if description:
+            self._attrs["description"] = description
+        if comment:
+            self._attrs["comment"] = comment
+        if attrs and isinstance(attrs, Mapping):
+            self._attrs.update(attrs)
 
         self._sort_criteria_by_weight()  # important if suitability as limited factor
         self._criteria_list = [sc.name for sc in self.criteria.values()]
@@ -103,37 +121,31 @@ class LandSuitabilityAnalysis:
 
     def __repr__(self) -> str:
         """Return a string representation of the land suitability."""
-        attrs = []
-        for k, v in self.attrs.items():
-            if isinstance(v, str):
-                v_ = f"'{v}'"
-            else:
-                v_ = v
-            attrs.append(f"{k}={v_}")
-        return f"{self.__class__.__name__}({', '.join(attrs) if attrs else ''})"
+        return lsa_repr(self)
 
     @property
-    def attrs(self):
+    def attrs(self) -> dict[Any, Any]:
         """
-        Dictionary of attributes of the land suitability analysis.
+        Dictionary of the Land Suitability Analysis attributes.
 
         Returns
         -------
         dict
-            A dictionary of attributes of the land suitability analysis, including name, criteria, short_name,
-            long_name, and description.
+            Dictionary containing the attributes of the Land Suitability Analysis.
         """
-        return {
-            k: v
-            for k, v in {
-                "land_use": self.land_use,
-                "criteria": self._criteria_list,
-                "short_name": self.short_name,
-                "long_name": self.long_name,
-                "description": self.description,
-            }.items()
-            if v is not None
-        }
+        return self._attrs
+
+    @attrs.setter
+    def attrs(self, value: Mapping[Any, Any]) -> None:
+        """
+        Set the attributes of the Land Suitability Analysis.
+
+        Parameters
+        ----------
+        value : Mapping[Any, Any]
+            Mapping of attributes to set for the Land Suitability Analysis.
+        """
+        self._attrs = dict(value)
 
     def run(
         self,
@@ -324,7 +336,9 @@ class LandSuitabilityAnalysis:
 
         # Reassign attributes to each criteria
         for sc in out.data_vars:
-            out[sc].attrs = {k: v for k, v in self.criteria[sc].attrs.items() if k != "is_computed"}
+            out[sc].attrs = self.criteria[sc].attrs
+        out.attrs["land_use"] = self.land_use
+        out.attrs["criteria"] = self._criteria_list
         out.attrs.update(self.attrs)
         return out
 

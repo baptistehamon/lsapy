@@ -336,7 +336,9 @@ class LandSuitabilityAnalysis:
 
         # Reassign attributes to each criteria
         for sc in out.data_vars:
-            out[sc].attrs = {k: v for k, v in self.criteria[sc].attrs.items() if k != "is_computed"}
+            out[sc].attrs = self.criteria[sc].attrs
+        out.attrs["land_use"] = self.land_use
+        out.attrs["criteria"] = self._criteria_list
         out.attrs.update(self.attrs)
         return out
 

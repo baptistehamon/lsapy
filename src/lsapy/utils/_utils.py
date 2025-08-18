@@ -129,4 +129,4 @@ def open_data(realm: str, variables: str | list | None = None, **kwargs: Any) ->
         variables = DATA_REALMS[realm]
     elif len(variables) == 1:
         variables = variables[0]
-    return xr.open_mfdataset(fnames, **kwargs)[variables]
+    return xr.open_mfdataset(fnames, **kwargs)[variables].compute()

@@ -32,6 +32,7 @@ dependencies = [
   "geopandas >=0.14.0",
   "numpy >=1.26.0",
   "pandas >=2.2.0",
+  "pooch >=1.8.2",
   "regionmask >=0.13.0",
   "scipy >=1.15.0",
   "xarray >=2024.10.0"
@@ -140,6 +141,7 @@ exclude = [
   "**/*.py[co]",
   ".*",
   "ci/*",
+  "src/lsapy/data/*.nc",
   "docs/_*"
 ]
 

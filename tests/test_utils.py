@@ -11,7 +11,7 @@ from lsapy.utils import (
     kuri,
     open_data,
 )
-from lsapy.utils._utils import _check_realm_vars, _format_vars_names  # noqa: PLC2701
+from lsapy.utils._utils import _check_realm_vars  # noqa: PLC2701
 
 
 class TestKuriPooch:
@@ -39,22 +39,20 @@ class TestRealmVars:
 
 class TestOpenData:
     def test_open_climate(self):
-        climate_vars = _format_vars_names(DATA_REALMS["climate"])
         # all variables
         data = open_data("climate")
         assert isinstance(data, xr.Dataset)
-        assert all(v in data.data_vars for v in climate_vars)
+        assert all(v in data.data_vars for v in DATA_REALMS["climate"])
         # single variable
         data = open_data("climate", "tas")
         assert isinstance(data, xr.DataArray)
         assert "tas" in data.name
 
     def test_open_land(self):
-        land_vars = _format_vars_names(DATA_REALMS["land"])
         # all variables
         data = open_data("land")
         assert isinstance(data, xr.Dataset)
-        assert all(v in data.data_vars for v in land_vars)
+        assert all(v in data.data_vars for v in DATA_REALMS["land"])
         # single variable
         data = open_data("land", "slope")
         assert isinstance(data, xr.DataArray)

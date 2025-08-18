@@ -20,27 +20,27 @@ DATA_REALMS = {
     ],
     "land": [
         "aspect",
-        "cation-exchange-capacity",
-        "depth-slowly-permeable-horizon",
+        "cation_exchange_capacity",
+        "depth_slowly_permeable_horizon",
         "drainage",
-        "erosion-severity",
-        "flood-return-interval",
-        "land-cover",
-        "land-use-capability",
-        "lucas-land-use",
-        "particle-size",
-        "permeability-profile",
+        "erosion_severity",
+        "flood_return_interval",
+        "land_cover",
+        "land_use_capability",
+        "lucas_land_use",
+        "particle_size",
+        "permeability_profile",
         "ph",
-        "phosphate-retention",
-        "potential-rooting-depth",
-        "profile-readily-available-water",
-        "profile-total-available-water",
+        "phosphate_retention",
+        "potential_rooting_depth",
+        "profile_readily_available_water",
+        "profile_total_available_water",
         "rock",
         "salinity",
         "slope",
-        "soil-temperature-regime",
-        "topsoil-gravel-content",
-        "total-carbon",
+        "soil_temperature_regime",
+        "topsoil_gravel_content",
+        "total_carbon",
     ],
 }
 
@@ -87,10 +87,8 @@ def _check_realm_vars(realm: str, variables: str | list | None = None) -> list:
 
 
 def _format_vars_names(variables: list) -> str | list[str]:
-    """Format variable names by replacing hyphens with underscores."""
-    variables = [v.replace("-", "_") for v in variables]
-    if len(variables) == 1:
-        return variables[0]
+    """Format variable names by replacing underscores with hyphens."""
+    variables = [v.replace("_", "-") for v in variables]
     return variables
 
 
@@ -121,7 +119,7 @@ def open_data(realm: str, variables: str | list | None = None, **kwargs: Any) ->
         fname = "New-Zealand-Gridded-Land-Information-Dataset_NZ5km.nc"
     else:
         fname = "nzglid_5km.zip"
-        unpack = Unzip(members=[f"NZGLID_{v}_NZ5km.nc" for v in variables])
+        unpack = Unzip(members=[f"NZGLID_{v}_NZ5km.nc" for v in _format_vars_names(variables)])
     if "unpack" not in locals():
         unpack = None
 
@@ -129,5 +127,6 @@ def open_data(realm: str, variables: str | list | None = None, **kwargs: Any) ->
 
     if variables is None:
         variables = DATA_REALMS[realm]
-    variables = _format_vars_names(variables)
+    elif len(variables) == 1:
+        variables = variables[0]
     return xr.open_mfdataset(fnames, **kwargs)[variables]

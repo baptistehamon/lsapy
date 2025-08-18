@@ -48,29 +48,27 @@ class LandSuitabilityAnalysis:
     --------
     Let first define the ``SuitabilityCriteria`` (we use `xclim` package for the GDD computation):
 
-    >>> from lsapy.utils import load_soil_data, load_climate_data
+    >>> from lsapy.utils import open_data
     >>> from lsapy.functions import SuitabilityFunction
     >>> from xclim.indicators.atmos import growing_degree_days
 
-    >>> soil_data = load_soil_data()
-    >>> climate_data = load_climate_data()
+    >>> drainage = open_data("land", variables="drainage")
+    >>> tas = open_data("climate", variables="tas")
     >>> sc = {
     ...     "drainage_class": SuitabilityCriteria(
     ...         name="drainage_class",
     ...         long_name="Drainage Class Suitability",
     ...         weight=3,
     ...         category="soilTerrain",
-    ...         indicator=soil_data["DRC"],
-    ...         func=SuitabilityFunction(
-    ...             name="discrete", params={"rules": {"1": 0, "2": 0.1, "3": 0.5, "4": 0.9, "5": 1}}
-    ...         ),
+    ...         indicator=drainage,
+    ...         func=SuitabilityFunction(name="discrete", params={"rules": {0: 0, 1: 0.1, 2: 0.5, 3: 0.9, 4: 1}}),
     ...     ),
     ...     "growing_degree_days": SuitabilityCriteria(
     ...         name="growing_degree_days",
     ...         long_name="Growing Degree Days Suitability",
     ...         weight=1,
     ...         category="climate",
-    ...         indicator=growing_degree_days(climate_data["tas"], thresh="10 degC", freq="YS-JUL"),
+    ...         indicator=growing_degree_days(tas, thresh="10 degC", freq="YS-JUL"),
     ...         func=SuitabilityFunction(name="vetharaniam2022_eq5", params={"a": -1.41, "b": 801}),
     ...     ),
     ... }
@@ -190,29 +188,27 @@ class LandSuitabilityAnalysis:
         --------
         Let first define the ``SuitabilityCriteria`` (we use `xclim` package for the GDD computation):
 
-        >>> from lsapy.utils import load_soil_data, load_climate_data
+        >>> from lsapy.utils import open_data
         >>> from lsapy.functions import SuitabilityFunction
         >>> from xclim.indicators.atmos import growing_degree_days
 
-        >>> soil_data = load_soil_data()
-        >>> climate_data = load_climate_data()
+        >>> drainage = open_data("land", variables="drainage")
+        >>> tas = open_data("climate", variables="tas")
         >>> sc = {
         ...     "drainage_class": SuitabilityCriteria(
         ...         name="drainage_class",
         ...         long_name="Drainage Class Suitability",
         ...         weight=3,
         ...         category="soilTerrain",
-        ...         indicator=soil_data["DRC"],
-        ...         func=SuitabilityFunction(
-        ...             name="discrete", params={"rules": {"1": 0, "2": 0.1, "3": 0.5, "4": 0.9, "5": 1}}
-        ...         ),
+        ...         indicator=drainage,
+        ...         func=SuitabilityFunction(name="discrete", params={"rules": {0: 0, 1: 0.1, 2: 0.5, 3: 0.9, 4: 1}}),
         ...     ),
         ...     "growing_degree_days": SuitabilityCriteria(
         ...         name="growing_degree_days",
         ...         long_name="Growing Degree Days Suitability",
         ...         weight=1,
         ...         category="climate",
-        ...         indicator=growing_degree_days(climate_data["tas"], thresh="10 degC", freq="YS-JUL"),
+        ...         indicator=growing_degree_days(tas, thresh="10 degC", freq="YS-JUL"),
         ...         func=SuitabilityFunction(name="vetharaniam2022_eq5", params={"a": -1.41, "b": 801}),
         ...     ),
         ... }
@@ -228,12 +224,7 @@ class LandSuitabilityAnalysis:
 
         The land suitability analysis can now be run:
 
-        >>> lsa.run(
-        ...     suitability_type="overall",
-        ...     agg_methods={"category": "weighted_geomean", "overall": "mean"},
-        ...     by_category=True,
-        ...     inplace=True,
-        ... )
+        >>> lsa.run(inplace=True)
         """
 
         def _pre_agg(suitability_type, by_category):

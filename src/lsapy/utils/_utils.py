@@ -9,7 +9,7 @@ import pooch
 import xarray as xr
 from pooch import Unzip
 
-__all__ = ["open_data", "kuri"]
+__all__ = ["DATA_REALMS", "kuri", "open_data"]
 
 DATA_REALMS = {
     "climate": [
@@ -44,8 +44,6 @@ DATA_REALMS = {
     ],
 }
 
-registry_file = Path(__file__).parent / "../data/registry.txt"
-
 
 def kuri() -> pooch.Pooch:
     """
@@ -59,8 +57,9 @@ def kuri() -> pooch.Pooch:
     _kuri = pooch.create(
         path=pooch.os_cache("lsapy"),
         base_url="https://raw.githubusercontent.com/baptistehamon/lsapy/main/src/lsapy/data/",
+        allow_updates=True,
     )
-    _kuri.load_registry(registry_file)
+    _kuri.load_registry(Path(__file__).parent / "../data/registry.txt")
 
     return _kuri
 
@@ -126,7 +125,7 @@ def open_data(realm: str, variables: str | list | None = None, **kwargs: Any) ->
     if "unpack" not in locals():
         unpack = None
 
-    fnames = kuri().fetch(fname, progressbar=True, processor=unpack)
+    fnames = kuri().fetch(fname, processor=unpack)
 
     if variables is None:
         variables = DATA_REALMS[realm]

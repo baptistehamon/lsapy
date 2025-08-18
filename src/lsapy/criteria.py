@@ -51,25 +51,25 @@ class SuitabilityCriteria:
     --------
     Here is an example using the sample soil data with the drainage class (DRC) as indicator for the criteria.
 
-    >>> from lsapy.utils import load_soil_data, load_climate_data
+    >>> from lsapy.utils import open_data
     >>> from lsapy.functions import SuitabilityFunction
     >>> from xclim.indicators.atmos import growing_degree_days
 
-    >>> soil_data = load_soil_data()
+    >>> drainage = open_data("land", variables="drainage")
     >>> sc = SuitabilityCriteria(
     ...     name="drainage_class",
     ...     long_name="Drainage Class Suitability",
     ...     weight=3,
     ...     category="soilTerrain",
-    ...     indicator=soil_data["DRC"],
-    ...     func=SuitabilityFunction(name="discrete", params={"rules": {"1": 0, "2": 0.1, "3": 0.5, "4": 0.9, "5": 1}}),
+    ...     indicator=drainage,
+    ...     func=SuitabilityFunction(name="discrete", params={"rules": {0: 0, 1: 0.1, 2: 0.5, 3: 0.9, 4: 1}}),
     ... )
 
     Here is another example using the sample climate data with the growing degree days (GDD)
     as indicator for the criteria computing using the `xclim` package.
 
-    >>> clim_data = load_climate_data()
-    >>> gdd = growing_degree_days(clim_data["tas"], thresh="10 degC", freq="YS-JUL")
+    >>> tas = open_data("climate", variables="tas")
+    >>> gdd = growing_degree_days(tas, thresh="10 degC", freq="YS-JUL")
     >>> sc = SuitabilityCriteria(
     ...     name="growing_degree_days",
     ...     long_name="Growing Degree Days Suitability",

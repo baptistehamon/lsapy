@@ -13,11 +13,13 @@ New features
 * `LSAPy` officially supports Python>=3.10 and is OS independent (PR `#46 <https://github.com/baptistehamon/lsapy/pull/46>`_).
 * ``repr`` methods of ``SuitabilityFunction``, ``SuitabilityCriteria`` and ``LandSuitabilityAnalysis`` have been modified to provide more user-friendly information (issue `#55 <https://github.com/baptistehamon/lsapy/issues/55>`_, PR `#59 <https://github.com/baptistehamon/lsapy/pull/59>`_).
 * A setter has been added to ``attrs`` method of ``SuitabilityCriteria`` and ``LandSuitabilityAnalysis`` (issue `#55 <https://github.com/baptistehamon/lsapy/issues/55>`_, PR `#59 <https://github.com/baptistehamon/lsapy/pull/59>`_).
+* The ``open_data`` function has been added to the ``lsapy.utils`` module to load data from the LSAPy data repository. (issue `#60 <https://github.com/baptistehamon/lsapy/issues/60>`_, PR `#62 <https://github.com/baptistehamon/lsapy/pull/62>`_).
 
 Breaking changes
 ^^^^^^^^^^^^^^^^
 * The deprecated ``SuitabilityFunction.map`` method has been removed (PR `#44 <https://github.com/baptistehamon/lsapy/pull/44>`_).
 * ``short_name``, ``long_name``, ``description`` and ``comment`` attributes of ``SuitabilityCriteria`` and ``LandSuitabilityAnalysis`` have been removed and are now store in the ``attrs`` attribute. (issue `#55 <https://github.com/baptistehamon/lsapy/issues/55>`_, PR `#59 <https://github.com/baptistehamon/lsapy/pull/59>`_).
+* ``load_climate_data`` and ``load_soil_data`` functions have been removed (issue `#60 <https://github.com/baptistehamon/lsapy/issues/60>`_, PR `#62 <https://github.com/baptistehamon/lsapy/pull/62>`_).
 
 Internal changes
 ^^^^^^^^^^^^^^^^
@@ -34,6 +36,10 @@ Internal changes
     * Update package metadata: keywords, classifiers (python versions) and project urls.
     * Update package sdist files.
 * The ``lsapy.core.formatting`` module has been added and contains ``repr`` formatting functions (issue `#55 <https://github.com/baptistehamon/lsapy/issues/55>`_, PR `#59 <https://github.com/baptistehamon/lsapy/pull/59>`_).
+* `LSAPy` sample data management has been improved (issue `#60 <https://github.com/baptistehamon/lsapy/issues/60>`_, PR `#62 <https://github.com/baptistehamon/lsapy/pull/62>`_):
+    * `LSAPy` now uses `pooch` to fetch sample data.
+    * Old data files have been removed from the data folder, and the new climate data file has been added.
+    * A registry file has been added to store sample data file names, hashes and URLs.
 
 v0.1.1 (2025-07-26)
 -------------------

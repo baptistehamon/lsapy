@@ -1,0 +1,3 @@
+NEX-GDDP-CMIP6_day_ACCESS-CM2_historical_r1i1p1f1_20000101-20041231.nc 29b3e755915431231f4738ad2fda765a027486a56bf83bc52f70b0aae52a6b37
+New-Zealand-Gridded-Land-Information-Dataset_NZ5km.nc md5:726772f47c791ebd9fc2e9e18cc85a9c doi:10.5281/zenodo.16249350/New-Zealand-Gridded-Land-Information-Dataset_NZ5km.nc
+nzglid_5km.zip md5:2c2b4173d331704f0e25a71bce27d0e7 doi:10.5281/zenodo.16249350/nzglid_5km.zip

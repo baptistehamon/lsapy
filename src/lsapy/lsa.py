@@ -6,9 +6,9 @@ import warnings
 from collections.abc import Mapping
 from typing import Any
 
-import numpy as np
 import xarray as xr
 
+from lsapy.core.aggregation import aggregate
 from lsapy.core.formatting import lsa_repr
 from lsapy.criteria import SuitabilityCriteria
 
@@ -368,15 +368,14 @@ class LandSuitabilityAnalysis:
         for k, v in agg_on.items():
             k_method = agg_methods if isinstance(agg_methods, str) else agg_methods[k]
 
-            if k_method in ["mean", "geomean"]:
+            if k_method in ["wmean", "wgmean"]:
+                kwargs[k] = {
+                    "weights": [
+                        self.weights_by_category[_v] if _v in self.category else self.criteria[_v].weight for _v in v
+                    ]
+                }
+            else:
                 kwargs[k] = {}
-            elif k_method in ["weighted_mean", "weighted_geomean"]:
-                if k not in self.category and any([i in self.category for i in v]):
-                    kwargs[k] = {"weights": [self.weights_by_category[cat] for cat in v]}
-                else:
-                    kwargs[k] = {"weights": [self.criteria[sc].weight for sc in v]}
-            elif k_method == "limiting_factor":
-                kwargs[k] = {"limiting_var": True}
 
         return kwargs
 
@@ -422,11 +421,11 @@ class LandSuitabilityAnalysis:
             else:
                 kwargs_k = {}
 
-            out = _aggregate_vars(ds, method=methods[k], vars=v, **kwargs_k)
+            out = aggregate(ds, method=methods[k], variables=v, **kwargs_k)
 
-            if methods[k] == "limiting_factor" and isinstance(out, xr.Dataset):
+            if methods[k] == "limfactor" and isinstance(out, xr.Dataset):
                 ds[k] = out["limiting_factor"]
-                ds[f"{k}_limvar"] = out["limiting_var"].assign_attrs(
+                ds[f"{k}_limvar"] = out["limiting_variable"].assign_attrs(
                     {"long_name": f"{k.capitalize()} Limiting Factor Variable"}
                 )
 
@@ -439,186 +438,4 @@ class LandSuitabilityAnalysis:
             return ds
 
         vars_to_keep = [k for k in agg_on.keys() if k not in [i for e in agg_on.values() for i in e]]
-        return ds[[i for v in vars_to_keep for i in ([v, f"{v}_limvar"] if methods[v] == "limiting_factor" else [v])]]
-
-
-def vars_weighted_mean(ds: xr.Dataset, vars=None, weights=None) -> xr.DataArray:
-    """
-    Compute the weighted mean of the variables.
-
-    Parameters
-    ----------
-    ds : xr.Dataset
-        The dataset containing the variables to compute the weighted mean.
-    vars : list[str] | None, optional
-        List of variable names to include in the weighted mean.
-        If None, all data variables are used.
-    weights : list[float] | None, optional
-        List of weights corresponding to the variables.
-        If None, equal weights are used (default is 1 for each variable).
-
-    Returns
-    -------
-    xr.DataArray
-        A DataArray containing the weighted mean of the specified variables.
-    """
-    if vars is None:
-        vars = list(ds.data_vars)
-    if weights is None:
-        weights = np.ones(len(vars))
-
-    s = sum([ds[v] * w for v, w in zip(vars, weights, strict=False)])
-    da: xr.DataArray = s / sum(weights)
-    return da.assign_attrs(
-        {
-            "method": "Weighted Mean",
-            "description": (
-                f"Weighted Mean of variables: {', '.join([f'{v} ({w})' for v, w in zip(vars, weights, strict=False)])}."
-            ),
-        }
-    ).rename("weighted_mean")
-
-
-def vars_mean(ds: xr.Dataset, vars=None) -> xr.DataArray:
-    """
-    Compute the mean of the variables.
-
-    Parameters
-    ----------
-    ds : xr.Dataset
-        The dataset containing the variables to compute the mean.
-    vars : list[str] | None, optional
-        List of variable names to include in the mean.
-        If None, all data variables are used.
-
-    Returns
-    -------
-    xr.DataArray
-        A DataArray containing the mean of the specified variables.
-    """
-    if vars is None:
-        vars = list(ds.data_vars)
-    da = vars_weighted_mean(ds, vars=vars)
-    return da.assign_attrs({"method": "Mean", "description": f"Mean of variables: {', '.join(vars)}."}).rename("mean")
-
-
-def vars_weighted_geomean(ds: xr.Dataset, vars=None, weights=None) -> xr.DataArray:
-    """
-    Compute the weighted geometric mean of the variables.
-
-    Parameters
-    ----------
-    ds : xr.Dataset
-        The dataset containing the variables to compute the weighted geometric mean.
-    vars : list[str] | None, optional
-        List of variable names to include in the weighted geometric mean.
-        If None, all data variables are used.
-    weights : list[float] | None, optional
-        List of weights corresponding to the variables.
-        If None, equal weights are used (default is 1 for each variable).
-
-    Returns
-    -------
-    xr.DataArray
-        A DataArray containing the weighted geometric mean of the specified variables.
-    """
-    if vars is None:
-        vars = list(ds.data_vars)
-    if weights is None:
-        weights = np.ones(len(vars))
-
-    s = sum([np.log(ds[v]) * w for v, w in zip(vars, weights, strict=False)])
-    da: xr.DataArray = np.exp(s / sum(weights))
-    return da.assign_attrs(
-        {
-            "method": "Weighted Geometric Mean",
-            "description": (
-                "Weighted Geometric Mean of variables: "
-                f"{', '.join([f'{v} ({w})' for v, w in zip(vars, weights, strict=False)])}."
-            ),
-        }
-    ).rename("weighted_geometric_mean")
-
-
-def vars_geomean(ds: xr.Dataset, vars=None) -> xr.DataArray:
-    """
-    Compute the geometric mean of the variables.
-
-    Parameters
-    ----------
-    ds : xr.Dataset
-        The dataset containing the variables to compute the geometric mean.
-    vars : list[str] | None, optional
-        List of variable names to include in the geometric mean.
-        If None, all data variables are used.
-
-    Returns
-    -------
-    xr.DataArray
-        A DataArray containing the geometric mean of the specified variables.
-    """
-    if vars is None:
-        vars = list(ds.data_vars)
-    da = vars_weighted_geomean(ds, vars=vars)
-    return da.assign_attrs(
-        {"method": "Geometric Mean", "description": f"Geometric Mean of variables: {', '.join(vars)}."}
-    ).rename("geometric_mean")
-
-
-def limiting_factor(ds: xr.Dataset, vars=None, limiting_var: bool | None = True) -> xr.DataArray | xr.Dataset:
-    """
-    Compute the limiting factor among the variables.
-
-    Parameters
-    ----------
-    ds : xr.Dataset
-        The dataset containing the variables to compute the limiting factor.
-    vars : list[str] | None, optional
-        List of variable names to include in the limiting factor computation.
-        If None, all data variables are used.
-    limiting_var : bool, optional
-        If True, return the variable that is the limiting factor. The default is True.
-
-    Returns
-    -------
-    xr.DataArray | xr.Dataset
-        A DataArray containing the value of the limiting factor among the specified variables.
-        If `limiting_var` is True, a Dataset is returned containing both the limiting factor
-        and the variable that is the limiting factor.
-    """
-    if vars is None:
-        vars = list(ds.data_vars)
-
-    da = ds[vars].to_array()
-    mask = da.notnull().all(dim="variable")
-
-    lim = da.min(dim="variable", skipna=True).where(mask).rename("limiting_factor")
-    lim = lim.assign_attrs(
-        {"method": "Limiting Factor", "description": f"Value of limiting factor among variables: {', '.join(vars)}."}
-    )
-    if limiting_var:
-        lim_var = da.fillna(9999).argmin(dim="variable", skipna=True).where(mask).rename("limiting_var")
-        lim_var.attrs = {
-            "method": "Limiting Factor",
-            "description": f"Limiting factor among: {', '.join(vars)}.",
-            "legend": {f"{i}": v for i, v in enumerate(vars)},
-        }
-        return xr.merge([lim, lim_var])
-    return lim.to_dataset()
-
-
-def _aggregate_vars(
-    ds: xr.Dataset, method: str = "mean", vars=None, weights=None, **kwargs
-) -> xr.DataArray | xr.Dataset:
-    if method.lower() == "mean":
-        return vars_mean(ds, vars=vars)
-    elif method.lower() == "weighted_mean":
-        return vars_weighted_mean(ds, vars=vars, weights=weights)
-    elif method.lower() == "geomean":
-        return vars_geomean(ds, vars=vars)
-    elif method.lower() == "weighted_geomean":
-        return vars_weighted_geomean(ds, vars=vars, weights=weights)
-    elif method.lower() == "limiting_factor":
-        return limiting_factor(ds, vars=vars, **kwargs)
-    else:
-        raise ValueError(f"Aggregation method '{method}' not recognized.")
+        return ds[[i for v in vars_to_keep for i in ([v, f"{v}_limvar"] if methods[v] == "limfactor" else [v])]]

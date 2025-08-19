@@ -14,12 +14,19 @@ New features
 * ``repr`` methods of ``SuitabilityFunction``, ``SuitabilityCriteria`` and ``LandSuitabilityAnalysis`` have been modified to provide more user-friendly information (issue `#55 <https://github.com/baptistehamon/lsapy/issues/55>`_, PR `#59 <https://github.com/baptistehamon/lsapy/pull/59>`_).
 * A setter has been added to ``attrs`` method of ``SuitabilityCriteria`` and ``LandSuitabilityAnalysis`` (issue `#55 <https://github.com/baptistehamon/lsapy/issues/55>`_, PR `#59 <https://github.com/baptistehamon/lsapy/pull/59>`_).
 * The ``open_data`` function has been added to the ``lsapy.utils`` module to load data from the LSAPy data repository. (issue `#60 <https://github.com/baptistehamon/lsapy/issues/60>`_, PR `#62 <https://github.com/baptistehamon/lsapy/pull/62>`_).
+* A ``median`` aggregation method has been added (PR `#63 <https://github.com/baptistehamon/lsapy/pull/63>`_).
 
 Breaking changes
 ^^^^^^^^^^^^^^^^
 * The deprecated ``SuitabilityFunction.map`` method has been removed (PR `#44 <https://github.com/baptistehamon/lsapy/pull/44>`_).
 * ``short_name``, ``long_name``, ``description`` and ``comment`` attributes of ``SuitabilityCriteria`` and ``LandSuitabilityAnalysis`` have been removed and are now store in the ``attrs`` attribute. (issue `#55 <https://github.com/baptistehamon/lsapy/issues/55>`_, PR `#59 <https://github.com/baptistehamon/lsapy/pull/59>`_).
 * ``load_climate_data`` and ``load_soil_data`` functions have been removed (issue `#60 <https://github.com/baptistehamon/lsapy/issues/60>`_, PR `#62 <https://github.com/baptistehamon/lsapy/pull/62>`_).
+* Some names of aggregation methods have been changed (PR `#63 <https://github.com/baptistehamon/lsapy/pull/63>`_).
+    * ``weighted_mean`` is now ``wmean``
+    * ``geomean`` is now ``gmean``
+    * ``weighted_geomean`` is now ``wgmean``
+    * ``limiting_factor`` is now ``limfactor``
+* The ``vars_weighted_mean``, ``vars_mean``, ``vars_geomean``, ``vars_weighted_geomean`` and ``limiting_factor`` aggregation methods have been removed (PR `#63 <https://github.com/baptistehamon/lsapy/pull/63>`_).
 
 Internal changes
 ^^^^^^^^^^^^^^^^
@@ -40,6 +47,7 @@ Internal changes
     * `LSAPy` now uses `pooch` to fetch sample data.
     * Old data files have been removed from the data folder, and the new climate data file has been added.
     * A registry file has been added to store sample data file names, hashes and URLs.
+* Aggregation functions have been moved to the `lsapy.core.aggregation` module (PR `#63 <https://github.com/baptistehamon/lsapy/pull/63>`_).
 
 v0.1.1 (2025-07-26)
 -------------------

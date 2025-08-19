@@ -99,7 +99,7 @@ class TestLandSuitabilityAnalysis:
             lsa.run("overall", agg_methods={"category": "mean"})
         # test wrong agg_methods type
         with pytest.raises(TypeError, match="'agg_methods' must be a string or a dictionary. Got <class 'list'>."):
-            lsa.run("overall", agg_methods=["mean", "geomean"])
+            lsa.run("overall", agg_methods=["mean", "gmean"])
 
     def test_run_criteria(self, lsa):
         res = lsa.run("criteria")
@@ -124,9 +124,9 @@ class TestLandSuitabilityAnalysis:
     def test_agg_kwargs_formatting(self, lsa):
         res = lsa._format_agg_kwargs(
             agg_methods={
-                "climate": "weighted_geomean",
-                "soilTerrain": "weighted_geomean",
-                "suitability": "limiting_factor",
+                "climate": "wgmean",
+                "soilTerrain": "wgmean",
+                "suitability": "wmean",
             },
             agg_on={
                 "climate": ["growing_degree_days", "annual_precipitation"],
@@ -137,11 +137,11 @@ class TestLandSuitabilityAnalysis:
         assert res == {
             "climate": {"weights": [3, 1]},
             "soilTerrain": {"weights": [2, 2]},
-            "suitability": {"limiting_var": True},
+            "suitability": {"weights": [2, 2, 4]},
         }
 
     def test_run_category(self, lsa):
-        res = lsa.run("category", agg_methods="weighted_geomean")
+        res = lsa.run("category", agg_methods="wgmean")
         # test format, shape and attrs
         assert isinstance(res, xr.Dataset)
         assert dict(res.sizes) == {"lat": 5, "lon": 5, "time": 5}
@@ -159,11 +159,11 @@ class TestLandSuitabilityAnalysis:
         np.testing.assert_array_almost_equal(res.soilTerrain.values, 0.69, decimal=2)
         # test if no category in criteria, should return criteria
         lsa.category = [None]  # force no category
-        res = lsa.run("category", agg_methods="weighted_geomean")
+        res = lsa.run("category", agg_methods="wgmean")
         assert res.equals(lsa.run("criteria"))
 
     def test_run_overall(self, lsa):
-        res = lsa.run("overall", agg_methods="weighted_geomean")
+        res = lsa.run("overall", agg_methods="wgmean")
         # test format, shape and attrs
         assert isinstance(res, xr.Dataset)
         assert dict(res.sizes) == {"lat": 5, "lon": 5, "time": 5}
@@ -179,13 +179,13 @@ class TestLandSuitabilityAnalysis:
         # test values
         np.testing.assert_array_almost_equal(res.suitability.values, 0.63, decimal=2)
         # test with by_category=False, should return aggregation of criteria
-        res = lsa.run("overall", agg_methods="weighted_mean", by_category=False)
+        res = lsa.run("overall", agg_methods="wmean", by_category=False)
         np.testing.assert_array_almost_equal(res.suitability.values, 0.68, decimal=2)
         # test with by_category=[True, None] but without category in criteria
         lsa.category = [None]  # force no category
-        res = lsa.run("overall", agg_methods="weighted_mean", by_category=True)
+        res = lsa.run("overall", agg_methods="wmean", by_category=True)
         np.testing.assert_array_almost_equal(res.suitability.values, 0.68, decimal=2)
-        res = lsa.run("overall", agg_methods="weighted_mean")
+        res = lsa.run("overall", agg_methods="wmean")
         np.testing.assert_array_almost_equal(res.suitability.values, 0.68, decimal=2)
 
     def test_run_keep_vars(self, lsa):
@@ -213,7 +213,7 @@ class TestLandSuitabilityAnalysis:
         lsa.run("criteria", inplace=True)
         # test limiting factor
         res = lsa._aggregate(
-            lsa.data, agg_on={"climate": ["growing_degree_days", "annual_precipitation"]}, methods="limiting_factor"
+            lsa.data, agg_on={"climate": ["growing_degree_days", "annual_precipitation"]}, methods="limfactor"
         )
         assert isinstance(res, xr.Dataset)
         # test wrong methods type

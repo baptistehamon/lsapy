@@ -9,6 +9,7 @@ from typing import Any
 import numpy as np
 import xarray as xr
 
+from lsapy.core.aggregation import aggregate
 from lsapy.core.formatting import lsa_repr
 from lsapy.criteria import SuitabilityCriteria
 
@@ -368,15 +369,14 @@ class LandSuitabilityAnalysis:
         for k, v in agg_on.items():
             k_method = agg_methods if isinstance(agg_methods, str) else agg_methods[k]
 
-            if k_method in ["mean", "geomean"]:
+            if k_method in ["wmean", "wgmean"]:
+                kwargs[k] = {
+                    "weights": [
+                        self.weights_by_category[_v] if _v in self.category else self.criteria[_v].weight for _v in v
+                    ]
+                }
+            else:
                 kwargs[k] = {}
-            elif k_method in ["weighted_mean", "weighted_geomean"]:
-                if k not in self.category and any([i in self.category for i in v]):
-                    kwargs[k] = {"weights": [self.weights_by_category[cat] for cat in v]}
-                else:
-                    kwargs[k] = {"weights": [self.criteria[sc].weight for sc in v]}
-            elif k_method == "limiting_factor":
-                kwargs[k] = {"limiting_var": True}
 
         return kwargs
 
@@ -422,11 +422,11 @@ class LandSuitabilityAnalysis:
             else:
                 kwargs_k = {}
 
-            out = _aggregate_vars(ds, method=methods[k], vars=v, **kwargs_k)
+            out = aggregate(ds, method=methods[k], variables=v, **kwargs_k)
 
-            if methods[k] == "limiting_factor" and isinstance(out, xr.Dataset):
+            if methods[k] == "limfactor" and isinstance(out, xr.Dataset):
                 ds[k] = out["limiting_factor"]
-                ds[f"{k}_limvar"] = out["limiting_var"].assign_attrs(
+                ds[f"{k}_limvar"] = out["limiting_variable"].assign_attrs(
                     {"long_name": f"{k.capitalize()} Limiting Factor Variable"}
                 )
 
@@ -439,7 +439,7 @@ class LandSuitabilityAnalysis:
             return ds
 
         vars_to_keep = [k for k in agg_on.keys() if k not in [i for e in agg_on.values() for i in e]]
-        return ds[[i for v in vars_to_keep for i in ([v, f"{v}_limvar"] if methods[v] == "limiting_factor" else [v])]]
+        return ds[[i for v in vars_to_keep for i in ([v, f"{v}_limvar"] if methods[v] == "limfactor" else [v])]]
 
 
 def vars_weighted_mean(ds: xr.Dataset, vars=None, weights=None) -> xr.DataArray:

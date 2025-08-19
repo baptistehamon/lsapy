@@ -7,18 +7,13 @@ from scipy import stats
 __all__ = ["aggregate"]
 
 
-def _agg_weights(ds: xr.Dataset, variables: str | list[str] = None, weights: list[float | int] = None) -> xr.DataArray:
+def _agg_weights(ds: xr.Dataset, variables: list[str], weights: list[float | int] = None) -> xr.DataArray:
     """Returns weights as an xarray.DataArray with given variables as dimensions."""
-    if variables is None:
-        variables = list(ds.data_vars)
-    elif isinstance(variables, str):
-        variables = [variables]
-
     if weights is None:
         weights = np.ones(len(variables))
 
     if len(variables) != len(weights):
-        raise ValueError("Length of variables must match length of weights.")
+        raise ValueError("Length of 'weights' must match length of 'variables'.")
 
     shape = tuple(ds.sizes[d] for d in ds.sizes)
 
@@ -100,13 +95,21 @@ def aggregate(ds: xr.Dataset, method: str = "mean", variables=None, weights=None
     xr.DataArray | xr.Dataset
         Aggregated data as an xarray.DataArray or xarray.Dataset.
     """
+    if method not in ["mean", "median", "wmean", "gmean", "wgmean", "limfactor"]:
+        raise ValueError(
+            f"Invalid method '{method}'. "
+            "Supported methods are: 'median', 'mean', 'wmean', 'gmean', 'wgmean', 'limfactor'."
+        )
+
     if isinstance(variables, list):
         ds = ds[variables]
     elif variables is None:
         variables = list(ds.data_vars)
     else:
-        raise ValueError("variables must be a list of variable names or None.")
+        raise ValueError("'variables' must be a list of variable names or None.")
 
+    if not isinstance(weights, list) and weights is not None:
+        raise ValueError("'weights' must be a list of numbers or None.")
     _weights = _agg_weights(ds, variables, weights)
 
     da = ds.to_dataarray()

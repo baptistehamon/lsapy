@@ -140,12 +140,17 @@ class SuitabilityCriteria:
         """
         self._attrs = dict(value)
 
-    def compute(self) -> xr.DataArray:
+    def compute(self, **kwargs) -> xr.DataArray:
         """
         Compute the suitability of the criteria.
 
         Returns a xarray DataArray with criteria suitability. The attributes of the DataArray describe how
         the suitability was computed.
+
+        Parameters
+        ----------
+        **kwargs : dict
+            Additional keyword arguments to pass to the xarray apply_ufunc function.
 
         Returns
         -------
@@ -157,7 +162,9 @@ class SuitabilityCriteria:
         elif self.func is None:
             raise ValueError("The suitability function is not defined. Please provide a valid function.")
         else:
-            sc: xr.DataArray = xr.apply_ufunc(self.func, self.indicator)
+            if kwargs is None:
+                kwargs = {}
+            sc: xr.DataArray = xr.apply_ufunc(self.func, self.indicator, **kwargs)
 
         attrs = {"weight": self.weight}
         if self.category:

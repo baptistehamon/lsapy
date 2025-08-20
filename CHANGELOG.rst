@@ -48,11 +48,13 @@ Internal changes
     * Old data files have been removed from the data folder, and the new climate data file has been added.
     * A registry file has been added to store sample data file names, hashes and URLs.
 * Aggregation functions have been moved to the `lsapy.core.aggregation` module (PR `#63 <https://github.com/baptistehamon/lsapy/pull/63>`_).
+* A relaxed configuration of `mypy` has been added to the project (PR `#66 <https://github.com/baptistehamon/lsapy/pull/66>`_).
 
 Bug fixes
 ^^^^^^^^^
 * Fix issues with representations of ``SuitabilityFunction`` when no parameters are provided (issue `#61 <https://github.com/baptistehamon/lsapy/issues/61>`_, PR `#65 <https://github.com/baptistehamon/lsapy/pull/65>`_).
 * Add `**kwargs` to `SuitabilityCriteria.compute` and `LandSuitabilityAnalysis.run` to allow handling dask arrays (issue `#64 <https://github.com/baptistehamon/lsapy/issues/64>`_, PR `#65 <https://github.com/baptistehamon/lsapy/pull/65>`_).
+* The codebase has been modified to improve typing and fix mypy errors (issue `#35 <https://github.com/baptistehamon/lsapy/issues/35>`_, PR `#66 <https://github.com/baptistehamon/lsapy/pull/66>`_).
 
 v0.1.1 (2025-07-26)
 -------------------

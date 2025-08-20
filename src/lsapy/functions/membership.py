@@ -325,14 +325,14 @@ def fit_membership(x, y=None, fit_on: str | list[str] = "all", plot: bool = Fals
     return get_function_from_name(f_best), p_best
 
 
-def _check_fitting(fit_on: str | list[str] = "all"):
+def _check_fitting(fit_on="all") -> tuple[list[str], list[str]]:
     _types = [t + "_like" for t in EQUATION_TYPES]
     _skipped = []
 
     if not isinstance(fit_on, str) and not isinstance(fit_on, list):
         raise ValueError(f"`fit_on` should be a str or a list of string. Got {type(fit_on)}")
 
-    functions = []
+    functions: list[str] = []
     if isinstance(fit_on, str):
         if fit_on == "all":
             for t in EQUATION_TYPES:
@@ -379,12 +379,12 @@ def _get_function_p0(func: str, x: np.ndarray) -> list[float]:
     return []
 
 
-def _rmse(y_true, y_pred):
+def _rmse(y_true, y_pred) -> float:
     diff = abs(y_true - y_pred)
     return np.sqrt(np.mean(diff**2))
 
 
-def _get_best_fit(functions, rmse, params, verbose=True):
+def _get_best_fit(functions, rmse, params, verbose=True) -> tuple[str, list[float]]:
     best_fit = np.nanargmin(rmse)
     if verbose:
         print(f"""

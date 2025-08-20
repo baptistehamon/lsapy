@@ -49,6 +49,7 @@ dev = [
   "h5netcdf >=1.4.0",
   "ipython >=8.20.0",
   "matplotlib >=3.9.0",
+  "mypy >=1.17.1",
   "nbval >=0.11.0",
   "nox >=2024.10.09",
   "numpydoc >=1.8.0",
@@ -143,6 +144,25 @@ exclude = [
   "ci/*",
   "src/lsapy/data/*.nc",
   "docs/_*"
+]
+
+[tool.mypy]
+python_version = "3.10"
+plugins = ["numpy.typing.mypy_plugin"]
+# strict = true
+show_error_context = true
+# warn_return_any = true
+warn_unreachable = true
+warn_unused_configs = true
+
+[[tool.mypy.overrides]]
+ignore_missing_imports = true
+module = [
+  "geopandas.*",
+  "lsapy.*",
+  "pandas.*",
+  "pooch.*",
+  "scipy.*",
 ]
 
 [tool.numpydoc_validation]

@@ -1,12 +1,17 @@
 """Suitability Function Utilities."""
 
-from collections.abc import Callable
+from __future__ import annotations
 
-equations: dict[str, dict] = {}
+from collections.abc import Callable
+from typing import Any, TypeVar
+
+equations: dict[str, dict[str, Callable[[Any], Any]]] = {}
 _alt_names: dict[str, str] = {}
 
+F = TypeVar("F", bound=Callable[..., Any])
 
-def declare_equation(ftype: str, alt_name: str | None = None) -> Callable:
+
+def declare_equation(ftype: str, alt_name: str | None = None) -> Callable[[F], F]:
     """
     Register an equation in the `equations` mapping under the specified type.
 
@@ -23,7 +28,7 @@ def declare_equation(ftype: str, alt_name: str | None = None) -> Callable:
         A decorator function that registers the equation.
     """
 
-    def _decorator(func: callable):
+    def _wrapper(func: F) -> F:
         if ftype not in equations:
             equations[ftype] = {}
         equations[ftype].update({func.__name__: func})
@@ -31,10 +36,10 @@ def declare_equation(ftype: str, alt_name: str | None = None) -> Callable:
             _alt_names.update({alt_name: func.__name__})
         return func
 
-    return _decorator
+    return _wrapper
 
 
-def get_function_from_name(name: str) -> Callable:
+def get_function_from_name(name: str) -> Callable[[Any], Any]:
     """
     Retrieve a function by its name from the registered equations.
 

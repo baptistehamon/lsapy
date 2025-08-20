@@ -64,7 +64,7 @@ def kuri() -> pooch.Pooch:
     return _kuri
 
 
-def _check_realm_vars(realm: str, variables: str | list | None = None) -> list:
+def _check_realm_vars(realm: str, variables: str | list | None = None) -> list | None:
     """Check validity of realm and variables."""
     if realm not in ["climate", "land"]:
         raise ValueError(f"Realm must be 'climate' or 'land', got '{realm}'.")
@@ -117,7 +117,7 @@ def open_data(realm: str, variables: str | list | None = None, **kwargs: Any) ->
         fname = "NEX-GDDP-CMIP6_day_ACCESS-CM2_historical_r1i1p1f1_20000101-20041231.nc"
     elif realm == "land" and not variables:
         fname = "New-Zealand-Gridded-Land-Information-Dataset_NZ5km.nc"
-    else:
+    elif realm == "land" and variables:
         fname = "nzglid_5km.zip"
         unpack = Unzip(members=[f"NZGLID_{v}_NZ5km.nc" for v in _format_vars_names(variables)])
     if "unpack" not in locals():

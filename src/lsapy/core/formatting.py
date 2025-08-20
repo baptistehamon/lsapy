@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import functools
+from typing import TYPE_CHECKING
 
+import xarray as xr
 from xarray.core.formatting import (
     _calculate_col_width,  # noqa: PLC2701
     _mapping_repr,  # noqa: PLC2701
@@ -17,8 +19,11 @@ from xarray.core.formatting import (
 
 from lsapy.core.options import OPTIONS
 
+if TYPE_CHECKING:
+    from lsapy import LandSuitabilityAnalysis, SuitabilityCriteria, SuitabilityFunction  # type: ignore[attr-defined]
 
-def sf_repr(sf):
+
+def sf_repr(sf: SuitabilityFunction) -> str:
     """Return a string representation of a SuitabilityFunction."""
     start = f"SuitabilityFunction(func={sf.func.__name__}"
     if sf.params:
@@ -28,7 +33,7 @@ def sf_repr(sf):
     return f"{start}{end}"
 
 
-def sf_short_repr(sf):
+def sf_short_repr(sf: SuitabilityFunction) -> str:
     """Return a short string representation of a SuitabilityFunction."""
     func = f"{sf.func.__name__}"
     if not sf.params:
@@ -36,7 +41,7 @@ def sf_short_repr(sf):
     return f"{func}({', '.join(f'{k}={v}' for k, v in sf.params.items())})"
 
 
-def sc_params_repr(sc):
+def sc_params_repr(sc: SuitabilityCriteria) -> str:
     """Format "weight" and "category" for SuitabilityCriteria."""
     summary = [f"weight: {sc.weight}"]
     if sc.category:
@@ -44,7 +49,7 @@ def sc_params_repr(sc):
     return f"({', '.join(summary)})"
 
 
-def data_repr(obj, col_width, max_width) -> str:
+def data_repr(obj: xr.DataArray, col_width: int, max_width: int) -> str:
     """Format indicator data for SuitabilityCriteria."""
     first_col = pretty_print("    Data", col_width)
     nbytes_str = f" {render_human_readable_nbytes(obj.nbytes)}"
@@ -56,7 +61,7 @@ def data_repr(obj, col_width, max_width) -> str:
     return front_str + values_str
 
 
-def sc_repr(sc) -> str:
+def sc_repr(sc: SuitabilityCriteria) -> str:
     """Return a string representation of a SuitabilityCriteria."""
     max_rows = OPTIONS["display_max_rows"]
     max_width = OPTIONS["display_width"]
@@ -84,11 +89,11 @@ def sc_repr(sc) -> str:
 
 
 def summarize_criteria(
-    name,
-    criteria,
+    name: str,
+    criteria: SuitabilityCriteria,
     col_width: int,
     max_width: int | None = None,
-):
+) -> str:
     """Summarize a criteria in one line, e.g., for the LandSuitabilityAnalysis.__repr__."""
     if max_width is None:
         max_width_options = OPTIONS["display_width"]
@@ -126,7 +131,7 @@ criteria_repr = functools.partial(
 )
 
 
-def lsa_repr(lsa):
+def lsa_repr(lsa: LandSuitabilityAnalysis) -> str:
     """Return a string representation of a LandSuitabilityAnalysis."""
     max_rows = OPTIONS["display_max_rows"]
 

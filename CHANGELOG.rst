@@ -49,6 +49,11 @@ Internal changes
     * A registry file has been added to store sample data file names, hashes and URLs.
 * Aggregation functions have been moved to the `lsapy.core.aggregation` module (PR `#63 <https://github.com/baptistehamon/lsapy/pull/63>`_).
 
+Bug fixes
+^^^^^^^^^
+* Fix issues with representations of ``SuitabilityFunction`` when no parameters are provided (issue `#61 <https://github.com/baptistehamon/lsapy/issues/61>`_, PR `#65 <https://github.com/baptistehamon/lsapy/pull/65>`_).
+* Add `**kwargs` to `SuitabilityCriteria.compute` and `LandSuitabilityAnalysis.run` to allow handling dask arrays (issue `#64 <https://github.com/baptistehamon/lsapy/issues/64>`_, PR `#65 <https://github.com/baptistehamon/lsapy/pull/65>`_).
+
 v0.1.1 (2025-07-26)
 -------------------
 Contributor to this version: Baptiste Hamon (@baptistehamon).

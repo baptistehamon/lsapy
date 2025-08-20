@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from lsapy import SuitabilityCriteria
-from lsapy.core.formatting import summarize_criteria
+from lsapy import SuitabilityCriteria, SuitabilityFunction
+from lsapy.core.formatting import sf_short_repr, summarize_criteria
 
 
 class TestSummarizeCriteria:
@@ -35,3 +35,12 @@ class TestSummarizeCriteria:
         res = summarize_criteria("criteria", criteria_gdd, col_width=20)
         expected_res = "    growing_degre...(w=3) climate vetharaniam2022_eq5(a=-0.55, b=1350) "
         assert res == expected_res
+
+
+class TestRepr:
+    def test_sf(self):
+        # test repr for function without params
+        sf = SuitabilityFunction(name="sigmoid")
+        assert repr(sf) == "SuitabilityFunction(func=sigmoid)"
+        # test short repr for function without params
+        assert sf_short_repr(sf) == "sigmoid()"

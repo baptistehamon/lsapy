@@ -152,6 +152,7 @@ class LandSuitabilityAnalysis:
         by_category: bool | None = None,
         keep_vars: bool | None = True,
         inplace=False,
+        **kwargs,
     ):
         """
         Run the land suitability analysis.
@@ -174,6 +175,8 @@ class LandSuitabilityAnalysis:
             data defined by the `suitability_type`. The default is True.
         inplace : bool, optional
             If True, compute the suitability in place. The default is False.
+        **kwargs : dict
+            Additional keyword arguments to pass to the suitability criteria compute method.
 
         Returns
         -------
@@ -268,7 +271,7 @@ class LandSuitabilityAnalysis:
                 f"'suitability_type' must be one of 'criteria', 'category', or 'overall'. Got '{suitability_type}'."
             )
 
-        ds = self._run_criteria()
+        ds = self._run_criteria(**kwargs)
 
         if suitability_type in ["category", "overall"]:
             agg_on, by_category = _pre_agg(suitability_type, by_category)
@@ -311,9 +314,15 @@ class LandSuitabilityAnalysis:
 
     def _run_criteria(
         self,
+        **kwargs,
     ) -> xr.Dataset:
         """
         Compute the suitability of each criteria.
+
+        Parameters
+        ----------
+        **kwargs : dict
+            Additional keyword arguments to pass to the suitability criteria compute method.
 
         Returns
         -------
@@ -322,7 +331,7 @@ class LandSuitabilityAnalysis:
         """
         out = []
         for sc in self.criteria.values():
-            out.append(sc.compute())
+            out.append(sc.compute(**kwargs))
         out = xr.merge(out, compat="override", combine_attrs="drop")
 
         # Reassign attributes to each criteria

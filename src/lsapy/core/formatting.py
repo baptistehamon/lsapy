@@ -20,12 +20,20 @@ from lsapy.core.options import OPTIONS
 
 def sf_repr(sf):
     """Return a string representation of a SuitabilityFunction."""
-    return f"SuitabilityFunction(func={sf.func.__name__}, params={sf.params})"
+    start = f"SuitabilityFunction(func={sf.func.__name__}"
+    if sf.params:
+        end = f", params={sf.params})"
+    else:
+        end = ")"
+    return f"{start}{end}"
 
 
 def sf_short_repr(sf):
     """Return a short string representation of a SuitabilityFunction."""
-    return f"{sf.func.__name__}({', '.join(f'{k}={v}' for k, v in sf.params.items())})"
+    func = f"{sf.func.__name__}"
+    if not sf.params:
+        return f"{func}()"
+    return f"{func}({', '.join(f'{k}={v}' for k, v in sf.params.items())})"
 
 
 def sc_params_repr(sc):

@@ -2,26 +2,26 @@
 Changelog
 =========
 
-v0.2.0 (unreleased)
+v0.2.0 (2025-08-20)
 -------------------
 Contributor to this version: Baptiste Hamon (@baptistehamon).
 
 New features
 ^^^^^^^^^^^^
-* Functions alternative names can now be used in ``SuitabilityFunction`` (PR `#43 <https://github.com/baptistehamon/lsapy/pull/43>`_).
+* Functions' alternative names can now be used in ``SuitabilityFunction`` (PR `#43 <https://github.com/baptistehamon/lsapy/pull/43>`_).
 * The documentation of membership functions has been improved (PR `#43 <https://github.com/baptistehamon/lsapy/pull/43>`_).
 * `LSAPy` officially supports Python>=3.10 and is OS independent (PR `#46 <https://github.com/baptistehamon/lsapy/pull/46>`_).
 * ``repr`` methods of ``SuitabilityFunction``, ``SuitabilityCriteria`` and ``LandSuitabilityAnalysis`` have been modified to provide more user-friendly information (issue `#55 <https://github.com/baptistehamon/lsapy/issues/55>`_, PR `#59 <https://github.com/baptistehamon/lsapy/pull/59>`_).
-* A setter has been added to ``attrs`` method of ``SuitabilityCriteria`` and ``LandSuitabilityAnalysis`` (issue `#55 <https://github.com/baptistehamon/lsapy/issues/55>`_, PR `#59 <https://github.com/baptistehamon/lsapy/pull/59>`_).
-* The ``open_data`` function has been added to the ``lsapy.utils`` module to load data from the LSAPy data repository. (issue `#60 <https://github.com/baptistehamon/lsapy/issues/60>`_, PR `#62 <https://github.com/baptistehamon/lsapy/pull/62>`_).
+* A setter has been added to the ``attrs`` method of ``SuitabilityCriteria`` and ``LandSuitabilityAnalysis`` (issue `#55 <https://github.com/baptistehamon/lsapy/issues/55>`_, PR `#59 <https://github.com/baptistehamon/lsapy/pull/59>`_).
+* The ``open_data`` function has been added to the ``lsapy.utils`` module to load data from the LSAPy data repository (issue `#60 <https://github.com/baptistehamon/lsapy/issues/60>`_, PR `#62 <https://github.com/baptistehamon/lsapy/pull/62>`_).
 * A ``median`` aggregation method has been added (PR `#63 <https://github.com/baptistehamon/lsapy/pull/63>`_).
 
 Breaking changes
 ^^^^^^^^^^^^^^^^
 * The deprecated ``SuitabilityFunction.map`` method has been removed (PR `#44 <https://github.com/baptistehamon/lsapy/pull/44>`_).
-* ``short_name``, ``long_name``, ``description`` and ``comment`` attributes of ``SuitabilityCriteria`` and ``LandSuitabilityAnalysis`` have been removed and are now store in the ``attrs`` attribute. (issue `#55 <https://github.com/baptistehamon/lsapy/issues/55>`_, PR `#59 <https://github.com/baptistehamon/lsapy/pull/59>`_).
+* ``short_name``, ``long_name``, ``description`` and ``comment`` attributes of ``SuitabilityCriteria`` and ``LandSuitabilityAnalysis`` have been removed and are now stored in the ``attrs`` attribute (issue `#55 <https://github.com/baptistehamon/lsapy/issues/55>`_, PR `#59 <https://github.com/baptistehamon/lsapy/pull/59>`_).
 * ``load_climate_data`` and ``load_soil_data`` functions have been removed (issue `#60 <https://github.com/baptistehamon/lsapy/issues/60>`_, PR `#62 <https://github.com/baptistehamon/lsapy/pull/62>`_).
-* Some names of aggregation methods have been changed (PR `#63 <https://github.com/baptistehamon/lsapy/pull/63>`_).
+* Some names of aggregation methods have been changed (PR `#63 <https://github.com/baptistehamon/lsapy/pull/63>`_):
     * ``weighted_mean`` is now ``wmean``
     * ``geomean`` is now ``gmean``
     * ``weighted_geomean`` is now ``wgmean``
@@ -30,17 +30,17 @@ Breaking changes
 
 Internal changes
 ^^^^^^^^^^^^^^^^
-* Tests have been added for current implemented `LSAPy` functionalities (issue `#7 <https://github.com/baptistehamon/lsapy/issues/7>`_, PR `#46 <https://github.com/baptistehamon/lsapy/pull/46>`_).
+* Tests have been added for currently implemented `LSAPy` functionalities (issue `#7 <https://github.com/baptistehamon/lsapy/issues/7>`_, PR `#46 <https://github.com/baptistehamon/lsapy/pull/46>`_).
     * ``pytest`` is used as the testing framework to run all unit tests, doctests and test notebooks.
     * ``nox`` has been set up and is used to run tests in CI workflows.
 * A CI GitHub Actions workflow has been added (issue `#8 <https://github.com/baptistehamon/lsapy/issues/8>`_, PR `#46 <https://github.com/baptistehamon/lsapy/pull/46>`_)
-    * The CI run tests on Python 3.10 to 3.13, on Ubuntu, macOS and Windows.
-    * The coverage, doctests and notebooks tests are run on Ubuntu under Python 3.12.
-* New pre-commit hooks have been added and package pyproject have been updated (PR `#58 <https://github.com/baptistehamon/lsapy/pull/58>`_)
+    * The CI runs tests on Python 3.10 to 3.13, on Ubuntu, macOS and Windows.
+    * The coverage, doctests and notebook tests are run on Ubuntu under Python 3.12.
+* New pre-commit hooks have been added and the package pyproject has been updated (PR `#58 <https://github.com/baptistehamon/lsapy/pull/58>`_)
     * New hooks: ``yamllint``, ``vulture``, ``nbstripout``, ``pygrep-hooks``, ``mdformat``, ``blackdoc``, ``formatbibtex``, ``gitleaks`` and ``meta``.
-    * Update dependencies: remove unused ``Shapely`` and add deps for new hooks.
+    * Update dependencies: remove unused ``Shapely`` and add dependencies for new hooks.
     * Add deptry config to track dependencies.
-    * Update package metadata: keywords, classifiers (python versions) and project urls.
+    * Update package metadata: keywords, classifiers (python versions) and project URLs.
     * Update package sdist files.
 * The ``lsapy.core.formatting`` module has been added and contains ``repr`` formatting functions (issue `#55 <https://github.com/baptistehamon/lsapy/issues/55>`_, PR `#59 <https://github.com/baptistehamon/lsapy/pull/59>`_).
 * `LSAPy` sample data management has been improved (issue `#60 <https://github.com/baptistehamon/lsapy/issues/60>`_, PR `#62 <https://github.com/baptistehamon/lsapy/pull/62>`_):
@@ -53,7 +53,7 @@ Internal changes
 Bug fixes
 ^^^^^^^^^
 * Fix issues with representations of ``SuitabilityFunction`` when no parameters are provided (issue `#61 <https://github.com/baptistehamon/lsapy/issues/61>`_, PR `#65 <https://github.com/baptistehamon/lsapy/pull/65>`_).
-* Add `**kwargs` to `SuitabilityCriteria.compute` and `LandSuitabilityAnalysis.run` to allow handling dask arrays (issue `#64 <https://github.com/baptistehamon/lsapy/issues/64>`_, PR `#65 <https://github.com/baptistehamon/lsapy/pull/65>`_).
+* Add `**kwargs` to `SuitabilityCriteria.compute` and `LandSuitabilityAnalysis.run` to allow handling Dask arrays (issue `#64 <https://github.com/baptistehamon/lsapy/issues/64>`_, PR `#65 <https://github.com/baptistehamon/lsapy/pull/65>`_).
 * The codebase has been modified to improve typing and fix mypy errors (issue `#35 <https://github.com/baptistehamon/lsapy/issues/35>`_, PR `#66 <https://github.com/baptistehamon/lsapy/pull/66>`_).
 
 v0.1.1 (2025-07-26)

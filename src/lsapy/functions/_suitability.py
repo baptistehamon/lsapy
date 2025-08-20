@@ -64,7 +64,7 @@ class SuitabilityFunction:
             else:
                 self.func = get_function_from_name(name)
         else:
-            if not isinstance(func, Callable):
+            if not callable(func):
                 raise TypeError("`func` must be a callable function.")
             if name is not None:
                 warnings.warn("`name` is ignored when `func` is provided", stacklevel=2)

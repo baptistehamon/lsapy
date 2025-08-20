@@ -27,4 +27,4 @@ def discrete(x, rules: dict[str | int, int | float]) -> np.ndarray:
     np.ndarray
         Suitability values.
     """
-    return np.vectorize(rules.get, otypes=[np.float32])(x, np.nan)
+    return np.vectorize(rules.get, otypes=[np.float32])(x, np.nan)  # type: ignore[return-value]

@@ -28,19 +28,19 @@ class LandSuitabilityAnalysis:
         A name for the land use.
     criteria : dict[str, SuitabilityCriteria]
         A dictionary of suitability criteria where the key is the name of the criteria.
-    short_name : str | None, optional
+    short_name : str, optional
         A short name for the land suitability analysis. The default is None. If provided,
         it will be stored as an attribute.
-    long_name : str | None, optional
+    long_name : str, optional
         A long name for the land suitability analysis. The default is None. If provided,
         it will be stored as an attribute.
-    description : str | None, optional
+    description : str, optional
         A description for the land suitability analysis. The default is None. If provided,
         it will be stored as an attribute.
-    comment : str | None, optional
+    comment : str, optional
         Additional information about the land suitability analysis. The default is None.
         If provided, it will be stored as an attribute.
-    attrs : Mapping[Any, Any] | None, optional
+    attrs : Mapping[Any, Any], optional
         Arbitrary metadata to store with the land suitability analysis, in addition to the attributes
         `short_name`, `long_name`, `description`, and `comment`. The default is None.
 
@@ -290,7 +290,7 @@ class LandSuitabilityAnalysis:
                 elif suitability_type == "category" or by_category:
                     cat_method = agg_methods.pop("category")
                     agg_methods = {
-                        **{k: cat_method for k in self.category},
+                        **{k: cat_method for k in self.category if k is not None},
                         **agg_methods,
                     }
 
@@ -329,7 +329,7 @@ class LandSuitabilityAnalysis:
         xr.Dataset
             A Dataset containing the computed suitability for each criteria.
         """
-        out = []
+        out: Any = []
         for sc in self.criteria.values():
             out.append(sc.compute(**kwargs))
         out = xr.merge(out, compat="override", combine_attrs="drop")
@@ -342,8 +342,14 @@ class LandSuitabilityAnalysis:
         out.attrs.update(self.attrs)
         return out
 
-    def _sort_criteria_by_weight(self) -> dict[str, SuitabilityCriteria]:
-        self.criteria = dict(sorted(self.criteria.items(), key=lambda item: item[1].weight, reverse=True))
+    def _sort_criteria_by_weight(self) -> None:
+        self.criteria = dict(
+            sorted(
+                self.criteria.items(),
+                key=lambda item: item[1].weight if item[1].weight is not None else 0,
+                reverse=True,
+            )
+        )
 
     def _get_params_by_category(self):
         self.criteria_by_category = {category: [] for category in self.category}

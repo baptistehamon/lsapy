@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable, Mapping
+from collections.abc import Mapping
 from typing import Any
 
 import xarray as xr
@@ -27,21 +27,21 @@ class SuitabilityCriteria:
         Name of the suitability criteria.
     indicator : xr.DataArray
         Indicator on which the criteria is based.
-    func : SuitabilityFunction | MembershipFunction | DiscreteSuitFunction
+    func : SuitabilityFunction, optional
         Suitability function describing how the suitability of the criteria is computed.
-    weight : int | float | None, optional
+    weight : int | float, optional
         Weight of the criteria used in the aggregation process if a weighted aggregation method is used.
         The default is 1.
-    category : str | None, optional
+    category : str, optional
         Category of the criteria. The default is None.
-    long_name : str | None, optional
+    long_name : str, optional
         A long name for the criteria. The default is None. If provided, it will be stored as an attribute.
-    description : str | None, optional
+    description : str, optional
         A description for the criteria. The default is None. If provided, it will be stored as an attribute.
-    comment : str | None, optional
+    comment : str, optional
         Additional information about the criteria. The default is None.
         If provided, it will be stored as an attribute.
-    attrs : Mapping[Any, Any] | None, optional
+    attrs : Mapping[Any, Any], optional
         Arbitrary metadata to store with the criteria, in addition to the attributes
         `long_name`, `description`, and `comment`. The default is None.
     is_computed : bool, optional
@@ -84,7 +84,7 @@ class SuitabilityCriteria:
         self,
         name: str,
         indicator: xr.DataArray,
-        func: SuitabilityFunction | Callable = None,
+        func: SuitabilityFunction | None = None,
         weight: int | float | None = 1,
         category: str | None = None,
         long_name: str | None = None,
@@ -158,15 +158,13 @@ class SuitabilityCriteria:
             Criteria suitability.
         """
         if self.is_computed:
-            sc = self.indicator
+            out = self.indicator
         elif self.func is None:
             raise ValueError("The suitability function is not defined. Please provide a valid function.")
         else:
-            if kwargs is None:
-                kwargs = {}
-            sc: xr.DataArray = xr.apply_ufunc(self.func, self.indicator, **kwargs)
+            out = xr.apply_ufunc(self.func, self.indicator, **kwargs)
 
-        attrs = {"weight": self.weight}
+        attrs: dict[str, Any] = {"weight": self.weight}
         if self.category:
             attrs["category"] = self.category
         attrs.update(self._attrs)
@@ -174,7 +172,7 @@ class SuitabilityCriteria:
             f"func_method: {self.func if self.func is not None else 'unknown'}; "
             f"from_indicator: [{self._from_indicator}]"
         )
-        return sc.rename(self.name).assign_attrs(attrs)
+        return out.rename(self.name).assign_attrs(attrs)
 
 
 def _get_indicator_description(indicator: xr.Dataset | xr.DataArray) -> str:

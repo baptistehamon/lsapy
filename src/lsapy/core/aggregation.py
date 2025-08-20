@@ -1,5 +1,7 @@
 """Module for LSA criteria aggregation."""
 
+from __future__ import annotations
+
 import numpy as np
 import xarray as xr
 from scipy import stats
@@ -7,10 +9,10 @@ from scipy import stats
 __all__ = ["aggregate"]
 
 
-def _agg_weights(ds: xr.Dataset, variables: list[str], weights: list[float | int] = None) -> xr.DataArray:
+def _agg_weights(ds: xr.Dataset, variables: list[str], weights: list[int | float] | None = None) -> xr.DataArray:
     """Returns weights as an xarray.DataArray with given variables as dimensions."""
     if weights is None:
-        weights = np.ones(len(variables))
+        weights = [1.0] * len(variables)
 
     if len(variables) != len(weights):
         raise ValueError("Length of 'weights' must match length of 'variables'.")
@@ -25,7 +27,7 @@ def _agg_weights(ds: xr.Dataset, variables: list[str], weights: list[float | int
 
 
 def _add_agg_attrs(
-    da: xr.DataArray | xr.Dataset, method: str, variables: list[str], weights=None
+    da: xr.DataArray | xr.Dataset, method: str, variables: list[str], weights: list[int | float] | None = None
 ) -> xr.DataArray | xr.Dataset:
     """Add aggregation method attributes to the DataArray or Dataset."""
     if method in ["wmean", "wgmean"] and weights is not None:
@@ -72,7 +74,12 @@ def _add_agg_attrs(
     return da
 
 
-def aggregate(ds: xr.Dataset, method: str = "mean", variables=None, weights=None) -> xr.DataArray | xr.Dataset:
+def aggregate(
+    ds: xr.Dataset,
+    method: str = "mean",
+    variables: list[str] | None = None,
+    weights: list[int | float] | None = None,
+) -> xr.DataArray | xr.Dataset:
     """
     Aggregate variables of an xarray.Dataset using specified methods.
 
@@ -84,9 +91,9 @@ def aggregate(ds: xr.Dataset, method: str = "mean", variables=None, weights=None
         Aggregation method to use. Options include 'mean', 'median', 'wmean' (weighted mean),
         'gmean' (geometric mean), 'wgmean' (weighted geometric mean), and 'limfactor' (limiting factor).
         Default is 'mean'.
-    variables : list[str] | None, optional
+    variables : list[str], optional
         List of variable names to aggregate. If None, all variables in the dataset are used.
-    weights : list[float | int], optional
+    weights : list[int | float], optional
         Weights for the variables when using weighted methods ('wmean', 'wgmean').
         If None, equal weights are assumed.
 

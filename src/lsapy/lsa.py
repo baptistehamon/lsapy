@@ -8,7 +8,7 @@ from typing import Any
 
 import xarray as xr
 
-from lsapy.core.aggregation import aggregate
+from lsapy.aggregate import aggregate
 from lsapy.core.formatting import lsa_repr
 from lsapy.criteria import SuitabilityCriteria
 

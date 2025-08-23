@@ -7,7 +7,7 @@ import pandas as pd
 import pytest
 import xarray as xr
 
-from lsapy.core.aggregation import aggregate
+from lsapy.aggregate import aggregate
 
 
 @pytest.fixture

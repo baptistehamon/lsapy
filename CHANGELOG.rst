@@ -2,6 +2,15 @@
 Changelog
 =========
 
+v0.3.0 (unreleased)
+-------------------
+Contributor to this version: Baptiste Hamon (@baptistehamon).
+
+Breaking changes
+^^^^^^^^^^^^^^^^
+* The ``lsapy.statistics`` module has been renamed to ``lsapy.stats`` (PR `#71 <https://github.com/baptistehamon/lsapy/pull/71>`_).
+* The ``lsapy.core.aggregation`` has been moved and renamed to ``lsapy.aggregate`` (PR `#71 <https://github.com/baptistehamon/lsapy/pull/71>`_).
+
 v0.2.0 (2025-08-20)
 -------------------
 Contributor to this version: Baptiste Hamon (@baptistehamon).

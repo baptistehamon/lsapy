@@ -1,21 +1,24 @@
----
+______________________________________________________________________
+
 title: 'LSAPy: Land Suitability Analysis in Python'
 tags:
-  - land suitability analysis
-  - land evaluation
-  - geospatial analysis
-  - GIS
-  - python
-authors:
-  - name: Baptiste Hamon
-    orcid: 0009-0007-4530-9772
-    affiliation: 1
-affiliations:
-  - name: Department of Civil and Environmental Engineering, University of Canterbury, Christchurch, New Zealand
-    index: 1
-date: 28 August 2025
-bibliography: paper.bib
----
+
+- land suitability analysis
+- land evaluation
+- geospatial analysis
+- GIS
+- python
+  authors:
+- name: Baptiste Hamon
+  orcid: 0009-0007-4530-9772
+  affiliation: 1
+  affiliations:
+- name: Department of Civil and Environmental Engineering, University of Canterbury, Christchurch, New Zealand
+  index: 1
+  date: 28 August 2025
+  bibliography: paper.bib
+
+______________________________________________________________________
 
 # Summary
 

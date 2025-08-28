@@ -19,7 +19,7 @@ bibliography: paper.bib
 
 # Summary
 
-LSAPy is a highly customizable Python library designed to streamline and enhance Land Suitability Analysis (LSA) workflows. The package implements a fuzzy-logic approach and provides three core objects — `SuitabilityFunction`, `SuitabilityCriteria`, and `LandSuitabilityAnalysis` — that work together to deliver a flexible and user-defined LSA framework. By relying on `xarray` objects for computation [@hoyer2017], LSAPy seamlessly integrates with the broader Python ecosystem, such as `dask` for efficient parallel processing and `matplotlib` for data visualisation. Its modular design addresses some limitations of existing LSA tools by offering greater flexibility, reproducibility, and scalability for research and practical applications.
+LSAPy is a highly customizable Python library designed to streamline and enhance Land Suitability Analysis (LSA) workflows. The package implements a fuzzy-logic approach and provides three core objects - `SuitabilityFunction`, `SuitabilityCriteria`, and `LandSuitabilityAnalysis` - that work together to deliver a flexible and user-defined LSA framework. By relying on `xarray` objects for computation [@hoyer2017], LSAPy seamlessly integrates with the broader Python ecosystem, such as `dask` for efficient parallel processing and `matplotlib` for data visualisation. Its modular design addresses some limitations of existing LSA tools by offering greater flexibility, reproducibility, and scalability for research and practical applications.
 
 # Statement of need
 
@@ -33,21 +33,21 @@ The limitations of existing software programs motivated the development of LSAPy
 
 # Land Suitability Analysis Workflow
 
-LSAPy provides three core objects that operate together to perform the land suitability analysis (LSA) according to user-defined frameworks \autoref{fig:lsapy}.
+LSAPy provides three core objects that operate together to perform the land suitability analysis (LSA) according to user-defined frameworks (\autoref{fig:lsapy}).
 
 ![Overview of LSAPy’s object structures and their associated properties and methods. *`sc` is used as an abbreviation of `SuitabilityCriteria`.\label{fig:lsapy}](lsapy.png)
 
 ## Suitability Function
 
-`SuitabilityFunction` is built around a function that transforms input data into suitability values \autoref{fig:lsapy}. LSAPy includes built-in functions for both discrete and continuous data. For the latter, the package follows a fuzzy-logic approach, implementing Gaussian-like and sigmoid-like membership functions previously used in LSA studies. If the provided functions do not meet user requirements, custom functions can be defined.
+`SuitabilityFunction` is built around a function that transforms input data into suitability values (\autoref{fig:lsapy}). LSAPy includes built-in functions for both discrete and continuous data. For the latter, the package follows a fuzzy-logic approach, implementing Gaussian-like and sigmoid-like membership functions previously used in LSA studies. If the provided functions do not meet user requirements, custom functions can be defined.
 
 ## Suitability Criteria
 
-The `SuitabilityCriteria` defines an individual criteria used in LSA. Its `indicator` property refers to the input data, while `func` specifies the associated `SuitabilityFunction` \autoref{fig:lsapy}. The `weight` and `category` properties allow users to customise how each criteria is aggregated with others in the analysis. The `compute()` method applies the `SuitabilityFunction` to the given `indicator` to calculate the suitability score.
+The `SuitabilityCriteria` defines an individual criteria used in LSA. Its `indicator` property refers to the input data, while `func` specifies the associated `SuitabilityFunction` (\autoref{fig:lsapy}). The `weight` and `category` properties allow users to customise how each criteria is aggregated with others in the analysis. The `compute()` method applies the `SuitabilityFunction` to the given `indicator` to calculate the suitability score.
 
 ## Land Suitability Analysis
 
-`LandSuitabilityAnalysis` is the top-level class in LSAPy, defining the LSA framework. All criteria for the analysis are stored in the `criteria` property. The `run()` method executes the LSA, with parameters specifying the level of suitability to compute (i.e., criteria, category, or overall land suitability) and the aggregation method to use. Currently, supported aggregation methods include median, mean, weighted mean, geometric mean, weighted geometric mean, and limiting factor.
+`LandSuitabilityAnalysis` is the top-level class in LSAPy, defining the LSA framework. All criteria for the analysis are stored in the `criteria` property (\autoref{fig:lsapy}). The `run()` method executes the LSA, with parameters specifying the level of suitability to compute (i.e., criteria, category, or overall land suitability) and the aggregation method to use. Currently, supported aggregation methods include median, mean, weighted mean, geometric mean, weighted geometric mean, and limiting factor.
 
 ## Additional Features
 

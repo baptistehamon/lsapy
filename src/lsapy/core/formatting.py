@@ -68,7 +68,7 @@ def sc_repr(sc: SuitabilityCriteria) -> str:
 
     col_width = _calculate_col_width([f"{k}:" for k in sc.attrs.keys()] + ["Dimensions"])
 
-    summary = [f"<SuitabilityCriteria> {sc.name!r}{sc_params_repr(sc)}"]
+    summary = [f"<SuitabilityCriteria> {sc.name!r} {sc_params_repr(sc)}"]
 
     if sc.func:
         summary.extend(["Function:", f"    {maybe_truncate(sf_repr(sc.func), max_width)}"])

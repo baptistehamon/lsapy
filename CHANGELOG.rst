@@ -15,6 +15,10 @@ Breaking changes
 * The ``lsapy.statistics`` module has been renamed to ``lsapy.stats`` (PR `#71 <https://github.com/baptistehamon/lsapy/pull/71>`_).
 * The ``lsapy.core.aggregation`` has been moved and renamed to ``lsapy.aggregate`` (PR `#71 <https://github.com/baptistehamon/lsapy/pull/71>`_).
 
+Internal changes
+^^^^^^^^^^^^^^^^
+* The name and year in the license file have been updated (PR `#76 <https://github.com/baptistehamon/lsapy/pull/76>`_).
+
 Bug fixes
 ^^^^^^^^^
 * Fix small issue of ``SuitabilityCriteria`` string representation (PR `#73 <https://github.com/baptistehamon/lsapy/pull/73>`_).

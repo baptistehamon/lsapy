@@ -6,7 +6,7 @@
     :alt: LSAPy Logo
 
 LSAPy: Land Suitability Analysis in Python
-===========================================
+==========================================
 |pypi| |conda| |python-versions| |status| |testing| |coverage| |ruff| |pre-commit| |docs| |question| |zenodo|
 
 `LSAPy` stands for Land Suitability Analysis (LSA) in Python. Its objective is to make conducting
@@ -16,7 +16,7 @@ LSA in Python easier and more accessible to users. It provides a set of objects 
 .. _`xarray`: https://xarray.pydata.org/en/stable/
 
 Quick Start
--------------
+-----------
 To install `LSAPy`, you can use `pip`:
 
 .. code-block:: shell

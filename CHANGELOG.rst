@@ -18,7 +18,7 @@ Breaking changes
 Internal changes
 ^^^^^^^^^^^^^^^^
 * The name and year in the license file have been updated (PR `#76 <https://github.com/baptistehamon/lsapy/pull/76>`_).
-* The logo has been updated (PR `#79 <https://github.com/baptistehamon/lsapy/pull/79>`_).
+* The logo has been updated (PR `#80 <https://github.com/baptistehamon/lsapy/pull/80>`_).
 
 Bug fixes
 ^^^^^^^^^

@@ -154,7 +154,7 @@ def stats_summary(
             df_ = df.drop(columns=["bin"]).assign(bin=all_bins_inter)
             df_.loc[df["value"].isnull(), "bin"] = np.nan
             if bins_labels is not None:
-                lab_mapping.update({str(all_bins_inter): "all"})
+                lab_mapping.update({str(all_bins_inter): "bins_range"})
             df = pd.concat([df, df_])
         df["bin"] = df["bin"].astype(str)
 

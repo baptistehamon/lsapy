@@ -65,37 +65,63 @@ def stats_summary(
 
     Examples
     --------
-    >>> # define your LandSuitabilityAnalysis
+    >>> from lsapy.utils import open_data
+    >>> from lsapy import SuitabilityFunction, SuitabilityCriteria, LandSuitabilityAnalysis
+    >>> from xclim.indicators.atmos import growing_degree_days
+
+    Let's first define a Land Suitability Analysis (LSA):
+
+    >>> drainage = open_data("land", variables="drainage")
+    >>> tas = open_data("climate", variables="tas")
+    >>> sc = {
+    ...     "drainage_class": SuitabilityCriteria(
+    ...         name="drainage_class",
+    ...         long_name="Drainage Class Suitability",
+    ...         weight=3,
+    ...         category="soilTerrain",
+    ...         indicator=drainage,
+    ...         func=SuitabilityFunction(name="discrete", params={"rules": {0: 0, 1: 0.1, 2: 0.5, 3: 0.9, 4: 1}}),
+    ...     ),
+    ...     "growing_degree_days": SuitabilityCriteria(
+    ...         name="growing_degree_days",
+    ...         long_name="Growing Degree Days Suitability",
+    ...         weight=1,
+    ...         category="climate",
+    ...         indicator=growing_degree_days(tas, thresh="10 degC", freq="YS-JUL"),
+    ...         func=SuitabilityFunction(name="vetharaniam2022_eq5", params={"a": -1.41, "b": 801}),
+    ...     ),
+    ... }
+    >>> lsa = LandSuitabilityAnalysis("land_use", sc)
     >>> lsa.run(inplace=True)
-    >>> # perform simple statistics summary
-    >>> stats_summary(lsa.data)
 
-    `on_vars`, `on_dims`, and `on_dim_values` parameters can be used to filter the data. Assuming
-    that `lsa.data` contains as the LSA criteria suitability and the overall suitability as variables (
-    `criteria1`, `criteria2`, and `suitability`), and as dimensions the time for 10 years (2000-2009).
-    If we want to get the statistics summary for criteria1 and criteria2, and only for the five first years,
-    we can do:
+    We can then compute the statistics summary for the data:
 
-    >>> stats_summary(
+    >>> stats = stats_summary(lsa.data)
+
+    `on_vars`, `on_dims`, and `on_dim_values` parameters can be used to filter the data.
+    If we want to get the statistics summary for only 'growing_degree_days', 'suitability', and
+    the first three years, we can do:
+
+    >>> stats = stats_summary(
     ...     lsa.data,
-    ...     on_vars=["criteria1", "criteria2"],  # select variables
-    ...     on_dim_values={"time": slice(2000, 2004)},  # select values of the time dimension
+    ...     on_vars=["growing_degree_days", "suitability"],  # select variables
+    ...     on_dim_values={"time": slice("2000", "2002")},  # select values of the time dimension
     ... )
 
-    This will compute the statistics for the two criteria and for each year of the 2000-2004 period.
+    This will compute the statistics for the two variables and for each year of the 2000-2002 period.
     We can also provide bins to group the data into intervals. For example, if we want to get the statistics
     for four bins (0-0.25, 0.25-0.5, 0.5-0.75, 0.75-1), we can do:
 
-    >>> stats_summary(
+    >>> stats = stats_summary(
     ...     lsa.data,
-    ...     bins=[0, 0.25, 0.5, 0.75, 1], # define bins
-    ...     bins_labels=['unsuitable', 'poorly suitable', 'moderately suitable', 'highly suitable'] # define labels
-    ...     all_bins=True # add an additional bin for the overall range (i.e., 0-1)
+    ...     bins=[0, 0.25, 0.5, 0.75, 1],  # define bins
+    ...     bins_labels=["unsuitable", "poorly suitable", "moderately suitable", "highly suitable"],  # define labels
+    ...     all_bins=True,  # add an additional bin for the overall range (i.e., 0-1)
     ... )
 
     Finally, we can get the area associated with each bin by providing the area of each cell in the data.
     Assuming that each cell has an area of 5 hectares (ha), we can do:
-    >>> stats_summary(
+    >>> stats = stats_summary(
     ...     lsa.data,
     ...     bins=[0, 0.25, 0.5, 0.75, 1],
     ...     bins_labels=["unsuitable", "poorly suitable", "moderately suitable", "highly suitable"],
@@ -200,15 +226,40 @@ def spatial_stats_summary(
 
     Examples
     --------
-    >>> # define your LandSuitabilityAnalysis
-    >>> lsa.run(inplace=True)
-    >>> # load areas as a GeoDataFrame
+    >>> from lsapy.utils import open_data
+    >>> from lsapy import SuitabilityFunction, SuitabilityCriteria, LandSuitabilityAnalysis
+    >>> from xclim.indicators.atmos import growing_degree_days
     >>> import geopandas as gpd
-    >>> areas = gpd.read_file("path_to_your_areas_file.shp")
 
-    We can then compute the statistics summary for each area:
+    Let's first define a Land Suitability Analysis (LSA):
 
-    >>> spatial_stats_summary(lsa.data, areas)
+    >>> drainage = open_data("land", variables="drainage")
+    >>> tas = open_data("climate", variables="tas")
+    >>> sc = {
+    ...     "drainage_class": SuitabilityCriteria(
+    ...         name="drainage_class",
+    ...         long_name="Drainage Class Suitability",
+    ...         weight=3,
+    ...         category="soilTerrain",
+    ...         indicator=drainage,
+    ...         func=SuitabilityFunction(name="discrete", params={"rules": {0: 0, 1: 0.1, 2: 0.5, 3: 0.9, 4: 1}}),
+    ...     ),
+    ...     "growing_degree_days": SuitabilityCriteria(
+    ...         name="growing_degree_days",
+    ...         long_name="Growing Degree Days Suitability",
+    ...         weight=1,
+    ...         category="climate",
+    ...         indicator=growing_degree_days(tas, thresh="10 degC", freq="YS-JUL"),
+    ...         func=SuitabilityFunction(name="vetharaniam2022_eq5", params={"a": -1.41, "b": 801}),
+    ...     ),
+    ... }
+    >>> lsa = LandSuitabilityAnalysis("land_use", sc)
+    >>> lsa.run(inplace=True)
+
+    We can then load a GeoDataFrame of areas and compute the statistics summary for each area.
+
+    >>> areas = gpd.read_file("path_to_your_areas_file.shp")  # doctest: +SKIP
+    >>> stats = spatial_stats_summary(lsa.data, areas)  # doctest: +SKIP
     """
     if mask_kwargs is None:
         mask_kwargs = {}

@@ -80,17 +80,7 @@ def stats_summary(
     ...     on_dim_values={"time": slice(2000, 2004)},  # select values of the time dimension
     ... )
 
-    This will compute the statistics for the two criteria and for the 2000-2004 period (i.e., one value for
-    the 5 years). However, if we want to get the statistics for each year, we can specify to keep the time
-    dimension:
-
-    >>> stats_summary(
-    ...     lsa.data,
-    ...     on_vars=["criteria1", "criteria2"],
-    ...     on_dims=["time"],  # keep the time dimension
-    ...     on_dim_values={"time": slice(2000, 2004)},
-    ... )
-
+    This will compute the statistics for the two criteria and for each year of the 2000-2004 period.
     We can also provide bins to group the data into intervals. For example, if we want to get the statistics
     for four bins (0-0.25, 0.25-0.5, 0.5-0.75, 0.75-1), we can do:
 

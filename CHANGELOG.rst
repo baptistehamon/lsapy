@@ -14,11 +14,14 @@ Breaking changes
 ^^^^^^^^^^^^^^^^
 * The ``lsapy.statistics`` module has been renamed to ``lsapy.stats`` (PR `#71 <https://github.com/baptistehamon/lsapy/pull/71>`_).
 * The ``lsapy.core.aggregation`` has been moved and renamed to ``lsapy.aggregate`` (PR `#71 <https://github.com/baptistehamon/lsapy/pull/71>`_).
+* The ``statistical_summary`` function has been renamed to ``stats_summary`` (PR `#82 <https://github.com/baptistehamon/lsapy/pull/82>`_).
+* The ``spatial_statistical_summary`` function has been renamed to ``spatial_stats_summary`` (PR `#82 <https://github.com/baptistehamon/lsapy/pull/82>`_).
 
 Internal changes
 ^^^^^^^^^^^^^^^^
 * The name and year in the license file have been updated (PR `#76 <https://github.com/baptistehamon/lsapy/pull/76>`_).
 * The logo has been updated (PR `#80 <https://github.com/baptistehamon/lsapy/pull/80>`_).
+* Tests have been added for the ``lsapy.stats`` module functions (PR `#82 <https://github.com/baptistehamon/lsapy/pull/82>`_).
 
 Bug fixes
 ^^^^^^^^^

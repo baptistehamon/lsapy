@@ -60,6 +60,56 @@ def stats_summary(
     pd.DataFrame
         A DataFrame with the statistics for the defined dimensions and variables, including:
         count, mean, std, min, max, and 25%, 50%, and 75% percentiles.
+
+    Examples
+    --------
+    >>> # define your LandSuitabilityAnalysis
+    >>> lsa.run(inplace=True)
+    >>> # perform simple statistics summary
+    >>> stats_summary(lsa.data)
+
+    `on_vars`, `on_dims`, and `on_dim_values` parameters can be used to filter the data. Assuming
+    that `lsa.data` contains as the LSA criteria suitability and the overall suitability as variables (
+    `criteria1`, `criteria2`, and `suitability`), and as dimensions the time for 10 years (2000-2009).
+    If we want to get the statistics summary for criteria1 and criteria2, and only for the five first years,
+    we can do:
+
+    >>> stats_summary(
+    ...     lsa.data,
+    ...     on_vars=["criteria1", "criteria2"],  # select variables
+    ...     on_dim_values={"time": slice(2000, 2004)},  # select values of the time dimension
+    ... )
+
+    This will compute the statistics for the two criteria and for the 2000-2004 period (i.e., one value for
+    the 5 years). However, if we want to get the statistics for each year, we can specify to keep the time
+    dimension:
+
+    >>> stats_summary(
+    ...     lsa.data,
+    ...     on_vars=["criteria1", "criteria2"],
+    ...     on_dims=["time"],  # keep the time dimension
+    ...     on_dim_values={"time": slice(2000, 2004)},
+    ... )
+
+    We can also provide bins to group the data into intervals. For example, if we want to get the statistics
+    for four bins (0-0.25, 0.25-0.5, 0.5-0.75, 0.75-1), we can do:
+
+    >>> stats_summary(
+    ...     lsa.data,
+    ...     bins=[0, 0.25, 0.5, 0.75, 1], # define bins
+    ...     bins_labels=['unsuitable', 'poorly suitable', 'moderately suitable', 'highly suitable'] # define labels
+    ...     all_bins=True # add an additional bin for the overall range (i.e., 0-1)
+    ... )
+
+    Finally, we can get the area associated with each bin by providing the area of each cell in the data.
+    Assuming that each cell has an area of 5 hectares (ha), we can do:
+    >>> stats_summary(
+    ...     lsa.data,
+    ...     bins=[0, 0.25, 0.5, 0.75, 1],
+    ...     bins_labels=["unsuitable", "poorly suitable", "moderately suitable", "highly suitable"],
+    ...     all_bins=True,
+    ...     cell_area=(5, "ha"),  # define the area of each cell
+    ... )
     """
 
     def _close_lowest_bin(x: pd.Series, bins) -> pd.Series:

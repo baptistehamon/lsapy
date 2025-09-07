@@ -8,6 +8,8 @@ import pandas as pd
 import regionmask
 import xarray as xr
 
+__all__ = ["stats_summary", "spatial_stats_summary"]
+
 
 def stats_summary(
     data: xr.Dataset,

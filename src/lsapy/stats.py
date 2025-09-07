@@ -9,7 +9,7 @@ import regionmask
 import xarray as xr
 
 
-def statistics_summary(
+def stats_summary(
     data: xr.DataArray | xr.Dataset,
     on_vars: list | None = None,
     on_dims: list | None = None,
@@ -22,10 +22,10 @@ def statistics_summary(
     **kwargs,
 ) -> pd.DataFrame:
     """
-    Generate a summary statistics of the data.
+    Generate a descriptive statistics summary of the data.
 
     Returns a pandas DataFrame of data according to the given parameters.
-    The statistics includes count, mean, std, min, 25%, 50%, 75%, and max.
+    The statistics includes count, mean, std, min, max, and 25%, 50%, and 75% percentiles.
     Bins can be provided to further group the data into intervals.
 
     Parameters
@@ -33,10 +33,10 @@ def statistics_summary(
     data : xr.DataArray | xr.Dataset
         The input data.
     on_vars : list, optional
-        Variables on which the statistics are calculated. If None (default), all variables are kept.
+        Variables for which the statistics are calculated. If None (default), all variables are kept.
     on_dims : list, optional
-        Dimensions on which the statistics are calculated. If None (default), all dimensions are kept.
-        Spatial dimensions (i.e., `lon` or `x` and `lat` or `y`) are removed by default.
+        Dimensions for which the statistics are calculated. If None (default), all dimensions except
+        spatial ones (i.e., `lon` or `x` and `lat` or `y`) are kept.
     on_dim_values : sequence, optional
         Values of dimensions to be kept in the summary. If None (default), all values are kept.
     bins : list or np.ndarray, optional
@@ -45,7 +45,7 @@ def statistics_summary(
         Labels for the bins. If None (default), bins values are used as labels.
         The length of the list must be equal to the number of bins. Ignored if `bins` is None.
     all_bins : bool, optional
-        If True, a additional bin corresponding to the bounds of `bins` is added to the summary. Default is False.
+        If True, a additional bin corresponding to the bounds of `bins` is added. Default is False.
         Ignored if `bins` is None.
     cell_area : tuple of float or int and str, optional
         Add a column to the summary with the given associated area calculated based on the count statistic
@@ -59,10 +59,10 @@ def statistics_summary(
     -------
     pd.DataFrame
         A DataFrame with the statistics for the defined dimensions and variables, including:
-        count, mean, std, min, 25%, 50%, 75%, and max.
+        count, mean, std, min, max, and 25%, 50%, and 75% percentiles.
     """
 
-    def _correct_lowest_cut_interval(x: pd.Series, bins) -> pd.Series:
+    def _close_lowest_bin(x: pd.Series, bins) -> pd.Series:
         first_cat = x.cat.categories[0]
         lf = first_cat.left + (abs(first_cat.left) - bins[0])
         return x.cat.rename_categories({first_cat: pd.Interval(lf, first_cat.right, closed="both")})
@@ -78,8 +78,7 @@ def statistics_summary(
         on_vars = list(data.data_vars)
     data = data[on_vars]
     if on_dims is None:
-        on_dims = list(data.dims)
-        on_dims = [d for d in on_dims if d not in ["lat", "lon", "x", "y"]]  # remove spatial dims
+        on_dims = [d for d in data.dims if d not in ["lat", "lon", "x", "y"]]  # remove spatial dims
     if cell_area:
         cell_value, cell_unit = cell_area
 
@@ -93,7 +92,7 @@ def statistics_summary(
     if bins is not None:
         df["bin"] = pd.cut(df["value"], bins=pd.Index(bins), **kwargs)
         if "include_lowest" in kwargs and kwargs["include_lowest"]:
-            df["bin"] = _correct_lowest_cut_interval(df["bin"], bins)
+            df["bin"] = _close_lowest_bin(df["bin"], bins)
 
         if bins_labels is not None:
             lab_mapping = dict(zip(df["bin"].cat.categories.astype(str), bins_labels, strict=False))
@@ -194,7 +193,7 @@ def spatial_statistics_summary(
 
     out = []
     for r in mask.region.values:
-        df = statistics_summary(
+        df = stats_summary(
             data.where(mask.sel(region=r)),
             on_vars=on_vars,
             on_dims=on_dims,

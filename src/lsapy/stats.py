@@ -172,27 +172,20 @@ def stats_summary(
     return df_out
 
 
-def spatial_statistics_summary(
+def spatial_stats_summary(
     data: xr.DataArray | xr.Dataset,
     areas: gpd.GeoDataFrame,
     name: str = "area",
-    on_vars: list | None = None,
-    on_dims: list | None = None,
-    on_dim_values: dict[str, Any] | None = None,
-    bins: np.ndarray | None = None,
-    bins_labels: list | None = None,
-    all_bins: bool | None = False,
-    cell_area: tuple[float | int, str] | None = None,
-    dropna: bool | None = False,
     mask_kwargs: dict[str, Any] | None = None,
-    stats_kwargs: dict[str, Any] | None = None,
+    **kwargs,
 ) -> pd.DataFrame:
     """
-    Generate a spatial summary statistics of the data.
+    Generate a descriptive statistics summary of the data for given areas.
 
-    Returns a pandas DataFrame of data consireding the given areas based on `statistic_summary` function.
-    The summary includes count, mean, std, min, 25%, 50%, 75%, and max.
+    Returns a pandas DataFrame of data according to the given parameters.
+    The statistics includes count, mean, std, min, max, and 25%, 50%, and 75% percentiles.
     Bins can be provided to further group the data into intervals.
+    The statistics are calculated for each area provided in the `areas` GeoDataFrame.
 
     Parameters
     ----------
@@ -202,59 +195,38 @@ def spatial_statistics_summary(
         Areas to be used as spatial masks.
     name : str, optional
         Name of the area column in the output DataFrame. Default is 'area'.
-    on_vars : list, optional
-        Variables on which the statistics are calculated. If None (default), all variables are kept.
-    on_dims : list, optional
-        Dimensions on which the statistics are calculated. If None (default), all dimensions are kept.
-        Spatial dimensions (i.e., `lon` or `x` and `lat` or `y`) are removed by default.
-    on_dim_values : sequence, optional
-        Values of dimensions to be kept in the summary. If None (default), all values are kept.
-    bins : list or np.ndarray, optional
-        Bins defining data intervals. If None (default), no binning is performed.
-    bins_labels : list, optional
-        Labels for the bins. If None (default), bins values are used as labels.
-        The length of the list must be equal to the number of bins. Ignored if `bins` is None.
-    all_bins : bool, optional
-        If True, a additional bin corresponding to the bounds of `bins` is added to the summary. Default is False.
-        Ignored if `bins` is None.
-    cell_area : tuple of float or int and str, optional
-        Add a column to the summary with the given associated area calculated based on the count statistic
-        variable. The tuple must contain the area value and the unit of the area.
-    dropna : bool, optional
-        If True, dimensions with NaN values are removed. Default is False.
     mask_kwargs : dict, optional
         Additional keyword arguments passed to `regionmask.from_geopandas`.
-    stats_kwargs : dict, optional
-        Additional keyword arguments passed to `statistics_summary`.
+    **kwargs : dict, optional
+        Additional keyword arguments passed to `lsapy.stats.stats_summary`.
 
     Returns
     -------
     pd.DataFrame
-        A DataFrame with the statistics for the defined areas, dimensions and variables, including:
-        count, mean, std, min, 25%, 50%, 75%, and max.
+        A DataFrame with the statistics for each area, including:
+        count, mean, std, min, max, and 25%, 50%, and 75% percentiles.
+
+    Examples
+    --------
+    >>> # define your LandSuitabilityAnalysis
+    >>> lsa.run(inplace=True)
+    >>> # load areas as a GeoDataFrame
+    >>> import geopandas as gpd
+    >>> areas = gpd.read_file("path_to_your_areas_file.shp")
+
+    We can then compute the statistics summary for each area:
+
+    >>> spatial_stats_summary(lsa.data, areas)
     """
     if mask_kwargs is None:
         mask_kwargs = {}
-    if stats_kwargs is None:
-        stats_kwargs = {}
 
     regions = regionmask.from_geopandas(areas, name=name, **mask_kwargs)
     mask = regions.mask_3D(data)
 
     out = []
-    for r in mask.region.values:
-        df = stats_summary(
-            data.where(mask.sel(region=r)),
-            on_vars=on_vars,
-            on_dims=on_dims,
-            on_dim_values=on_dim_values,
-            bins=bins,
-            bins_labels=bins_labels,
-            all_bins=all_bins,
-            cell_area=cell_area,
-            dropna=dropna,
-            **stats_kwargs,
-        )
+    for r in mask["region"].values:
+        df = stats_summary(data.where(mask.sel(region=r)), **kwargs)
         df.insert(0, name, regions[r].name)
         out.append(df)
     return pd.concat(out)

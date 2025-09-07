@@ -10,7 +10,7 @@ import xarray as xr
 
 
 def stats_summary(
-    data: xr.DataArray | xr.Dataset,
+    data: xr.Dataset,
     on_vars: list | None = None,
     on_dims: list | None = None,
     on_dim_values: dict[str, Any] | None = None,
@@ -30,7 +30,7 @@ def stats_summary(
 
     Parameters
     ----------
-    data : xr.DataArray | xr.Dataset
+    data : xr.Dataset
         The input data.
     on_vars : list, optional
         Variables for which the statistics are calculated. If None (default), all variables are kept.

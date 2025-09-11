@@ -63,7 +63,7 @@ def boolean(x, op: str, thresh: int | float, skipna: bool = True):
     elif op in binary_ops.values():
         pass
     else:
-        raise ValueError(f"Operator {op} not recognized.")
+        raise ValueError(f"Operator '{op}' not recognized.")
 
     res = getattr(operator, op)(x, thresh)
     if skipna:

@@ -61,6 +61,47 @@ class TestDiscrete:
         assert np.isnan(func.discrete(1, rules))
 
 
+class TestBoolean:
+    def test_operators(self):
+        with pytest.raises(ValueError, match="Operator 'invalid_op' not recognized."):
+            func.boolean(1, "invalid_op", 3)
+
+    def test_outputs(self):
+        x = np.array([1, 2, 3, 4, 5])
+
+        ops = {
+            ">": np.array([False, False, False, True, True]),
+            "<": np.array([True, True, False, False, False]),
+            ">=": np.array([False, False, True, True, True]),
+            "<=": np.array([True, True, True, False, False]),
+            "==": np.array([False, False, True, False, False]),
+            "!=": np.array([True, True, False, True, True]),
+            "gt": np.array([False, False, False, True, True]),
+            "lt": np.array([True, True, False, False, False]),
+            "ge": np.array([False, False, True, True, True]),
+            "le": np.array([True, True, True, False, False]),
+            "eq": np.array([False, False, True, False, False]),
+            "ne": np.array([True, True, False, True, True]),
+        }
+
+        for op, expected in ops.items():
+            result = func.boolean(x, op=op, thresh=3)
+            np.testing.assert_array_equal(result, expected)
+
+    def test_skipna(self):
+        x = np.array([1, 2, np.nan, 4, 5])
+
+        # skipna=True (default)
+        result = func.boolean(x, op=">", thresh=3, skipna=True)
+        expected = np.array([False, False, np.nan, True, True])
+        np.testing.assert_array_equal(result, expected)
+
+        # skipna=False
+        result = func.boolean(x, op=">", thresh=3, skipna=False)
+        expected = np.array([False, False, False, True, True])
+        np.testing.assert_array_equal(result, expected)
+
+
 class TestLogistic:
     def test_midpoint(self):
         # if x < b (midpoint), then logistic(x) < 0.5 for a > 0

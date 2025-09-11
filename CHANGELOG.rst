@@ -10,6 +10,10 @@ Announcements
 ^^^^^^^^^^^^^
 * `LSAPy` is now available on `conda-forge <https://anaconda.org/conda-forge/lsapy>`_ (issue `#68 <https://github.com/baptistehamon/lsapy/issues/68>`_, PR `#74 <https://github.com/baptistehamon/lsapy/pull/74>`_).
 
+New features
+^^^^^^^^^^^^
+* A new ``boolean`` suitability function has been added (issue `#85 <https://github.com/baptistehamon/lsapy/issues/85>`_, PR `#86 <https://github.com/baptistehamon/lsapy/pull/86>`_).
+
 Breaking changes
 ^^^^^^^^^^^^^^^^
 * The ``lsapy.statistics`` module has been renamed to ``lsapy.stats`` (PR `#71 <https://github.com/baptistehamon/lsapy/pull/71>`_).

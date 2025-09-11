@@ -25,6 +25,7 @@ Suitability Functions
    :toctree: generated
    :nosignatures:
 
+   functions.boolean
    functions.discrete
    functions.logistic
    functions.sigmoid

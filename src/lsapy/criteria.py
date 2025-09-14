@@ -82,8 +82,8 @@ class SuitabilityCriteria:
 
     def __init__(
         self,
-        name: str,
-        indicator: xr.DataArray,
+        name: str | None = None,
+        indicator: xr.DataArray | None = None,
         func: SuitabilityFunction | None = None,
         weight: int | float | None = 1,
         category: str | None = None,
@@ -110,11 +110,147 @@ class SuitabilityCriteria:
             self._attrs.update(attrs)
 
         self.is_computed = is_computed
-        self._from_indicator = _get_indicator_description(indicator)
 
     def __repr__(self) -> str:
         """Return a string representation of the suitability criteria."""
         return fmt.sc_repr(self)
+
+    @property
+    def indicator(self) -> xr.DataArray:
+        """
+        The indicator DataArray.
+
+        Returns
+        -------
+        xr.DataArray
+            The indicator DataArray.
+        """
+        return self._indicator
+
+    @indicator.setter
+    def indicator(self, value: xr.DataArray) -> None:
+        """
+        Set the indicator DataArray.
+
+        Parameters
+        ----------
+        value : xr.DataArray
+            The indicator DataArray to set.
+        """
+        if not isinstance(value, xr.DataArray) and value is not None:
+            raise TypeError("The indicator must be an xarray DataArray.")
+        if value is not None:
+            self._from_indicator = _get_indicator_description(value)
+        self._indicator = value
+
+    @property
+    def func(self) -> SuitabilityFunction | None:
+        """
+        The suitability function.
+
+        Returns
+        -------
+        SuitabilityFunction | None
+            The suitability function.
+        """
+        return self._func
+
+    @func.setter
+    def func(self, value: SuitabilityFunction | None) -> None:
+        """
+        Set the suitability function.
+
+        Parameters
+        ----------
+        value : SuitabilityFunction | None
+            The suitability function to set.
+        """
+        if not isinstance(value, SuitabilityFunction) and value is not None:
+            raise TypeError("The function must be a SuitabilityFunction.")
+        self._func = value
+
+    @property
+    def weight(self) -> float:
+        """
+        The weight of the suitability criteria.
+
+        Returns
+        -------
+        float
+            The weight of the suitability criteria.
+        """
+        return self._weight
+
+    @weight.setter
+    def weight(self, value: int | float | None) -> None:
+        """
+        Set the weight of the suitability criteria.
+
+        Parameters
+        ----------
+        value : int | float | None
+            The weight of the suitability criteria. If None, the weight is set to 1.
+        """
+        if value is None:
+            self._weight = 1.0
+        elif not isinstance(value, (int, float)):
+            raise TypeError("The weight must be a number.")
+        elif value <= 0:
+            raise ValueError("The weight must be a positive number.")
+        else:
+            self._weight = float(value)
+
+    @property
+    def category(self) -> str | None:
+        """
+        The category of the suitability criteria.
+
+        Returns
+        -------
+        str | None
+            The category of the suitability criteria.
+        """
+        return self._category
+
+    @category.setter
+    def category(self, value: str | None) -> None:
+        """
+        Set the category of the suitability criteria.
+
+        Parameters
+        ----------
+        value : str | None
+            The category of the suitability criteria. If None, the category is set to None.
+        """
+        if value is not None and not isinstance(value, str):
+            raise TypeError("The category must be a string.")
+        self._category = value
+
+    @property
+    def is_computed(self) -> bool:
+        """
+        Whether the indicator data already contains the computed suitability values.
+
+        Returns
+        -------
+        bool
+            True if the indicator data already contains the computed suitability values, False otherwise.
+        """
+        return self._is_computed
+
+    @is_computed.setter
+    def is_computed(self, value: bool) -> None:
+        """
+        Set whether the indicator data already contains the computed suitability values.
+
+        Parameters
+        ----------
+        value : bool
+            True if the indicator data already contains the computed suitability values, False otherwise.
+        """
+        if not isinstance(value, bool):
+            raise TypeError("is_computed must be a boolean.")
+        self._is_computed = value
 
     @property
     def attrs(self) -> dict[Any, Any]:

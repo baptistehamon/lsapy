@@ -22,7 +22,7 @@ class TestSuitabilityCriteria:
             }
         )
         expected_repr = (
-            "<SuitabilityCriteria> 'annual_precipitation' (weight: 1, category: climate)\n"
+            "<SuitabilityCriteria> 'annual_precipitation' (weight: 1.0, category: climate)\n"
             "Function:\n"
             "    SuitabilityFunction(func=vetharaniam2022_eq5, params={'a': -0.71, 'b': 1100})\n"
             "Indicator:\n"
@@ -37,17 +37,20 @@ class TestSuitabilityCriteria:
 
         # test for drainage criteria
         expected_repr = (
-            "<SuitabilityCriteria> 'drainage_class' (weight: 2, category: soilTerrain)\n"
+            "<SuitabilityCriteria> 'drainage_class' (weight: 2.0, category: soilTerrain)\n"
             "Function:\n"
             "    SuitabilityFunction(func=discrete, params={'rules': {1: 0, 2: 0.1, 3: 0.5, 4:...\n"
             "Indicator:\n"
             "    Name        drainage \n"
             "    Data        float64 200B 3.0 3.0 3.0 3.0 3.0 3.0 ... 3.0 3.0 3.0 3.0 3.0 3.0\n"
-            "    Dimensions  lat: 5, lon: 5 \n"
-            "Attributes:\n"
-            "    *empty*"
+            "    Dimensions  lat: 5, lon: 5 "
         )
         assert repr(criteria_drain) == expected_repr
+
+        # test empty criteria
+        sc = SuitabilityCriteria()
+        expected_repr = "<SuitabilityCriteria> (weight: 1.0)\n    *undefined*"
+        assert repr(sc) == expected_repr
 
     def test_attrs(self, criteria_anpr, annual_precip, sf_anpr):
         assert criteria_anpr.attrs == {}
@@ -75,6 +78,25 @@ class TestSuitabilityCriteria:
         assert sc.attrs["description"] == "This is the annual precipitation criteria."
         assert sc.attrs["comment"] == "Some comment about annual precipitation."
         assert sc.attrs["another_attr"] == "value"
+
+    def test_setting_properties(self):
+        sc = SuitabilityCriteria()
+        # test invalid properties
+        with pytest.raises(TypeError, match="The indicator must be an xarray DataArray."):
+            sc.indicator = [1, 2, 3]
+        with pytest.raises(TypeError, match="The function must be a SuitabilityFunction."):
+            sc.func = "not_a_function"
+        with pytest.raises(TypeError, match="The weight must be a number."):
+            sc.weight = "not_a_number"
+        with pytest.raises(ValueError, match="The weight must be a positive number."):
+            sc.weight = -1
+        with pytest.raises(TypeError, match="The category must be a string."):
+            sc.category = 123
+        with pytest.raises(TypeError, match="is_computed must be a boolean."):
+            sc.is_computed = "not_a_boolean"
+        # test valid properties
+        sc.weight = None
+        assert sc.weight == 1.0
 
     def test_format(self, criteria_anpr):
         sc = criteria_anpr.compute()

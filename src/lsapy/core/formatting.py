@@ -68,22 +68,32 @@ def sc_repr(sc: SuitabilityCriteria) -> str:
 
     col_width = _calculate_col_width([f"{k}:" for k in sc.attrs.keys()] + ["Dimensions"])
 
-    summary = [f"<SuitabilityCriteria> {sc.name!r} {sc_params_repr(sc)}"]
+    if not sc.name:
+        name = ""
+    else:
+        name = f" {sc.name!r}"
+
+    summary = [f"<SuitabilityCriteria>{name} {sc_params_repr(sc)}"]
 
     if sc.func:
         summary.extend(["Function:", f"    {maybe_truncate(sf_repr(sc.func), max_width)}"])
 
-    dims = pretty_print("    Dimensions", col_width)
-    summary.extend(
-        [
-            "Indicator:",
-            f"{pretty_print('    Name', col_width)}{sc.indicator.name} ",
-            data_repr(sc.indicator, col_width, max_width),
-            f"{dims}{dim_summary_limited(sc.indicator.sizes, len(dims) + 1, max_rows)} ",
-        ]
-    )
+    if sc.indicator is not None:
+        dims = pretty_print("    Dimensions", col_width)
+        summary.extend(
+            [
+                "Indicator:",
+                f"{pretty_print('    Name', col_width)}{sc.indicator.name} ",
+                data_repr(sc.indicator, col_width, max_width),
+                f"{dims}{dim_summary_limited(sc.indicator.sizes, len(dims) + 1, max_rows)} ",
+            ]
+        )
 
-    summary.append(attrs_repr(sc.attrs, col_width=col_width, max_rows=max_rows))
+    if sc.attrs:
+        summary.append(attrs_repr(sc.attrs, col_width=col_width, max_rows=max_rows))
+
+    if not sc.func and not sc.indicator and not sc.attrs:
+        summary.append("    *undefined*")
 
     return "\n".join(summary)
 

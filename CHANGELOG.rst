@@ -13,6 +13,8 @@ Announcements
 New features
 ^^^^^^^^^^^^
 * A new ``boolean`` suitability function has been added (issue `#85 <https://github.com/baptistehamon/lsapy/issues/85>`_, PR `#86 <https://github.com/baptistehamon/lsapy/pull/86>`_).
+* The ``name`` and ``indicator`` arguments of ``SuitabilityCriteria`` can now be optional (issue `#84 <https://github.com/baptistehamon/lsapy/issues/84>`_, PR `#87 <https://github.com/baptistehamon/lsapy/issues/87>`_)
+* A ``setter`` has been added to ``SuitabilityCriteria`` attributes (issue `#84 <https://github.com/baptistehamon/lsapy/issues/84>`_, PR `#87 <https://github.com/baptistehamon/lsapy/issues/87>`_)
 
 Breaking changes
 ^^^^^^^^^^^^^^^^

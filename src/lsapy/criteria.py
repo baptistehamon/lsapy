@@ -144,6 +144,89 @@ class SuitabilityCriteria:
         self._indicator = value
 
     @property
+    def func(self) -> SuitabilityFunction | None:
+        """
+        The suitability function.
+
+        Returns
+        -------
+        SuitabilityFunction | None
+            The suitability function.
+        """
+        return self._func
+
+    @func.setter
+    def func(self, value: SuitabilityFunction | None) -> None:
+        """
+        Set the suitability function.
+
+        Parameters
+        ----------
+        value : SuitabilityFunction | None
+            The suitability function to set.
+        """
+        if not isinstance(value, SuitabilityFunction) and value is not None:
+            raise TypeError("The function must be a SuitabilityFunction.")
+        self._func = value
+
+    @property
+    def weight(self) -> float:
+        """
+        The weight of the suitability criteria.
+
+        Returns
+        -------
+        float
+            The weight of the suitability criteria.
+        """
+        return self._weight
+
+    @weight.setter
+    def weight(self, value: int | float | None) -> None:
+        """
+        Set the weight of the suitability criteria.
+
+        Parameters
+        ----------
+        value : int | float | None
+            The weight of the suitability criteria. If None, the weight is set to 1.
+        """
+        if value is None:
+            self._weight = 1.0
+        elif not isinstance(value, (int, float)):
+            raise TypeError("The weight must be a number.")
+        elif value <= 0:
+            raise ValueError("The weight must be a positive number.")
+        else:
+            self._weight = float(value)
+
+    @property
+    def category(self) -> str | None:
+        """
+        The category of the suitability criteria.
+
+        Returns
+        -------
+        str | None
+            The category of the suitability criteria.
+        """
+        return self._category
+
+    @category.setter
+    def category(self, value: str | None) -> None:
+        """
+        Set the category of the suitability criteria.
+
+        Parameters
+        ----------
+        value : str | None
+            The category of the suitability criteria. If None, the category is set to None.
+        """
+        if value is not None and not isinstance(value, str):
+            raise TypeError("The category must be a string.")
+        self._category = value
+
+    @property
     def attrs(self) -> dict[Any, Any]:
         """
         Dictionary of the suitability criteria attributes.

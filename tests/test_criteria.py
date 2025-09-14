@@ -22,7 +22,7 @@ class TestSuitabilityCriteria:
             }
         )
         expected_repr = (
-            "<SuitabilityCriteria> 'annual_precipitation' (weight: 1, category: climate)\n"
+            "<SuitabilityCriteria> 'annual_precipitation' (weight: 1.0, category: climate)\n"
             "Function:\n"
             "    SuitabilityFunction(func=vetharaniam2022_eq5, params={'a': -0.71, 'b': 1100})\n"
             "Indicator:\n"
@@ -37,7 +37,7 @@ class TestSuitabilityCriteria:
 
         # test for drainage criteria
         expected_repr = (
-            "<SuitabilityCriteria> 'drainage_class' (weight: 2, category: soilTerrain)\n"
+            "<SuitabilityCriteria> 'drainage_class' (weight: 2.0, category: soilTerrain)\n"
             "Function:\n"
             "    SuitabilityFunction(func=discrete, params={'rules': {1: 0, 2: 0.1, 3: 0.5, 4:...\n"
             "Indicator:\n"

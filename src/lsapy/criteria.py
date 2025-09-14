@@ -82,8 +82,8 @@ class SuitabilityCriteria:
 
     def __init__(
         self,
-        name: str,
-        indicator: xr.DataArray,
+        name: str | None = None,
+        indicator: xr.DataArray | None = None,
         func: SuitabilityFunction | None = None,
         weight: int | float | None = 1,
         category: str | None = None,
@@ -110,11 +110,38 @@ class SuitabilityCriteria:
             self._attrs.update(attrs)
 
         self.is_computed = is_computed
-        self._from_indicator = _get_indicator_description(indicator)
 
     def __repr__(self) -> str:
         """Return a string representation of the suitability criteria."""
         return fmt.sc_repr(self)
+
+    @property
+    def indicator(self) -> xr.DataArray:
+        """
+        The indicator DataArray.
+
+        Returns
+        -------
+        xr.DataArray
+            The indicator DataArray.
+        """
+        return self._indicator
+
+    @indicator.setter
+    def indicator(self, value: xr.DataArray) -> None:
+        """
+        Set the indicator DataArray.
+
+        Parameters
+        ----------
+        value : xr.DataArray
+            The indicator DataArray to set.
+        """
+        if not isinstance(value, xr.DataArray) and value is not None:
+            raise TypeError("The indicator must be an xarray DataArray.")
+        if value is not None:
+            self._from_indicator = _get_indicator_description(value)
+        self._indicator = value
 
     @property
     def attrs(self) -> dict[Any, Any]:

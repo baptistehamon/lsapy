@@ -227,6 +227,32 @@ class SuitabilityCriteria:
         self._category = value
 
     @property
+    def is_computed(self) -> bool:
+        """
+        Whether the indicator data already contains the computed suitability values.
+
+        Returns
+        -------
+        bool
+            True if the indicator data already contains the computed suitability values, False otherwise.
+        """
+        return self._is_computed
+
+    @is_computed.setter
+    def is_computed(self, value: bool) -> None:
+        """
+        Set whether the indicator data already contains the computed suitability values.
+
+        Parameters
+        ----------
+        value : bool
+            True if the indicator data already contains the computed suitability values, False otherwise.
+        """
+        if not isinstance(value, bool):
+            raise TypeError("is_computed must be a boolean.")
+        self._is_computed = value
+
+    @property
     def attrs(self) -> dict[Any, Any]:
         """
         Dictionary of the suitability criteria attributes.

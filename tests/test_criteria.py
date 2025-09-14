@@ -76,6 +76,25 @@ class TestSuitabilityCriteria:
         assert sc.attrs["comment"] == "Some comment about annual precipitation."
         assert sc.attrs["another_attr"] == "value"
 
+    def test_setting_properties(self):
+        sc = SuitabilityCriteria()
+        # test invalid properties
+        with pytest.raises(TypeError, match="The indicator must be an xarray DataArray."):
+            sc.indicator = [1, 2, 3]
+        with pytest.raises(TypeError, match="The function must be a SuitabilityFunction."):
+            sc.func = "not_a_function"
+        with pytest.raises(TypeError, match="The weight must be a number."):
+            sc.weight = "not_a_number"
+        with pytest.raises(ValueError, match="The weight must be a positive number."):
+            sc.weight = -1
+        with pytest.raises(TypeError, match="The category must be a string."):
+            sc.category = 123
+        with pytest.raises(TypeError, match="is_computed must be a boolean."):
+            sc.is_computed = "not_a_boolean"
+        # test valid properties
+        sc.weight = None
+        assert sc.weight == 1.0
+
     def test_format(self, criteria_anpr):
         sc = criteria_anpr.compute()
 

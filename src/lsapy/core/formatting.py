@@ -78,7 +78,7 @@ def sc_repr(sc: SuitabilityCriteria) -> str:
     if sc.func:
         summary.extend(["Function:", f"    {maybe_truncate(sf_repr(sc.func), max_width)}"])
 
-    if sc.indicator:
+    if sc.indicator is not None:
         dims = pretty_print("    Dimensions", col_width)
         summary.extend(
             [

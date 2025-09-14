@@ -43,11 +43,14 @@ class TestSuitabilityCriteria:
             "Indicator:\n"
             "    Name        drainage \n"
             "    Data        float64 200B 3.0 3.0 3.0 3.0 3.0 3.0 ... 3.0 3.0 3.0 3.0 3.0 3.0\n"
-            "    Dimensions  lat: 5, lon: 5 \n"
-            "Attributes:\n"
-            "    *empty*"
+            "    Dimensions  lat: 5, lon: 5 "
         )
         assert repr(criteria_drain) == expected_repr
+
+        # test empty criteria
+        sc = SuitabilityCriteria()
+        expected_repr = "<SuitabilityCriteria> (weight: 1.0)\n    *undefined*"
+        assert repr(sc) == expected_repr
 
     def test_attrs(self, criteria_anpr, annual_precip, sf_anpr):
         assert criteria_anpr.attrs == {}

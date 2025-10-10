@@ -14,7 +14,17 @@ except ImportError:
     plt = None
     warnings.warn("Matplotlib not found. Plotting functionality will be disabled.", stacklevel=2)
 
-__all__ = ["boolean", "discrete"]
+__all__ = [
+    "boolean",
+    "discrete",
+    "logistic",
+    "sigmoid",
+    "vetharaniam2022_eq3",
+    "vetharaniam2022_eq5",
+    "vetharaniam2024_eq8",
+    "vetharaniam2024_eq10",
+    "fit",
+]
 
 FIT_TYPES = ["sigmoid", "gaussian"]  # only sigmoid and gaussian need to be fitted
 binary_ops = {">": "gt", "<": "lt", ">=": "ge", "<=": "le", "==": "eq", "!=": "ne"}

@@ -2,13 +2,14 @@
 
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
+from functools import partial
 from typing import Any
 
 import xarray as xr
 
 import lsapy.core.formatting as fmt
-from lsapy.functions import SuitabilityFunction
+from lsapy.core.functions import get_function_from_name
 
 __all__ = ["SuitabilityCriteria"]
 
@@ -27,8 +28,10 @@ class SuitabilityCriteria:
         Name of the suitability criteria.
     indicator : xr.DataArray
         Indicator on which the criteria is based.
-    func : SuitabilityFunction, optional
-        Suitability function describing how the suitability of the criteria is computed.
+    func : Callable, optional
+        Standardization function that takes the indicator as input and returns the suitability values.
+    fparams : dict, optional
+        A dictionary of parameters to pass to the function `func`. The default is None.
     weight : int | float, optional
         Weight of the criteria used in the aggregation process if a weighted aggregation method is used.
         The default is 1.
@@ -84,7 +87,8 @@ class SuitabilityCriteria:
         self,
         name: str | None = None,
         indicator: xr.DataArray | None = None,
-        func: SuitabilityFunction | None = None,
+        func: Callable | None = None,
+        fparams: dict[str, Any] | None = None,
         weight: int | float | None = 1,
         category: str | None = None,
         long_name: str | None = None,
@@ -95,9 +99,12 @@ class SuitabilityCriteria:
     ) -> None:
         self.name = name
         self.indicator = indicator
-        self.func = func
         self.weight = weight
         self.category = category
+
+        if isinstance(func, str):
+            func = get_function_from_name(func)
+        self.func = partial(func, **fparams) if fparams else func
 
         self._attrs = {}
         if long_name:
@@ -144,29 +151,29 @@ class SuitabilityCriteria:
         self._indicator = value
 
     @property
-    def func(self) -> SuitabilityFunction | None:
+    def func(self) -> Callable | partial | None:
         """
-        The suitability function.
+        The standardization function.
 
         Returns
         -------
-        SuitabilityFunction | None
-            The suitability function.
+        Callable | None
+            The standardization function.
         """
         return self._func
 
     @func.setter
-    def func(self, value: SuitabilityFunction | None) -> None:
+    def func(self, value: Callable | partial | None) -> None:
         """
-        Set the suitability function.
+        Set the standardization function.
 
         Parameters
         ----------
-        value : SuitabilityFunction | None
-            The suitability function to set.
+        value : Callable | None
+            The standardization function to set.
         """
-        if not isinstance(value, SuitabilityFunction) and value is not None:
-            raise TypeError("The function must be a SuitabilityFunction.")
+        if not isinstance(value, Callable) and value is not None:
+            raise TypeError("The function must be a callable.")
         self._func = value
 
     @property

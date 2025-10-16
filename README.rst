@@ -41,17 +41,14 @@ You can now perform your LSA:
         "crit1": SuitabilityCriteria(
             name="criteria1",
             indicator=indicator1,  # xarray object
-            func=SuitabilityFunction(
-                name="function_name", params={"param1": value1, "param2": value2}
-            ),
+            func="function_name",
+            fparams={"param1": value1, "param2": value2},
         ),
         "crit2": SuitabilityCriteria(
             name="criteria2",
             indicator=indicator2,  # xarray object
-            func=SuitabilityFunction(
-                name="another_function_name",
-                params={"param1": value1, "param2": value2},
-            ),
+            func="another_function_name",
+            fparams={"param1": value1, "param2": value2},
         ),
         # add all necessary criteria
     }

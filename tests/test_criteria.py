@@ -24,7 +24,7 @@ class TestSuitabilityCriteria:
         expected_repr = (
             "<SuitabilityCriteria> 'annual_precipitation' (weight: 1.0, category: climate)\n"
             "Function:\n"
-            "    SuitabilityFunction(func=vetharaniam2022_eq5, params={'a': -0.71, 'b': 1100})\n"
+            "    vetharaniam2022_eq5(a=-0.71, b=1100)\n"
             "Indicator:\n"
             "    Name          prcptot \n"
             "    Data          int32 500B 1000 1000 1000 1000 1000 ... 1000 1000 1000 1000\n"
@@ -39,7 +39,7 @@ class TestSuitabilityCriteria:
         expected_repr = (
             "<SuitabilityCriteria> 'drainage_class' (weight: 2.0, category: soilTerrain)\n"
             "Function:\n"
-            "    SuitabilityFunction(func=discrete, params={'rules': {1: 0, 2: 0.1, 3: 0.5, 4:...\n"
+            "    discrete(rules={1: 0, 2: 0.1, 3: 0.5, 4: 0.9, 5: 1})\n"
             "Indicator:\n"
             "    Name        drainage \n"
             "    Data        float64 200B 3.0 3.0 3.0 3.0 3.0 3.0 ... 3.0 3.0 3.0 3.0 3.0 3.0\n"
@@ -84,7 +84,7 @@ class TestSuitabilityCriteria:
         # test invalid properties
         with pytest.raises(TypeError, match="The indicator must be an xarray DataArray."):
             sc.indicator = [1, 2, 3]
-        with pytest.raises(TypeError, match="The function must be a SuitabilityFunction."):
+        with pytest.raises(TypeError, match="The function must be a callable."):
             sc.func = "not_a_function"
         with pytest.raises(TypeError, match="The weight must be a number."):
             sc.weight = "not_a_number"

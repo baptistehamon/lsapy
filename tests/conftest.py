@@ -6,6 +6,7 @@ import pandas as pd
 import pytest
 import xarray as xr
 
+import lsapy.standardize as std
 from lsapy import SuitabilityCriteria, SuitabilityFunction
 
 
@@ -102,30 +103,50 @@ def sf_drain() -> SuitabilityFunction:
 
 
 @pytest.fixture
-def criteria_anpr(annual_precip, sf_anpr) -> SuitabilityCriteria:
+def criteria_anpr(annual_precip) -> SuitabilityCriteria:
     return SuitabilityCriteria(
-        name="annual_precipitation", category="climate", indicator=annual_precip, weight=1, func=sf_anpr
+        name="annual_precipitation",
+        category="climate",
+        indicator=annual_precip,
+        weight=1,
+        func=std.vetharaniam2022_eq5,
+        fparams={"a": -0.71, "b": 1100},
     )
 
 
 @pytest.fixture
-def criteria_gdd(growing_degree_days, sf_gdd) -> SuitabilityCriteria:
+def criteria_gdd(growing_degree_days) -> SuitabilityCriteria:
     return SuitabilityCriteria(
-        name="growing_degree_days", category="climate", indicator=growing_degree_days, weight=3, func=sf_gdd
+        name="growing_degree_days",
+        category="climate",
+        indicator=growing_degree_days,
+        weight=3,
+        func=std.vetharaniam2022_eq5,
+        fparams={"a": -0.55, "b": 1350},
     )
 
 
 @pytest.fixture
-def criteria_prd(potential_rooting_depth, sf_prd) -> SuitabilityCriteria:
+def criteria_prd(potential_rooting_depth) -> SuitabilityCriteria:
     return SuitabilityCriteria(
-        name="potential_rooting_depth", category="soilTerrain", indicator=potential_rooting_depth, weight=2, func=sf_prd
+        name="potential_rooting_depth",
+        category="soilTerrain",
+        indicator=potential_rooting_depth,
+        weight=2,
+        func=std.vetharaniam2022_eq5,
+        fparams={"a": -9.8, "b": 0.45},
     )
 
 
 @pytest.fixture
-def criteria_drain(drainage, sf_drain) -> SuitabilityCriteria:
+def criteria_drain(drainage) -> SuitabilityCriteria:
     return SuitabilityCriteria(
-        name="drainage_class", category="soilTerrain", indicator=drainage, weight=2, func=sf_drain
+        name="drainage_class",
+        category="soilTerrain",
+        indicator=drainage,
+        weight=2,
+        func=std.discrete,
+        fparams={"rules": {1: 0, 2: 0.1, 3: 0.5, 4: 0.9, 5: 1}},
     )
 
 

@@ -31,6 +31,7 @@ Internal changes
 * The name and year in the license file have been updated (PR `#76 <https://github.com/baptistehamon/lsapy/pull/76>`_).
 * The logo has been updated (PR `#80 <https://github.com/baptistehamon/lsapy/pull/80>`_).
 * Tests have been added for the ``lsapy.stats`` module functions (PR `#82 <https://github.com/baptistehamon/lsapy/pull/82>`_).
+* The README file has been updated integrating new standardization function workflow (issue `#92 <https://github.com/baptistehamon/lsapy/issues/92>`_, PR `#93 <https://github.com/baptistehamon/lsapy/issues/93>`_).
 
 Bug fixes
 ^^^^^^^^^

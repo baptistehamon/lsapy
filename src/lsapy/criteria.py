@@ -65,7 +65,8 @@ class SuitabilityCriteria:
     ...     weight=3,
     ...     category="soilTerrain",
     ...     indicator=drainage,
-    ...     func=SuitabilityFunction(name="discrete", params={"rules": {0: 0, 1: 0.1, 2: 0.5, 3: 0.9, 4: 1}}),
+    ...     func="discrete",
+    ...     fparams={"rules": {0: 0, 1: 0.1, 2: 0.5, 3: 0.9, 4: 1}},
     ... )
 
     Here is another example using the sample climate data with the growing degree days (GDD)
@@ -79,7 +80,8 @@ class SuitabilityCriteria:
     ...     weight=1,
     ...     category="climate",
     ...     indicator=gdd,
-    ...     func=SuitabilityFunction(name="vetharaniam2022_eq5", params={"a": -1.41, "b": 801}),
+    ...     func="vetharaniam2022_eq5",
+    ...     fparams={"a": -1.41, "b": 801},
     ... )
     """
 

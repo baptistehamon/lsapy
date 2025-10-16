@@ -61,7 +61,8 @@ class LandSuitabilityAnalysis:
     ...         weight=3,
     ...         category="soilTerrain",
     ...         indicator=drainage,
-    ...         func=SuitabilityFunction(name="discrete", params={"rules": {0: 0, 1: 0.1, 2: 0.5, 3: 0.9, 4: 1}}),
+    ...         func="discrete",
+    ...         fparams={"rules": {0: 0, 1: 0.1, 2: 0.5, 3: 0.9, 4: 1}},
     ...     ),
     ...     "growing_degree_days": SuitabilityCriteria(
     ...         name="growing_degree_days",
@@ -69,7 +70,8 @@ class LandSuitabilityAnalysis:
     ...         weight=1,
     ...         category="climate",
     ...         indicator=growing_degree_days(tas, thresh="10 degC", freq="YS-JUL"),
-    ...         func=SuitabilityFunction(name="vetharaniam2022_eq5", params={"a": -1.41, "b": 801}),
+    ...         func="vetharaniam2022_eq5",
+    ...         fparams={"a": -1.41, "b": 801},
     ...     ),
     ... }
 
@@ -204,7 +206,8 @@ class LandSuitabilityAnalysis:
         ...         weight=3,
         ...         category="soilTerrain",
         ...         indicator=drainage,
-        ...         func=SuitabilityFunction(name="discrete", params={"rules": {0: 0, 1: 0.1, 2: 0.5, 3: 0.9, 4: 1}}),
+        ...         func="discrete",
+        ...         fparams={"rules": {0: 0, 1: 0.1, 2: 0.5, 3: 0.9, 4: 1}},
         ...     ),
         ...     "growing_degree_days": SuitabilityCriteria(
         ...         name="growing_degree_days",
@@ -212,7 +215,8 @@ class LandSuitabilityAnalysis:
         ...         weight=1,
         ...         category="climate",
         ...         indicator=growing_degree_days(tas, thresh="10 degC", freq="YS-JUL"),
-        ...         func=SuitabilityFunction(name="vetharaniam2022_eq5", params={"a": -1.41, "b": 801}),
+        ...         func="vetharaniam2022_eq5",
+        ...         fparams={"a": -1.41, "b": 801},
         ...     ),
         ... }
 

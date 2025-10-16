@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+from functools import partial
+
+import lsapy.standardize as std
 from lsapy import SuitabilityCriteria, SuitabilityFunction
-from lsapy.core.formatting import sf_short_repr, summarize_criteria
+from lsapy.core.formatting import sc_func_repr, summarize_criteria
 
 
 class TestSummarizeCriteria:
@@ -38,9 +41,15 @@ class TestSummarizeCriteria:
 
 
 class TestRepr:
-    def test_sf(self):
+    def test_sf(self, sf_anpr):
         # test repr for function without params
         sf = SuitabilityFunction(name="sigmoid")
-        assert repr(sf) == "SuitabilityFunction(func=sigmoid)"
-        # test short repr for function without params
-        assert sf_short_repr(sf) == "sigmoid()"
+        assert repr(sf) == "sigmoid()"
+        # test repr for function with params
+        assert repr(sf_anpr) == "vetharaniam2022_eq5(a=-0.71, b=1100)"
+
+    def test_sc_func(self):
+        sc = SuitabilityCriteria("test", func="logistic")
+        assert sc_func_repr(sc.func) == repr(std.logistic)
+        sc.func = partial(std.logistic)
+        assert sc_func_repr(sc.func) == "logistic()"

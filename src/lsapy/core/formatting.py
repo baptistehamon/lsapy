@@ -24,21 +24,24 @@ if TYPE_CHECKING:
 
 
 def sf_repr(sf: SuitabilityFunction) -> str:
-    """Return a string representation of a SuitabilityFunction."""
-    start = f"SuitabilityFunction(func={sf.func.__name__}"
-    if sf.params:
-        end = f", params={sf.params})"
-    else:
-        end = ")"
-    return f"{start}{end}"
-
-
-def sf_short_repr(sf: SuitabilityFunction) -> str:
     """Return a short string representation of a SuitabilityFunction."""
     func = f"{sf.func.__name__}"
     if not sf.params:
         return f"{func}()"
     return f"{func}({', '.join(f'{k}={v}' for k, v in sf.params.items())})"
+
+
+def sc_func_repr(func) -> str:
+    """Return a string representation of a suitability criteria standardization function."""
+    if isinstance(func, functools.partial):
+        f = f"{func.func.__name__}"
+        if not func.args and not func.keywords:
+            return f"{f}()"
+        args = [repr(a) for a in func.args] if func.args else []
+        kwargs = [f"{k}={v!r}" for k, v in func.keywords.items()] if func.keywords else []
+        return f"{f}({', '.join(args + kwargs)})"
+    else:
+        return repr(func)
 
 
 def sc_params_repr(sc: SuitabilityCriteria) -> str:
@@ -76,7 +79,7 @@ def sc_repr(sc: SuitabilityCriteria) -> str:
     summary = [f"<SuitabilityCriteria>{name} {sc_params_repr(sc)}"]
 
     if sc.func:
-        summary.extend(["Function:", f"    {maybe_truncate(sf_repr(sc.func), max_width)}"])
+        summary.extend(["Function:", f"    {maybe_truncate(sc_func_repr(sc.func), max_width)}"])
 
     if sc.indicator is not None:
         dims = pretty_print("    Dimensions", col_width)
@@ -123,7 +126,7 @@ def summarize_criteria(
         cat = ""
 
     if criteria.func:
-        func = f"{sf_short_repr(criteria.func)} "
+        func = f"{sc_func_repr(criteria.func)} "
     else:
         func = ""
 

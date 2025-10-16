@@ -13,8 +13,10 @@ Announcements
 New features
 ^^^^^^^^^^^^
 * A new ``boolean`` suitability function has been added (issue `#85 <https://github.com/baptistehamon/lsapy/issues/85>`_, PR `#86 <https://github.com/baptistehamon/lsapy/pull/86>`_).
-* The ``name`` and ``indicator`` arguments of ``SuitabilityCriteria`` can now be optional (issue `#84 <https://github.com/baptistehamon/lsapy/issues/84>`_, PR `#87 <https://github.com/baptistehamon/lsapy/issues/87>`_)
-* A ``setter`` has been added to ``SuitabilityCriteria`` attributes (issue `#84 <https://github.com/baptistehamon/lsapy/issues/84>`_, PR `#87 <https://github.com/baptistehamon/lsapy/issues/87>`_)
+* The ``name`` and ``indicator`` arguments of ``SuitabilityCriteria`` can now be optional (issue `#84 <https://github.com/baptistehamon/lsapy/issues/84>`_, PR `#87 <https://github.com/baptistehamon/lsapy/issues/87>`_).
+* A ``setter`` has been added to ``SuitabilityCriteria`` attributes (issue `#84 <https://github.com/baptistehamon/lsapy/issues/84>`_, PR `#87 <https://github.com/baptistehamon/lsapy/issues/87>`_).
+* The ``lsapy.standardize`` module has been added with categorical and membership standardization functions (issue `#89 <https://github.com/baptistehamon/lsapy/issues/89>`_, PR `#91 <https://github.com/baptistehamon/lsapy/issues/91>`_).
+* The ``SuitabilityFunction`` is not longer required to define the standardization function in ``SuitabilityCriteria`` (issue `#89 <https://github.com/baptistehamon/lsapy/issues/89>`_, PR `#91 <https://github.com/baptistehamon/lsapy/issues/91>`_).
 
 Breaking changes
 ^^^^^^^^^^^^^^^^
@@ -22,6 +24,7 @@ Breaking changes
 * The ``lsapy.core.aggregation`` has been moved and renamed to ``lsapy.aggregate`` (PR `#71 <https://github.com/baptistehamon/lsapy/pull/71>`_).
 * The ``statistical_summary`` function has been renamed to ``stats_summary`` (PR `#82 <https://github.com/baptistehamon/lsapy/pull/82>`_).
 * The ``spatial_statistical_summary`` function has been renamed to ``spatial_stats_summary`` (PR `#82 <https://github.com/baptistehamon/lsapy/pull/82>`_).
+* The ``lsapy.functions`` module as well as ``SuitabilityFunction`` have been marked as deprecated and will be removed in a future release (issue `#89 <https://github.com/baptistehamon/lsapy/issues/89>`_, PR `#91 <https://github.com/baptistehamon/lsapy/issues/91>`_).
 
 Internal changes
 ^^^^^^^^^^^^^^^^

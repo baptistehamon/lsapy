@@ -91,7 +91,7 @@ class TestGetBestFit:
         assert p == (3, 1)
 
 
-class TestFitMembership:
+class TestFit:
     def test_simple(self):
         # test simple cas with plotting
         x = [-10, -6.5, -5, -3.5, 0]

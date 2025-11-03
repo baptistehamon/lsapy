@@ -55,7 +55,7 @@ class SuitabilityFunction:
     array(0.5, dtype=float32)
 
     Warnings
-    ----------
+    --------
     This class is deprecated and will be removed in a future release. Consider using the underlying functions
     directly from `lsapy.standardize` module.
     """

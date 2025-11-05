@@ -36,6 +36,11 @@ class SuitabilityFunction:
     params : dict[str, Any], optional
         Parameters of the function.
 
+    Warnings
+    --------
+    This class is deprecated and will be removed in a future release. Consider using the underlying functions
+    directly from `lsapy.standardize` module.
+
     Notes
     -----
     The implemented functions are (in parentheses the alternative names): ``discrete``, ``logistic``, ``sigmoid``,
@@ -53,11 +58,6 @@ class SuitabilityFunction:
     >>> func = SuitabilityFunction(name="discrete", params={"rules": {1: 0, 2: 0.1, 3: 0.5, 4: 0.9, 5: 1}})
     >>> func(3)
     array(0.5, dtype=float32)
-
-    Warnings
-    ----------
-    This class is deprecated and will be removed in a future release. Consider using the underlying functions
-    directly from `lsapy.standardize` module.
     """
 
     def __init__(self, func: Callable | None = None, name: str | None = None, params: dict[str, Any] | None = None):

@@ -125,6 +125,30 @@ class SuitabilityCriteria:
         return fmt.sc_repr(self)
 
     @property
+    def name(self) -> str:
+        """
+        The name of the criteria.
+
+        Returns
+        -------
+        str
+            The name of the criteria.
+        """
+        return self._name
+
+    @name.setter
+    def name(self, value: str | None) -> None:
+        """
+        Set the name of the criteria.
+
+        Parameters
+        ----------
+        value : str | None
+            The name of the criteria to set.
+        """
+        self._name = value
+
+    @property
     def indicator(self) -> xr.DataArray:
         """
         The indicator DataArray.

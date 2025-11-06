@@ -17,6 +17,7 @@ New features
 * A ``setter`` has been added to ``SuitabilityCriteria`` attributes (issue `#84 <https://github.com/baptistehamon/lsapy/issues/84>`_, PR `#87 <https://github.com/baptistehamon/lsapy/issues/87>`_).
 * The ``lsapy.standardize`` module has been added with categorical and membership standardization functions (issue `#89 <https://github.com/baptistehamon/lsapy/issues/89>`_, PR `#91 <https://github.com/baptistehamon/lsapy/issues/91>`_).
 * The ``SuitabilityFunction`` is not longer required to define the standardization function in ``SuitabilityCriteria`` (issue `#89 <https://github.com/baptistehamon/lsapy/issues/89>`_, PR `#91 <https://github.com/baptistehamon/lsapy/issues/91>`_).
+* ``SuitabilityCriteria.name`` is now a property of the class (PR `#97 <https://github.com/baptistehamon/lsapy/issues/97>`_).
 
 Breaking changes
 ^^^^^^^^^^^^^^^^

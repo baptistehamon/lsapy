@@ -18,6 +18,7 @@ New features
 * The ``lsapy.standardize`` module has been added with categorical and membership standardization functions (issue `#89 <https://github.com/baptistehamon/lsapy/issues/89>`_, PR `#91 <https://github.com/baptistehamon/lsapy/issues/91>`_).
 * The ``SuitabilityFunction`` is not longer required to define the standardization function in ``SuitabilityCriteria`` (issue `#89 <https://github.com/baptistehamon/lsapy/issues/89>`_, PR `#91 <https://github.com/baptistehamon/lsapy/issues/91>`_).
 * ``SuitabilityCriteria.name`` is now a property of the class (PR `#97 <https://github.com/baptistehamon/lsapy/issues/97>`_).
+* The ``LandSuitabilityAnalysis`` properties have been properly defined (PR `#98 <https://github.com/baptistehamon/lsapy/issues/98>`_).
 
 Breaking changes
 ^^^^^^^^^^^^^^^^

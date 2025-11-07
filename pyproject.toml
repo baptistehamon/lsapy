@@ -83,7 +83,7 @@ Issues = "https://github.com/baptistehamon/lsapy/issues"
 Zenodo = "https://doi.org/10.5281/zenodo.15015110"
 
 [tool.bumpversion]
-current_version = "0.2.1-dev10"
+current_version = "0.2.1-dev11"
 commit = true
 commit_args = "--no-verify --signoff"
 tag = false

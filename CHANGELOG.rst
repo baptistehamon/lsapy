@@ -19,6 +19,7 @@ New features
 * The ``SuitabilityFunction`` is not longer required to define the standardization function in ``SuitabilityCriteria`` (issue `#89 <https://github.com/baptistehamon/lsapy/issues/89>`_, PR `#91 <https://github.com/baptistehamon/lsapy/issues/91>`_).
 * ``SuitabilityCriteria.name`` is now a property of the class (PR `#97 <https://github.com/baptistehamon/lsapy/issues/97>`_).
 * The ``LandSuitabilityAnalysis`` properties have been properly defined (PR `#98 <https://github.com/baptistehamon/lsapy/issues/98>`_).
+* The API Reference documentation has been updated and improved (issue `#96 <https://github.com/baptistehamon/lsapy/issues/96>`_, PR `#99 <https://github.com/baptistehamon/lsapy/issues/99>`_).
 
 Breaking changes
 ^^^^^^^^^^^^^^^^

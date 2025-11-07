@@ -121,6 +121,7 @@ def stats_summary(
 
     Finally, we can get the area associated with each bin by providing the area of each cell in the data.
     Assuming that each cell has an area of 5 hectares (ha), we can do:
+
     >>> stats = stats_summary(
     ...     lsa.data,
     ...     bins=[0, 0.25, 0.5, 0.75, 1],

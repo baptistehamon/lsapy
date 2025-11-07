@@ -61,7 +61,8 @@ class LandSuitabilityAnalysis:
     ...         weight=3,
     ...         category="soilTerrain",
     ...         indicator=drainage,
-    ...         func=SuitabilityFunction(name="discrete", params={"rules": {0: 0, 1: 0.1, 2: 0.5, 3: 0.9, 4: 1}}),
+    ...         func="discrete",
+    ...         fparams={"rules": {0: 0, 1: 0.1, 2: 0.5, 3: 0.9, 4: 1}},
     ...     ),
     ...     "growing_degree_days": SuitabilityCriteria(
     ...         name="growing_degree_days",
@@ -69,7 +70,8 @@ class LandSuitabilityAnalysis:
     ...         weight=1,
     ...         category="climate",
     ...         indicator=growing_degree_days(tas, thresh="10 degC", freq="YS-JUL"),
-    ...         func=SuitabilityFunction(name="vetharaniam2022_eq5", params={"a": -1.41, "b": 801}),
+    ...         func="vetharaniam2022_eq5",
+    ...         fparams={"a": -1.41, "b": 801},
     ...     ),
     ... }
 
@@ -100,17 +102,18 @@ class LandSuitabilityAnalysis:
         self.land_use = land_use
         self.criteria = criteria
 
-        self._attrs = {}
+        _attrs = {}
         if short_name:
-            self._attrs["short_name"] = short_name
+            _attrs.update({"short_name": short_name})
         if long_name:
-            self._attrs["long_name"] = long_name
+            _attrs.update({"long_name": long_name})
         if description:
-            self._attrs["description"] = description
+            _attrs.update({"description": description})
         if comment:
-            self._attrs["comment"] = comment
-        if attrs and isinstance(attrs, Mapping):
-            self._attrs.update(attrs)
+            _attrs.update({"comment": comment})
+        if attrs:
+            _attrs.update(dict(attrs))
+        self.attrs = _attrs
 
         self._sort_criteria_by_weight()  # important if suitability as limited factor
         self._criteria_list = [sc.name for sc in self.criteria.values()]
@@ -120,6 +123,150 @@ class LandSuitabilityAnalysis:
     def __repr__(self) -> str:
         """Return a string representation of the land suitability."""
         return lsa_repr(self)
+
+    @property
+    def land_use(self) -> str:
+        """
+        Name of the land use.
+
+        Returns
+        -------
+        str
+            Name of the land use.
+        """
+        return self._land_use
+
+    @land_use.setter
+    def land_use(self, value: str) -> None:
+        """
+        Set the name of the land use.
+
+        Parameters
+        ----------
+        value : str
+            Name of the land use.
+        """
+        self._land_use = value
+
+    @property
+    def criteria(self) -> dict[str, SuitabilityCriteria]:
+        """
+        Dictionary of the suitability criteria.
+
+        Returns
+        -------
+        dict
+            Dictionary containing the suitability criteria.
+        """
+        return self._criteria
+
+    @criteria.setter
+    def criteria(self, value: dict[str, SuitabilityCriteria]) -> None:
+        """
+        Set the suitability criteria.
+
+        Parameters
+        ----------
+        value : dict[str, SuitabilityCriteria]
+            Dictionary of suitability criteria where the key is the name of the criteria.
+        """
+        self._criteria = value
+
+    @property
+    def data(self) -> xr.Dataset:
+        """
+        Dataset containing the computed suitability.
+
+        Returns
+        -------
+        xr.Dataset
+            Dataset containing the computed suitability.
+        """
+        return self._data
+
+    @data.setter
+    def data(self, value: xr.Dataset) -> None:
+        """
+        Set the computed suitability dataset.
+
+        Parameters
+        ----------
+        value : xr.Dataset
+            Dataset containing the computed suitability.
+        """
+        self._data = value
+
+    @property
+    def category(self) -> list[str | None]:
+        """
+        List of categories defined in the suitability criteria.
+
+        Returns
+        -------
+        list[str | None]
+            List of categories defined in the suitability criteria.
+        """
+        return self._category
+
+    @category.setter
+    def category(self, value: list[str | None]) -> None:
+        """
+        Set the list of categories defined in the suitability criteria.
+
+        Parameters
+        ----------
+        value : list[str | None]
+            List of categories defined in the suitability criteria.
+        """
+        self._category = value
+
+    @property
+    def criteria_by_category(self) -> dict[str | None, list[str]]:
+        """
+        Dictionary of criteria names grouped by category.
+
+        Returns
+        -------
+        dict
+            Dictionary where keys are categories and values are lists of criteria names.
+        """
+        return self._criteria_by_category
+
+    @criteria_by_category.setter
+    def criteria_by_category(self, value: dict[str | None, list[str]]) -> None:
+        """
+        Set the dictionary of criteria names grouped by category.
+
+        Parameters
+        ----------
+        value : dict[str | None, list[str]]
+            Dictionary where keys are categories and values are lists of criteria names.
+        """
+        self._criteria_by_category = value
+
+    @property
+    def weights_by_category(self) -> dict[str | None, float]:
+        """
+        Dictionary of total weights grouped by category.
+
+        Returns
+        -------
+        dict
+            Dictionary where keys are categories and values are total weights.
+        """
+        return self._weights_by_category
+
+    @weights_by_category.setter
+    def weights_by_category(self, value: dict[str | None, float]) -> None:
+        """
+        Set the dictionary of total weights grouped by category.
+
+        Parameters
+        ----------
+        value : dict[str | None, float]
+            Dictionary where keys are categories and values are total weights.
+        """
+        self._weights_by_category = value
 
     @property
     def attrs(self) -> dict[Any, Any]:
@@ -204,7 +351,8 @@ class LandSuitabilityAnalysis:
         ...         weight=3,
         ...         category="soilTerrain",
         ...         indicator=drainage,
-        ...         func=SuitabilityFunction(name="discrete", params={"rules": {0: 0, 1: 0.1, 2: 0.5, 3: 0.9, 4: 1}}),
+        ...         func="discrete",
+        ...         fparams={"rules": {0: 0, 1: 0.1, 2: 0.5, 3: 0.9, 4: 1}},
         ...     ),
         ...     "growing_degree_days": SuitabilityCriteria(
         ...         name="growing_degree_days",
@@ -212,7 +360,8 @@ class LandSuitabilityAnalysis:
         ...         weight=1,
         ...         category="climate",
         ...         indicator=growing_degree_days(tas, thresh="10 degC", freq="YS-JUL"),
-        ...         func=SuitabilityFunction(name="vetharaniam2022_eq5", params={"a": -1.41, "b": 801}),
+        ...         func="vetharaniam2022_eq5",
+        ...         fparams={"a": -1.41, "b": 801},
         ...     ),
         ... }
 

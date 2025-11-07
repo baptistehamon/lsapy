@@ -6,8 +6,8 @@
     :alt: LSAPy Logo
 
 LSAPy: Land Suitability Analysis in Python
-===========================================
-|pypi| |python-versions| |status| |testing| |coverage| |ruff| |pre-commit| |docs| |question| |zenodo|
+==========================================
+|pypi| |conda| |python-versions| |status| |testing| |coverage| |ruff| |pre-commit| |docs| |question| |zenodo|
 
 `LSAPy` stands for Land Suitability Analysis (LSA) in Python. Its objective is to make conducting
 LSA in Python easier and more accessible to users. It provides a set of objects built around
@@ -16,13 +16,18 @@ LSA in Python easier and more accessible to users. It provides a set of objects 
 .. _`xarray`: https://xarray.pydata.org/en/stable/
 
 Quick Start
--------------
+-----------
 To install `LSAPy`, you can use `pip`:
 
 .. code-block:: shell
 
     pip install lsapy
 
+or `conda`:
+
+.. code-block:: shell
+
+    conda install -c conda-forge lsapy
 
 You can now perform your LSA:
 
@@ -36,17 +41,14 @@ You can now perform your LSA:
         "crit1": SuitabilityCriteria(
             name="criteria1",
             indicator=indicator1,  # xarray object
-            func=SuitabilityFunction(
-                name="function_name", params={"param1": value1, "param2": value2}
-            ),
+            func="function_name",
+            fparams={"param1": value1, "param2": value2},
         ),
         "crit2": SuitabilityCriteria(
             name="criteria2",
             indicator=indicator2,  # xarray object
-            func=SuitabilityFunction(
-                name="another_function_name",
-                params={"param1": value1, "param2": value2},
-            ),
+            func="another_function_name",
+            fparams={"param1": value1, "param2": value2},
         ),
         # add all necessary criteria
     }
@@ -114,6 +116,10 @@ The Python package has been created following the `pyOpenSci Guidebook`_.
 .. |pypi| image:: https://img.shields.io/pypi/v/lsapy.svg
     :target: https://pypi.python.org/pypi/lsapy
     :alt: Python Package Index Build
+
+.. |conda| image:: https://img.shields.io/conda/vn/conda-forge/lsapy
+    :target: https://anaconda.org/conda-forge/lsapy
+    :alt: Conda Version
 
 .. |status| image:: https://www.repostatus.org/badges/latest/active.svg
     :target: https://www.repostatus.org/#active

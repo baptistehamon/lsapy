@@ -1,27 +1,98 @@
-"""Membership Function Module."""
+"""Standardization Functions Module."""
 
+import operator
 import warnings
 
-import matplotlib.pyplot as plt
 import numpy as np
 from scipy.optimize import curve_fit
 
 from lsapy.core.functions import declare_equation, equations, get_function_from_name
 
+try:
+    import matplotlib.pyplot as plt
+except ImportError:
+    plt = None
+    warnings.warn("Matplotlib not found. Plotting functionality will be disabled.", stacklevel=2)
+
 __all__ = [
-    "fit_membership",
+    "boolean",
+    "discrete",
     "logistic",
     "sigmoid",
     "vetharaniam2022_eq3",
     "vetharaniam2022_eq5",
     "vetharaniam2024_eq8",
     "vetharaniam2024_eq10",
+    "fit",
 ]
 
-EQUATION_TYPES = ["sigmoid", "gaussian"]
+FIT_TYPES = ["sigmoid", "gaussian"]  # only sigmoid and gaussian need to be fitted
+binary_ops = {">": "gt", "<": "lt", ">=": "ge", "<=": "le", "==": "eq", "!=": "ne"}
+
+
+@declare_equation("boolean")
+def boolean(x, op: str, thresh: int | float, skipna: bool = True):
+    """
+    Boolean function.
+
+    This function applies a boolean operation to the values based on a threshold.
+
+    Parameters
+    ----------
+    x : any
+        Input values.
+    op : {">", "gt", "<", "lt", ">=", "ge", "<=", "le", "==", "eq", "!=", "ne"}
+        Logical operator.
+    thresh : any
+        Threshold value.
+    skipna : bool, optional
+        Whether to skip NaN values. If True, NaN values in `x` will remain NaN in the output. Default is True.
+
+    Returns
+    -------
+    np.ndarray
+        Boolean mask of the operation.
+    """
+    if op in binary_ops:
+        op = binary_ops[op]
+    elif op in binary_ops.values():
+        pass
+    else:
+        raise ValueError(f"Operator '{op}' not recognized.")
+
+    res = getattr(operator, op)(x, thresh)
+    if skipna:
+        mask = np.isnan(x)
+        return np.where(mask, np.nan, res)
+    return res
+
+
+@declare_equation("categorical")
+@np.vectorize(otypes=[np.float32])
+def discrete(x, rules: dict[str | int, int | float]) -> np.ndarray:
+    """
+    Discrete function.
+
+    This function maps input values to a set of rules that define the output values.
+
+    Parameters
+    ----------
+    x : any
+        Input values to map.
+    rules : dict[str | int, int | float]
+        Rules to map the input values to output values. The keys correspond to the input values and the
+        values to its associated output values.
+
+    Returns
+    -------
+    np.ndarray
+        Mapped output values.
+    """
+    return rules.get(x, np.nan)
 
 
 @declare_equation("sigmoid")
+@np.vectorize(otypes=[np.float32])
 def logistic(x, a, b):
     r"""
     Logistic function capped to 1.
@@ -88,6 +159,7 @@ def sigmoid(x):
 
 
 @declare_equation("sigmoid", "VTR22_eq3")
+@np.vectorize(otypes=[np.float32])
 def vetharaniam2022_eq3(x, a, b):
     r"""
     Sigmoid like function.
@@ -132,6 +204,7 @@ def vetharaniam2022_eq3(x, a, b):
 
 
 @declare_equation("sigmoid", "VTR22_eq5")
+@np.vectorize(otypes=[np.float32])
 def vetharaniam2022_eq5(x, a, b):
     r"""
     Sigmoid like function.
@@ -170,6 +243,7 @@ def vetharaniam2022_eq5(x, a, b):
 
 
 @declare_equation("gaussian", "VTR24_eq8")
+@np.vectorize(otypes=[np.float32])
 def vetharaniam2024_eq8(x, a, b, c):
     r"""
     Gaussian like function.
@@ -210,6 +284,7 @@ def vetharaniam2024_eq8(x, a, b, c):
 
 
 @declare_equation("gaussian", "VTR24_eq10")
+@np.vectorize(otypes=[np.float32])
 def vetharaniam2024_eq10(x, a, b, c):
     r"""
     Gaussian like function.
@@ -249,9 +324,9 @@ def vetharaniam2024_eq10(x, a, b, c):
     return 2 / (1 + np.exp(a * np.power(np.power(x, c) - np.power(b, c), 2)))
 
 
-def fit_membership(x, y=None, fit_on: str | list[str] = "all", plot: bool = False, verbose: bool = False):
+def fit(x, y=None, kind: str | list[str] = "all", plot: bool = False, verbose: bool = False):
     """
-    Fit membership function to data.
+    Fit standardization functions to data.
 
     This function fits membership functions to the provided data. It helps to determine the best membership function
     to use on the data.
@@ -261,12 +336,11 @@ def fit_membership(x, y=None, fit_on: str | list[str] = "all", plot: bool = Fals
     x : any
         Input values to fit the functions on.
     y : any, optional
-        Target suitability values to fit the functions. Should be the same length as `x`. If not provided,
+        Target values to fit the functions. Should be the same length as `x`. If not provided,
         the default values are used (0, 0.25, 0.5, 0.75, 1).
-    fit_on : str | list[str], optional
-        List of equation or equation types to fit. `all, `sigmoid_like` and `gaussian_like` can also be used.
-        If 'all', all available equations are fitted. If '{TYPES}_like', all equations corresponding to the
-        type are fitted. Default is 'all'.
+    kind : str | list[str], optional
+        List of functions or function types to fit. If '{TYPES}_like', all equations corresponding to the
+        type are fitted (available types: 'sigmoid', 'gaussian'). If 'all', all available equations are fitted.
     plot : bool, optional
         Whether to plot the fitted functions. Default is False.
     verbose : bool, optional
@@ -276,24 +350,11 @@ def fit_membership(x, y=None, fit_on: str | list[str] = "all", plot: bool = Fals
     -------
     tuple
         A tuple containing the best fitting function and its parameters.
-
-    Examples
-    --------
-    >>> from lsapy.functions.membership import fit_membership
-    >>> fit_membership([1, 3, 5, 7, 10])  # doctest: +ELLIPSIS
-    (<numpy.vectorize object at 0x...>, array([1., 5.]))
-
-    By default, the function will fit all available membership equations. If you want to fit only specific equations,
-    you can specify it using the `fit_on` parameter: "all", "sigmoid_like", "gaussian_like", or a list of equations.
-    The default `y` values can also be changed.
-
-    >>> fit_membership(x=[1, 3, 5, 5, 7, 9], y=[0, 0.5, 1, 1, 0.5, 0], fit_on="gaussian_like")  # doctest: +ELLIPSIS
-    (<numpy.vectorize object at 0x...>, array([0.667..., 4.941..., 0.846...]))
     """
     if y is None:
         y = [0, 0.25, 0.5, 0.75, 1]
     y = np.array(y)
-    functions, skipped = _check_fitting(fit_on)
+    functions, skipped = _check_fitting(kind)
 
     x_ = np.linspace(min(x), max(x), 100)
     rms_errors = []
@@ -317,7 +378,7 @@ def fit_membership(x, y=None, fit_on: str | list[str] = "all", plot: bool = Fals
         warnings.warn(f"No methods to fit. Skipping: {', '.join(skipped)}.", stacklevel=2)
         return None, None
 
-    if plot:
+    if plot and plt is not None:
         plt.scatter(x, y, c="r")
         plt.legend()
 
@@ -325,23 +386,23 @@ def fit_membership(x, y=None, fit_on: str | list[str] = "all", plot: bool = Fals
     return get_function_from_name(f_best), p_best
 
 
-def _check_fitting(fit_on="all") -> tuple[list[str], list[str]]:
-    _types = [t + "_like" for t in EQUATION_TYPES]
+def _check_fitting(kind="all") -> tuple[list[str], list[str]]:
+    _types = [t + "_like" for t in FIT_TYPES]
     _skipped = []
 
-    if not isinstance(fit_on, str) and not isinstance(fit_on, list):
-        raise ValueError(f"`fit_on` should be a str or a list of string. Got {type(fit_on)}")
+    if not isinstance(kind, str) and not isinstance(kind, list):
+        raise ValueError(f"`kind` should be a str or a list of string. Got {type(kind)}")
 
     functions: list[str] = []
-    if isinstance(fit_on, str):
-        if fit_on == "all":
-            for t in EQUATION_TYPES:
+    if isinstance(kind, str):
+        if kind == "all":
+            for t in FIT_TYPES:
                 functions.extend(equations[t].keys())
-                fit_on = None
+                kind = None
         else:
-            fit_on = [fit_on]
-    if fit_on is not None:
-        for func in fit_on:
+            kind = [kind]
+    if kind is not None:
+        for func in kind:
             if not isinstance(func, str):
                 continue
             if func in _types:
@@ -367,7 +428,7 @@ def _check_fitting(fit_on="all") -> tuple[list[str], list[str]]:
                 warnings.warn("Fitting does not support `vetharaniam2024_eq8`. Skipped.", stacklevel=3)
 
     if len(functions) == 0:
-        raise ValueError("No functions to fit. Try to modify `fit_on` parameter.")
+        raise ValueError("No functions to fit. Try to modify `kind` parameter.")
     return functions, _skipped
 
 

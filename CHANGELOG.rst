@@ -6,10 +6,38 @@ v0.3.0 (unreleased)
 -------------------
 Contributor to this version: Baptiste Hamon (@baptistehamon).
 
+Announcements
+^^^^^^^^^^^^^
+* `LSAPy` is now available on `conda-forge <https://anaconda.org/conda-forge/lsapy>`_ (issue `#68 <https://github.com/baptistehamon/lsapy/issues/68>`_, PR `#74 <https://github.com/baptistehamon/lsapy/pull/74>`_).
+
+New features
+^^^^^^^^^^^^
+* A new ``boolean`` suitability function has been added (issue `#85 <https://github.com/baptistehamon/lsapy/issues/85>`_, PR `#86 <https://github.com/baptistehamon/lsapy/pull/86>`_).
+* The ``name`` and ``indicator`` arguments of ``SuitabilityCriteria`` can now be optional (issue `#84 <https://github.com/baptistehamon/lsapy/issues/84>`_, PR `#87 <https://github.com/baptistehamon/lsapy/issues/87>`_).
+* A ``setter`` has been added to ``SuitabilityCriteria`` attributes (issue `#84 <https://github.com/baptistehamon/lsapy/issues/84>`_, PR `#87 <https://github.com/baptistehamon/lsapy/issues/87>`_).
+* The ``lsapy.standardize`` module has been added with categorical and membership standardization functions (issue `#89 <https://github.com/baptistehamon/lsapy/issues/89>`_, PR `#91 <https://github.com/baptistehamon/lsapy/issues/91>`_).
+* The ``SuitabilityFunction`` is not longer required to define the standardization function in ``SuitabilityCriteria`` (issue `#89 <https://github.com/baptistehamon/lsapy/issues/89>`_, PR `#91 <https://github.com/baptistehamon/lsapy/issues/91>`_).
+* ``SuitabilityCriteria.name`` is now a property of the class (PR `#97 <https://github.com/baptistehamon/lsapy/issues/97>`_).
+* The ``LandSuitabilityAnalysis`` properties have been properly defined (PR `#98 <https://github.com/baptistehamon/lsapy/issues/98>`_).
+
 Breaking changes
 ^^^^^^^^^^^^^^^^
 * The ``lsapy.statistics`` module has been renamed to ``lsapy.stats`` (PR `#71 <https://github.com/baptistehamon/lsapy/pull/71>`_).
 * The ``lsapy.core.aggregation`` has been moved and renamed to ``lsapy.aggregate`` (PR `#71 <https://github.com/baptistehamon/lsapy/pull/71>`_).
+* The ``statistical_summary`` function has been renamed to ``stats_summary`` (PR `#82 <https://github.com/baptistehamon/lsapy/pull/82>`_).
+* The ``spatial_statistical_summary`` function has been renamed to ``spatial_stats_summary`` (PR `#82 <https://github.com/baptistehamon/lsapy/pull/82>`_).
+* The ``lsapy.functions`` module as well as ``SuitabilityFunction`` have been marked as deprecated and will be removed in a future release (issue `#89 <https://github.com/baptistehamon/lsapy/issues/89>`_, PR `#91 <https://github.com/baptistehamon/lsapy/issues/91>`_).
+
+Internal changes
+^^^^^^^^^^^^^^^^
+* The name and year in the license file have been updated (PR `#76 <https://github.com/baptistehamon/lsapy/pull/76>`_).
+* The logo has been updated (PR `#80 <https://github.com/baptistehamon/lsapy/pull/80>`_).
+* Tests have been added for the ``lsapy.stats`` module functions (PR `#82 <https://github.com/baptistehamon/lsapy/pull/82>`_).
+* The README file has been updated integrating new standardization function workflow (issue `#92 <https://github.com/baptistehamon/lsapy/issues/92>`_, PR `#93 <https://github.com/baptistehamon/lsapy/issues/93>`_).
+
+Bug fixes
+^^^^^^^^^
+* Fix small issue of ``SuitabilityCriteria`` string representation (PR `#73 <https://github.com/baptistehamon/lsapy/pull/73>`_).
 
 v0.2.0 (2025-08-20)
 -------------------

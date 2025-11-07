@@ -23,7 +23,7 @@ making LSA's workflow straight forward and easy to understand.
    About <readme>
    Getting Started <getting_started/index>
    User Guide <notebooks/index>
-   API Reference <api/index>
+   API Reference <api>
    Community <community/index>
 
 .. toctree::

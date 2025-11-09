@@ -2,7 +2,7 @@
 Changelog
 =========
 
-v0.3.0 (unreleased)
+v0.3.0 (2025-10-11)
 -------------------
 Contributor to this version: Baptiste Hamon (@baptistehamon).
 

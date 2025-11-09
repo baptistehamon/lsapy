@@ -34,7 +34,7 @@ You can now perform your LSA:
 .. code-block:: python
 
     # import modules
-    from lsapy import LandSuitabilityAnalysis, SuitabilityCriteria, SuitabilityFunction
+    from lsapy import LandSuitabilityAnalysis, SuitabilityCriteria
 
     # define your criteria
     criteria = {

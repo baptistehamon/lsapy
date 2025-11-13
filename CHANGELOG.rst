@@ -2,7 +2,15 @@
 Changelog
 =========
 
-v0.3.0 (2025-10-11)
+v0.3.1 (2025-11-14)
+-------------------
+Contributor to this version: Baptiste Hamon (@baptistehamon).
+
+Bug fixes
+^^^^^^^^^
+* The `np.vectorize` decorator has been removed of standardization functions to fix fitting functions issues (issue `#101 <https://github.com/baptistehamon/lsapy/issues/101>`_, PR `#102 <https://github.com/baptistehamon/lsapy/pull/102>`_).
+
+v0.3.0 (2025-11-10)
 -------------------
 Contributor to this version: Baptiste Hamon (@baptistehamon).
 

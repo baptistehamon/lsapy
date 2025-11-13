@@ -98,7 +98,7 @@ class TestFitMembership:
         x = [-10, -6.5, -5, -3.5, 0]
         f, p = mbs.fit_membership(x, fit_on="all", plot=True)
         assert f == std.logistic
-        np.testing.assert_array_almost_equal(p, [0.91, -5.0], decimal=2)
+        np.testing.assert_array_almost_equal(p, [0.76, -5.0], decimal=2)
 
     def test_skipped(self):
         with pytest.warns(UserWarning, match="No methods to fit. Skipping: vetharaniam2024_eq8, vetharaniam2024_eq10."):

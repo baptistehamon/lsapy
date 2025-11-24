@@ -49,7 +49,7 @@ class LandSuitabilityAnalysis:
     Let first define the ``SuitabilityCriteria`` (we use `xclim` package for the GDD computation):
 
     >>> from lsapy.utils import open_data
-    >>> from lsapy.functions import SuitabilityFunction
+    >>> import lsapy.standardize as lstd
     >>> from xclim.indicators.atmos import growing_degree_days
 
     >>> drainage = open_data("land", variables="drainage")
@@ -61,7 +61,7 @@ class LandSuitabilityAnalysis:
     ...         weight=3,
     ...         category="soilTerrain",
     ...         indicator=drainage,
-    ...         func="discrete",
+    ...         func=lstd.discrete,
     ...         fparams={"rules": {0: 0, 1: 0.1, 2: 0.5, 3: 0.9, 4: 1}},
     ...     ),
     ...     "growing_degree_days": SuitabilityCriteria(
@@ -70,7 +70,7 @@ class LandSuitabilityAnalysis:
     ...         weight=1,
     ...         category="climate",
     ...         indicator=growing_degree_days(tas, thresh="10 degC", freq="YS-JUL"),
-    ...         func="vetharaniam2022_eq5",
+    ...         func=lstd.vetharaniam2022_eq5,
     ...         fparams={"a": -1.41, "b": 801},
     ...     ),
     ... }
@@ -339,7 +339,7 @@ class LandSuitabilityAnalysis:
         Let first define the ``SuitabilityCriteria`` (we use `xclim` package for the GDD computation):
 
         >>> from lsapy.utils import open_data
-        >>> from lsapy.functions import SuitabilityFunction
+        >>> import lsapy.standardize as lstd
         >>> from xclim.indicators.atmos import growing_degree_days
 
         >>> drainage = open_data("land", variables="drainage")
@@ -351,7 +351,7 @@ class LandSuitabilityAnalysis:
         ...         weight=3,
         ...         category="soilTerrain",
         ...         indicator=drainage,
-        ...         func="discrete",
+        ...         func=lstd.discrete,
         ...         fparams={"rules": {0: 0, 1: 0.1, 2: 0.5, 3: 0.9, 4: 1}},
         ...     ),
         ...     "growing_degree_days": SuitabilityCriteria(
@@ -360,7 +360,7 @@ class LandSuitabilityAnalysis:
         ...         weight=1,
         ...         category="climate",
         ...         indicator=growing_degree_days(tas, thresh="10 degC", freq="YS-JUL"),
-        ...         func="vetharaniam2022_eq5",
+        ...         func=lstd.vetharaniam2022_eq5,
         ...         fparams={"a": -1.41, "b": 801},
         ...     ),
         ... }

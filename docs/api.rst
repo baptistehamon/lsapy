@@ -12,4 +12,3 @@ This page provides an overview of all functions, modules, objects implemented in
    api/lsa
    api/stats
    api/utils
-   api/deprecated

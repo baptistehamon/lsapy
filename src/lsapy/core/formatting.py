@@ -20,15 +20,7 @@ from xarray.core.formatting import (
 from lsapy.core.options import OPTIONS
 
 if TYPE_CHECKING:
-    from lsapy import LandSuitabilityAnalysis, SuitabilityCriteria, SuitabilityFunction  # type: ignore[attr-defined]
-
-
-def sf_repr(sf: SuitabilityFunction) -> str:
-    """Return a short string representation of a SuitabilityFunction."""
-    func = f"{sf.func.__name__}"
-    if not sf.params:
-        return f"{func}()"
-    return f"{func}({', '.join(f'{k}={v}' for k, v in sf.params.items())})"
+    from lsapy import LandSuitabilityAnalysis, SuitabilityCriteria  # type: ignore[attr-defined]
 
 
 def sc_func_repr(func) -> str:

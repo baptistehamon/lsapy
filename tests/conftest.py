@@ -7,7 +7,7 @@ import pytest
 import xarray as xr
 
 import lsapy.standardize as std
-from lsapy import SuitabilityCriteria, SuitabilityFunction
+from lsapy import SuitabilityCriteria
 
 
 @pytest.fixture
@@ -80,26 +80,6 @@ def indicators(annual_precip, growing_degree_days, potential_rooting_depth, drai
     ds = xr.merge([annual_precip, growing_degree_days, potential_rooting_depth, drainage])
     ds.attrs = {}
     return ds
-
-
-@pytest.fixture
-def sf_anpr() -> SuitabilityFunction:
-    return SuitabilityFunction(name="vetharaniam2022_eq5", params={"a": -0.71, "b": 1100})
-
-
-@pytest.fixture
-def sf_gdd() -> SuitabilityFunction:
-    return SuitabilityFunction(name="vetharaniam2022_eq5", params={"a": -0.55, "b": 1350})
-
-
-@pytest.fixture
-def sf_prd() -> SuitabilityFunction:
-    return SuitabilityFunction(name="vetharaniam2022_eq5", params={"a": -9.8, "b": 0.45})
-
-
-@pytest.fixture
-def sf_drain() -> SuitabilityFunction:
-    return SuitabilityFunction(name="discrete", params={"rules": {1: 0, 2: 0.1, 3: 0.5, 4: 0.9, 5: 1}})
 
 
 @pytest.fixture

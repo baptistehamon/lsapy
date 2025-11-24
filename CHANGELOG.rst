@@ -2,6 +2,17 @@
 Changelog
 =========
 
+v0.4.0 (unreleased)
+-------------------
+Contributor to this version: Baptiste Hamon (@baptistehamon).
+
+Breaking changes
+^^^^^^^^^^^^^^^^
+* The ``lsapy.functions`` module has been removed (PR `#104 <https://github.com/baptistehamon/lsapy/pull/104>`_).
+    * The ``SuitabilityFunction`` class has been removed.
+    * All the standardization functions contained in this module have been removed and are now only available in the ``lsapy.standardize`` module.
+    * The ``fit_membership`` function has been removed and ``lsapy.standardize.fit`` should be used instead.
+
 v0.3.1 (2025-11-14)
 -------------------
 Contributor to this version: Baptiste Hamon (@baptistehamon).

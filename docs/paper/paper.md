@@ -43,7 +43,7 @@ LSAPy provides two core objects and one module that operate together to perform 
 
 ## Suitability Criteria
 
-The `SuitabilityCriteria` defines an individual criteria used in LSA. Its `func` property refers to the standardization function, while `indicator` specifies the associated input data (\autoref{fig:lsapy}). The `weight` and `category` properties allow users to customise how each criteria is aggregated with others in the analysis. `is_computed` indicates whether the indicator already corresponds to suitability values and does not need further computation.
+The `SuitabilityCriteria` defines an individual criteria used in LSA. Its `func` property refers to the standardization function, while `indicator` specifies the input data (\autoref{fig:lsapy}). The `weight` and `category` properties allow users to customise how each criteria is aggregated with others in the analysis. `is_computed` indicates whether the indicator already corresponds to suitability values and does not need further computation.
 Finally, the `compute()` method applies the standardization function to the given `indicator` to calculate the suitability score.
 
 ## Land Suitability Analysis

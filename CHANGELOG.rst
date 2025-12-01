@@ -2,7 +2,26 @@
 Changelog
 =========
 
-v0.3.0 (unreleased)
+v0.4.0 (unreleased)
+-------------------
+Contributor to this version: Baptiste Hamon (@baptistehamon).
+
+Breaking changes
+^^^^^^^^^^^^^^^^
+* The ``lsapy.functions`` module has been removed (PR `#104 <https://github.com/baptistehamon/lsapy/pull/104>`_).
+    * The ``SuitabilityFunction`` class has been removed.
+    * All the standardization functions contained in this module have been removed and are now only available in the ``lsapy.standardize`` module.
+    * The ``fit_membership`` function has been removed and ``lsapy.standardize.fit`` should be used instead.
+
+v0.3.1 (2025-11-14)
+-------------------
+Contributor to this version: Baptiste Hamon (@baptistehamon).
+
+Bug fixes
+^^^^^^^^^
+* The `np.vectorize` decorator has been removed of standardization functions to fix fitting functions issues (issue `#101 <https://github.com/baptistehamon/lsapy/issues/101>`_, PR `#102 <https://github.com/baptistehamon/lsapy/pull/102>`_).
+
+v0.3.0 (2025-11-10)
 -------------------
 Contributor to this version: Baptiste Hamon (@baptistehamon).
 
@@ -19,6 +38,7 @@ New features
 * The ``SuitabilityFunction`` is not longer required to define the standardization function in ``SuitabilityCriteria`` (issue `#89 <https://github.com/baptistehamon/lsapy/issues/89>`_, PR `#91 <https://github.com/baptistehamon/lsapy/issues/91>`_).
 * ``SuitabilityCriteria.name`` is now a property of the class (PR `#97 <https://github.com/baptistehamon/lsapy/issues/97>`_).
 * The ``LandSuitabilityAnalysis`` properties have been properly defined (PR `#98 <https://github.com/baptistehamon/lsapy/issues/98>`_).
+* The API Reference documentation has been updated and improved (issue `#96 <https://github.com/baptistehamon/lsapy/issues/96>`_, PR `#99 <https://github.com/baptistehamon/lsapy/issues/99>`_).
 
 Breaking changes
 ^^^^^^^^^^^^^^^^
@@ -123,7 +143,7 @@ Breaking changes
 Internal changes
 ^^^^^^^^^^^^^^^^
 * Templates for requesting new features, asking question and submitting PR have been added (issue `#11 <https://github.com/baptistehamon/lsapy/issues/11>`_, PR `#12 <https://github.com/baptistehamon/lsapy/pull/12>`_).
-* The README has been updated to make links permanent and to add a docs badge (PR `#13 <https://github.com/baptistehamon/lsapy/pull/13>`_, PR `#15 <https://github.com/baptistehamon/lsapy/pull/15>`_).
+* The README has been updated to make links permanent and to add a docs badge (PR `#13 <https://github.com/baptistehamon/lsapy/pull/13>`_).
 * A configuration file for Zenodo integration has been added to the repository (PR `#14 <https://github.com/baptistehamon/lsapy/pull/14>`_).
 * `Pre-commit` has been setup and `ruff`, `codespell` and `numpydoc` hooks have been added (issue `#8 <https://github.com/baptistehamon/lsapy/issues/8>`_, PR `#18 <https://github.com/baptistehamon/lsapy/pull/18>`_/PR `#19 <https://github.com/baptistehamon/lsapy/pull/19>`_).
 * The autoupdate schedule of `pre-commit` has been set to weekly (PR `#21 <https://github.com/baptistehamon/lsapy/pull/21>`_)

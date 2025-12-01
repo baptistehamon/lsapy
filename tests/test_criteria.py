@@ -52,7 +52,7 @@ class TestSuitabilityCriteria:
         expected_repr = "<SuitabilityCriteria> (weight: 1.0)\n    *undefined*"
         assert repr(sc) == expected_repr
 
-    def test_attrs(self, criteria_anpr, annual_precip, sf_anpr):
+    def test_attrs(self, criteria_anpr, annual_precip):
         assert criteria_anpr.attrs == {}
         criteria_anpr.attrs = {
             "long_name": "Annual Precipitation",
@@ -68,7 +68,6 @@ class TestSuitabilityCriteria:
             name="annual_precipitation",
             category="climate",
             indicator=annual_precip,
-            func=sf_anpr,
             long_name="Annual Precipitation",
             description="This is the annual precipitation criteria.",
             comment="Some comment about annual precipitation.",

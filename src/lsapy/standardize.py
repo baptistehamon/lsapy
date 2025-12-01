@@ -68,7 +68,6 @@ def boolean(x, op: str, thresh: int | float, skipna: bool = True):
 
 
 @declare_equation("categorical")
-@np.vectorize(otypes=[np.float32])
 def discrete(x, rules: dict[str | int, int | float]) -> np.ndarray:
     """
     Discrete function.
@@ -88,12 +87,11 @@ def discrete(x, rules: dict[str | int, int | float]) -> np.ndarray:
     np.ndarray
         Mapped output values.
     """
-    return rules.get(x, np.nan)
+    return np.vectorize(rules.get)(x, np.nan)
 
 
 @declare_equation("sigmoid")
-@np.vectorize(otypes=[np.float32])
-def logistic(x, a, b):
+def logistic(x, a, b) -> np.ndarray:
     r"""
     Logistic function capped to 1.
 
@@ -122,11 +120,11 @@ def logistic(x, a, b):
 
         f(x) = \frac{1}{1 + e^{-a(x - b)}}
     """
-    return 1 / (1 + np.exp(-a * (x - b)))
+    return 1 / (1 + np.exp(-a * np.subtract(x, b)))
 
 
 @declare_equation("sigmoid")
-def sigmoid(x):
+def sigmoid(x) -> np.ndarray:
     r"""
     Logistic sigmoid function.
 
@@ -159,8 +157,7 @@ def sigmoid(x):
 
 
 @declare_equation("sigmoid", "VTR22_eq3")
-@np.vectorize(otypes=[np.float32])
-def vetharaniam2022_eq3(x, a, b):
+def vetharaniam2022_eq3(x, a, b) -> np.ndarray:
     r"""
     Sigmoid like function.
 
@@ -200,12 +197,11 @@ def vetharaniam2022_eq3(x, a, b):
     ----------
     :cite:cts:`vetharaniam_lsa_2022`
     """
-    return np.exp(a * (x - b)) / (1 + np.exp(a * (x - b)))
+    return np.exp(a * np.subtract(x, b)) / (1 + np.exp(a * np.subtract(x, b)))
 
 
 @declare_equation("sigmoid", "VTR22_eq5")
-@np.vectorize(otypes=[np.float32])
-def vetharaniam2022_eq5(x, a, b):
+def vetharaniam2022_eq5(x, a, b) -> np.ndarray:
     r"""
     Sigmoid like function.
 
@@ -243,8 +239,7 @@ def vetharaniam2022_eq5(x, a, b):
 
 
 @declare_equation("gaussian", "VTR24_eq8")
-@np.vectorize(otypes=[np.float32])
-def vetharaniam2024_eq8(x, a, b, c):
+def vetharaniam2024_eq8(x, a, b, c) -> np.ndarray:
     r"""
     Gaussian like function.
 
@@ -280,12 +275,11 @@ def vetharaniam2024_eq8(x, a, b, c):
     ----------
     :cite:cts:`vetharaniam_lsa_2024`
     """
-    return np.exp(-a * np.power(x - b, c))
+    return np.exp(-a * np.power(np.subtract(x, b), c))
 
 
 @declare_equation("gaussian", "VTR24_eq10")
-@np.vectorize(otypes=[np.float32])
-def vetharaniam2024_eq10(x, a, b, c):
+def vetharaniam2024_eq10(x, a, b, c) -> np.ndarray:
     r"""
     Gaussian like function.
 

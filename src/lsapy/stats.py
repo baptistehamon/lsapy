@@ -66,7 +66,8 @@ def stats_summary(
     Examples
     --------
     >>> from lsapy.utils import open_data
-    >>> from lsapy import SuitabilityFunction, SuitabilityCriteria, LandSuitabilityAnalysis
+    >>> from lsapy import SuitabilityCriteria, LandSuitabilityAnalysis
+    >>> import lsapy.standardize as lstd
     >>> from xclim.indicators.atmos import growing_degree_days
 
     Let's first define a Land Suitability Analysis (LSA):
@@ -80,7 +81,8 @@ def stats_summary(
     ...         weight=3,
     ...         category="soilTerrain",
     ...         indicator=drainage,
-    ...         func=SuitabilityFunction(name="discrete", params={"rules": {0: 0, 1: 0.1, 2: 0.5, 3: 0.9, 4: 1}}),
+    ...         func=lstd.discrete,
+    ...         fparams={"rules": {0: 0, 1: 0.1, 2: 0.5, 3: 0.9, 4: 1}},
     ...     ),
     ...     "growing_degree_days": SuitabilityCriteria(
     ...         name="growing_degree_days",
@@ -88,7 +90,8 @@ def stats_summary(
     ...         weight=1,
     ...         category="climate",
     ...         indicator=growing_degree_days(tas, thresh="10 degC", freq="YS-JUL"),
-    ...         func=SuitabilityFunction(name="vetharaniam2022_eq5", params={"a": -1.41, "b": 801}),
+    ...         func=lstd.vetharaniam2022_eq5,
+    ...         fparams={"a": -1.41, "b": 801},
     ...     ),
     ... }
     >>> lsa = LandSuitabilityAnalysis("land_use", sc)
@@ -121,6 +124,7 @@ def stats_summary(
 
     Finally, we can get the area associated with each bin by providing the area of each cell in the data.
     Assuming that each cell has an area of 5 hectares (ha), we can do:
+
     >>> stats = stats_summary(
     ...     lsa.data,
     ...     bins=[0, 0.25, 0.5, 0.75, 1],
@@ -227,7 +231,8 @@ def spatial_stats_summary(
     Examples
     --------
     >>> from lsapy.utils import open_data
-    >>> from lsapy import SuitabilityFunction, SuitabilityCriteria, LandSuitabilityAnalysis
+    >>> from lsapy import SuitabilityCriteria, LandSuitabilityAnalysis
+    >>> import lsapy.standardize as lstd
     >>> from xclim.indicators.atmos import growing_degree_days
     >>> import geopandas as gpd
 
@@ -242,7 +247,8 @@ def spatial_stats_summary(
     ...         weight=3,
     ...         category="soilTerrain",
     ...         indicator=drainage,
-    ...         func=SuitabilityFunction(name="discrete", params={"rules": {0: 0, 1: 0.1, 2: 0.5, 3: 0.9, 4: 1}}),
+    ...         func=lstd.discrete,
+    ...         fparams={"rules": {0: 0, 1: 0.1, 2: 0.5, 3: 0.9, 4: 1}},
     ...     ),
     ...     "growing_degree_days": SuitabilityCriteria(
     ...         name="growing_degree_days",
@@ -250,7 +256,8 @@ def spatial_stats_summary(
     ...         weight=1,
     ...         category="climate",
     ...         indicator=growing_degree_days(tas, thresh="10 degC", freq="YS-JUL"),
-    ...         func=SuitabilityFunction(name="vetharaniam2022_eq5", params={"a": -1.41, "b": 801}),
+    ...         func=lstd.vetharaniam2022_eq5,
+    ...         fparams={"a": -1.41, "b": 801},
     ...     ),
     ... }
     >>> lsa = LandSuitabilityAnalysis("land_use", sc)

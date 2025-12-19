@@ -25,7 +25,7 @@ repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
   # Use ruff as a substitute for black, flake8, isort, pyupgrade,
   # pylint.
-    rev: v0.14.3
+    rev: v0.14.7
     hooks:
       - id: ruff-check
         args: ['--fix', '--show-fixes']
@@ -46,7 +46,7 @@ repos:
     hooks:
       - id: vulture
   - repo: https://github.com/kynan/nbstripout
-    rev: 0.8.1
+    rev: 0.8.2
     hooks:
       - id: nbstripout
         files: '.ipynb'
@@ -68,7 +68,7 @@ repos:
       - id: mdformat
         exclude: '.github/\w+.md|docs/paper/paper.md'
   - repo: https://github.com/keewis/blackdoc
-    rev: v0.4.5
+    rev: v0.4.6
     hooks:
       - id: blackdoc
         additional_dependencies: [ 'black==25.9.0' ]
@@ -78,7 +78,7 @@ repos:
     hooks:
       - id: formatbibtex
   - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.28.0
+    rev: v8.30.0
     hooks:
       - id: gitleaks
   - repo: meta

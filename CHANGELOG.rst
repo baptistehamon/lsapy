@@ -13,6 +13,10 @@ Breaking changes
     * All the standardization functions contained in this module have been removed and are now only available in the ``lsapy.standardize`` module.
     * The ``fit_membership`` function has been removed and ``lsapy.standardize.fit`` should be used instead.
 
+Internal changes
+^^^^^^^^^^^^^^^^
+* The testing GitHub Actions workflow has been updated to install HDF5 on Linux runners (issue `#109 <https://github.com/baptistehamon/lsapy/issues/109>`_, PR `#110 <https://github.com/baptistehamon/lsapy/pull/110>`_).
+
 v0.3.1 (2025-11-14)
 -------------------
 Contributor to this version: Baptiste Hamon (@baptistehamon).

@@ -19,6 +19,7 @@ dependencies:
   - deptry >=0.23.0
   - flit >=3.11
   - h5netcdf >=1.4.0
+  - h5py
   - ipykernel
   - ipython >=8.20.0
   - matplotlib >=3.9.0

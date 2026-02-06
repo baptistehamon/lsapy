@@ -13,6 +13,10 @@ Breaking changes
     * All the standardization functions contained in this module have been removed and are now only available in the ``lsapy.standardize`` module.
     * The ``fit_membership`` function has been removed and ``lsapy.standardize.fit`` should be used instead.
 
+Internal changes
+^^^^^^^^^^^^^^^^
+* `h5py` has been added to the project dev dependencies (PR `#112 <https://github.com/baptistehamon/lsapy/pull/112>`_).
+
 v0.3.1 (2025-11-14)
 -------------------
 Contributor to this version: Baptiste Hamon (@baptistehamon).

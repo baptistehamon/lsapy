@@ -87,7 +87,7 @@ def sc_repr(sc: SuitabilityCriteria) -> str:
     if sc.attrs:
         summary.append(attrs_repr(sc.attrs, col_width=col_width, max_rows=max_rows))
 
-    if not sc.func and not sc.indicator and not sc.attrs:
+    if not sc.func and sc.indicator is None and not sc.attrs:
         summary.append("    *undefined*")
 
     return "\n".join(summary)

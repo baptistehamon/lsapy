@@ -6,6 +6,10 @@ v0.4.0 (unreleased)
 -------------------
 Contributor to this version: Baptiste Hamon (@baptistehamon).
 
+Bug fixes
+^^^^^^^^^
+* Fix ``lsapy.core.formatting.sc_repr`` function  to handle ``SuitabilityCriteria`` with non-empty ``xr.DataArray`` indicators and undefined ``func`` (issue `#115 <https://github.com/baptistehamon/lsapy/issues/115>`_, PR `#116 <https://github.com/baptistehamon/lsapy/pull/116>`_).
+
 Breaking changes
 ^^^^^^^^^^^^^^^^
 * The ``lsapy.functions`` module has been removed (PR `#104 <https://github.com/baptistehamon/lsapy/pull/104>`_).

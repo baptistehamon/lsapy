@@ -52,6 +52,20 @@ class TestSuitabilityCriteria:
         expected_repr = "<SuitabilityCriteria> (weight: 1.0)\n    *undefined*"
         assert repr(sc) == expected_repr
 
+        # test criteria with non-empty indicator but no function
+        sc = SuitabilityCriteria(
+            name="test_criteria",
+            indicator=xr.DataArray([1, 2, 3], dims=["x"], name="test_indicator"),
+        )
+        expected_repr = (
+            "<SuitabilityCriteria> 'test_criteria' (weight: 1.0)\n"
+            "Indicator:\n"
+            "    Name        test_indicator \n"
+            "    Data        int64 24B 1 2 3\n"
+            "    Dimensions  x: 3 "
+        )
+        assert repr(sc) == expected_repr
+
     def test_attrs(self, criteria_anpr, annual_precip):
         assert criteria_anpr.attrs == {}
         criteria_anpr.attrs = {

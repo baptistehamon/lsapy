@@ -107,6 +107,9 @@ def aggregate(
     else:
         raise ValueError("'variables' must be a list of variable names or None.")
 
+    if method not in ["wmean", "wgmean"] and weights is not None:
+        weights = None  # Ignore weights for non-weighted methods
+
     if not isinstance(weights, list) and weights is not None:
         raise ValueError("'weights' must be a list of numbers or None.")
     _weights = _agg_weights(ds, variables, weights)

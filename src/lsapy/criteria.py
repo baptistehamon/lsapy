@@ -309,7 +309,7 @@ class SuitabilityCriteria:
         """
         self._attrs = dict(value)
 
-    def compute(self, **kwargs) -> xr.DataArray:
+    def compute(self, inplace: bool = False, **kwargs) -> xr.DataArray:
         """
         Compute the suitability of the criteria.
 
@@ -318,6 +318,9 @@ class SuitabilityCriteria:
 
         Parameters
         ----------
+        inplace : bool, optional
+            If True, the suitability values are stored in the `indicator` attribute of the criteria.
+            Default is False.
         **kwargs : dict
             Additional keyword arguments to pass to the xarray apply_ufunc function.
 
@@ -341,7 +344,14 @@ class SuitabilityCriteria:
             f"func_method: {self.func if self.func is not None else 'unknown'}; "
             f"from_indicator: [{self._from_indicator}]"
         )
-        return out.rename(self.name).assign_attrs(attrs)
+
+        out = out.rename(self.name)
+        out.attrs = attrs
+        if inplace:
+            self.indicator = out
+            self.is_computed = True
+        else:
+            return out
 
 
 def _get_indicator_description(indicator: xr.Dataset | xr.DataArray) -> str:

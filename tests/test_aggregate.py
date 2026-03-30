@@ -94,6 +94,9 @@ class TestMean:
         np.testing.assert_equal(res.values, 0.9)
         res = aggregate(data, method="mean", variables=["growing_degree_days"])
         np.testing.assert_equal(res.values, 0.7)
+        # if weights are provided for mean, they should be ignored
+        res = aggregate(data, method="mean", variables=["prcptot", "growing_degree_days"], weights=[3, 1])
+        np.testing.assert_equal(res.values, 0.8)
 
 
 class TestWeightedMean:
@@ -139,7 +142,7 @@ class TestGeometricMean:
         assert gmean_data.attrs["method"] == "Geometric Mean"
         assert gmean_data.attrs["description"] == "Geometric mean of the variables: prcptot, growing_degree_days."
 
-    def test_values(self, gmean_data, data, mean_data):
+    def test_values(self, gmean_data, data):
         # multivars geometric mean
         np.testing.assert_array_almost_equal(gmean_data.values, 0.79, decimal=2)
         # singlevar geometric mean
@@ -147,6 +150,9 @@ class TestGeometricMean:
         np.testing.assert_equal(res.values, 0.9)
         res = aggregate(data, method="gmean", variables=["growing_degree_days"])
         np.testing.assert_equal(res.values, 0.7)
+        # if weights are provided for gmean, they should be ignored
+        res = aggregate(data, method="gmean", variables=["prcptot", "growing_degree_days"], weights=[3, 1])
+        np.testing.assert_array_almost_equal(res.values, 0.79, decimal=2)
 
 
 class TestWeightedGeometricMean:

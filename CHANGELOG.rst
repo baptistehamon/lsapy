@@ -9,6 +9,7 @@ Contributor to this version: Baptiste Hamon (@baptistehamon).
 Bug fixes
 ^^^^^^^^^
 * Fix ``lsapy.core.formatting.sc_repr`` function  to handle ``SuitabilityCriteria`` with non-empty ``xr.DataArray`` indicators and undefined ``func`` (issue `#115 <https://github.com/baptistehamon/lsapy/issues/115>`_, PR `#116 <https://github.com/baptistehamon/lsapy/pull/116>`_).
+* Fix ``lsapy.aggregate.aggregate`` function for ``mean`` and ``gmean`` aggregation when weights are provided (issue `#121 <https://github.com/baptistehamon/lsapy/issues/121>`_, PR `#122 <https://github.com/baptistehamon/lsapy/pull/122>`_).
 
 Breaking changes
 ^^^^^^^^^^^^^^^^
@@ -20,6 +21,7 @@ Breaking changes
 Internal changes
 ^^^^^^^^^^^^^^^^
 * `h5py` has been added to the project dev dependencies (PR `#112 <https://github.com/baptistehamon/lsapy/pull/112>`_).
+* ``lsapy.aggregate._agg_weights`` has been modified to return a ``xr.DataArray`` where weights are distributed only along the ``variable`` dimension (issue `#117 <https://github.com/baptistehamon/lsapy/issues/117>`_, PR `#122 <https://github.com/baptistehamon/lsapy/pull/122>`_).
 
 v0.3.1 (2025-11-14)
 -------------------

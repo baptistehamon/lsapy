@@ -2,9 +2,7 @@
 
 from __future__ import annotations
 
-import numpy as np
 import xarray as xr
-from scipy import stats
 
 __all__ = ["aggregate"]
 
@@ -17,13 +15,7 @@ def _agg_weights(ds: xr.Dataset, variables: list[str], weights: list[int | float
     if len(variables) != len(weights):
         raise ValueError("Length of 'weights' must match length of 'variables'.")
 
-    shape = tuple(ds.sizes[d] for d in ds.sizes)
-
-    return xr.DataArray(
-        np.array([np.full(shape, w) for w in weights]),
-        dims=["variable"] + list(ds.dims),
-        coords={"variable": variables, **ds.coords},
-    )
+    return xr.DataArray(weights, dims=["variable"], coords={"variable": variables})
 
 
 def _add_agg_attrs(
@@ -126,7 +118,7 @@ def aggregate(
     if method in ["mean", "wmean"]:
         out = da.weighted(_weights).mean(dim="variable")
     if method in ["gmean", "wgmean"]:
-        out = da.reduce(stats.gmean, dim="variable", weights=_weights)
+        out = (da**_weights).prod(dim="variable", min_count=(len(variables))) ** (1 / _weights.sum())
     if method == "limfactor":
         limval = da.min(dim="variable").rename("limiting_factor")
         limvar = (

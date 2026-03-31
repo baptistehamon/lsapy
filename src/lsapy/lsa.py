@@ -479,13 +479,16 @@ class LandSuitabilityAnalysis:
             A Dataset containing the computed suitability for each criteria.
         """
         out: Any = []
+        attrs: dict[str, dict[Any, Any]] = {}
         for sc in self.criteria.values():
-            out.append(sc.compute(**kwargs))
+            da = sc.compute(**kwargs)
+            out.append(da)
+            attrs[sc.name] = da.attrs
         out = xr.merge(out, compat="override", combine_attrs="drop")
 
         # Reassign attributes to each criteria
         for sc in out.data_vars:
-            out[sc].attrs = self.criteria[sc].attrs
+            out[sc].attrs = attrs.get(sc, out[sc].attrs)
         out.attrs["land_use"] = self.land_use
         out.attrs["criteria"] = self._criteria_list
         out.attrs.update(self.attrs)

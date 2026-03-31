@@ -6,6 +6,10 @@ v0.4.0 (unreleased)
 -------------------
 Contributor to this version: Baptiste Hamon (@baptistehamon).
 
+New features
+^^^^^^^^^^^^
+* ``SuitabilityCriteria`` now supports "inplace" computation, meaning that the suitability values are stored in the ``indicator`` attribute of the criteria (issue `#118 <https://github.com/baptistehamon/lsapy/issues/118>`_, PR `#123 <https://github.com/baptistehamon/lsapy/pull/123>`_).
+
 Bug fixes
 ^^^^^^^^^
 * Fix ``lsapy.core.formatting.sc_repr`` function  to handle ``SuitabilityCriteria`` with non-empty ``xr.DataArray`` indicators and undefined ``func`` (issue `#115 <https://github.com/baptistehamon/lsapy/issues/115>`_, PR `#116 <https://github.com/baptistehamon/lsapy/pull/116>`_).

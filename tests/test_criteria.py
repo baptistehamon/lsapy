@@ -127,15 +127,19 @@ class TestSuitabilityCriteria:
             assert k in sc.attrs
             assert sc.attrs[k] == criteria_anpr.attrs[k]
 
-    def test_compute_func(self, criteria_anpr, criteria_drain):
+    def test_compute_func(self, criteria_anpr, criteria_drain, criteria_prd):
         # test suitability function computation
         sc = criteria_anpr.compute()
         np.testing.assert_array_almost_equal(sc.values, 0.25, decimal=2)
-
         sc = criteria_drain.compute()
         np.testing.assert_equal(sc.values, 0.5)
+        # test when computed inplace
+        sc = criteria_prd
+        sc.compute(inplace=True)
+        np.testing.assert_array_almost_equal(sc.indicator.values, 0.95, decimal=2)
+        assert sc.is_computed is True
 
-        # test when already computed, should input indicator values
+        # test when already computed, should be input indicator values
         sc = criteria_anpr
         sc.is_computed = True
         sc = sc.compute()

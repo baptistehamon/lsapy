@@ -1,6 +1,8 @@
 # ruff: noqa: D100, D103
 from __future__ import annotations
 
+import re
+
 import numpy as np
 import pandas as pd
 import pytest
@@ -95,6 +97,17 @@ def criteria_anpr(annual_precip) -> SuitabilityCriteria:
 
 
 @pytest.fixture
+def anpr_attrs() -> dict:
+    return {
+        "weight": 1.0,
+        "category": "climate",
+        "history": "func_method: functools.partial(<function vetharaniam2022_eq5 at 0x...>, a=-0.71, b=1100); "
+        "from_indicator: [name: prcptot; units: mm; standard_name: lwe_thickness_of_precipitation_amount; "
+        "long_name: Total accumulated precipitation]",
+    }
+
+
+@pytest.fixture
 def criteria_gdd(growing_degree_days) -> SuitabilityCriteria:
     return SuitabilityCriteria(
         name="growing_degree_days",
@@ -104,6 +117,18 @@ def criteria_gdd(growing_degree_days) -> SuitabilityCriteria:
         func=std.vetharaniam2022_eq5,
         fparams={"a": -0.55, "b": 1350},
     )
+
+
+@pytest.fixture
+def gdd_attrs() -> dict:
+    return {
+        "weight": 3.0,
+        "category": "climate",
+        "history": "func_method: functools.partial(<function vetharaniam2022_eq5 at 0x...>, a=-0.55, b=1350); "
+        "from_indicator: [name: growing_degree_days; units: C days; "
+        "standard_name: integral_of_air_temperature_excess_wrt_time; "
+        "long_name: Cumulative sum of temperature degrees for mean daily temperature above 4.0 degc]",
+    }
 
 
 @pytest.fixture
@@ -119,6 +144,16 @@ def criteria_prd(potential_rooting_depth) -> SuitabilityCriteria:
 
 
 @pytest.fixture
+def prd_attrs() -> dict:
+    return {
+        "weight": 2.0,
+        "category": "soilTerrain",
+        "history": "func_method: functools.partial(<function vetharaniam2022_eq5 at 0x...>, a=-9.8, b=0.45); "
+        "from_indicator: [name: potential_rooting_depth; units: m; long_name: Potential rooting depth]",
+    }
+
+
+@pytest.fixture
 def criteria_drain(drainage) -> SuitabilityCriteria:
     return SuitabilityCriteria(
         name="drainage_class",
@@ -131,6 +166,18 @@ def criteria_drain(drainage) -> SuitabilityCriteria:
 
 
 @pytest.fixture
+def drain_attrs() -> dict:
+    return {
+        "weight": 2.0,
+        "category": "soilTerrain",
+        "history": "func_method: functools.partial(<function discrete at 0x...>, "
+        "rules={1: 0, 2: 0.1, 3: 0.5, 4: 0.9, 5: 1}); from_indicator: [name: drainage; units: ; "
+        "long_name: Drainage Class; flag_values: 1, 2, 3, 4, 5; "
+        "flag_meanings: very-poor poor imperfect moderately-well well]",
+    }
+
+
+@pytest.fixture
 def criteria(criteria_anpr, criteria_gdd, criteria_prd, criteria_drain) -> dict[str, SuitabilityCriteria]:
     """Returns a dictionary of all suitability criteria."""
     return {
@@ -139,3 +186,16 @@ def criteria(criteria_anpr, criteria_gdd, criteria_prd, criteria_drain) -> dict[
         "potential_rooting_depth": criteria_prd,
         "drainage_class": criteria_drain,
     }
+
+
+@pytest.fixture
+def assert_criteria_attrs():
+    """Fixture to assert that the attributes of a suitability criteria match the expected attributes."""
+
+    def _assert_criteria_attrs(res_attrs, expected_attrs):
+        history = res_attrs.pop("history", None)  # Remove history for comparison
+        assert res_attrs == {k: v for k, v in expected_attrs.items() if k != "history"}
+        history = re.sub(r"at 0x[0-9a-fA-F]+", "at 0x...", history)  # Normalize memory addresses in history
+        assert history == expected_attrs.get("history", None)
+
+    return _assert_criteria_attrs

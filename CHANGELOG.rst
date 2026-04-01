@@ -14,6 +14,7 @@ Bug fixes
 ^^^^^^^^^
 * Fix ``lsapy.core.formatting.sc_repr`` function  to handle ``SuitabilityCriteria`` with non-empty ``xr.DataArray`` indicators and undefined ``func`` (issue `#115 <https://github.com/baptistehamon/lsapy/issues/115>`_, PR `#116 <https://github.com/baptistehamon/lsapy/pull/116>`_).
 * Fix ``lsapy.aggregate.aggregate`` function for ``mean`` and ``gmean`` aggregation when weights are provided (issue `#121 <https://github.com/baptistehamon/lsapy/issues/121>`_, PR `#122 <https://github.com/baptistehamon/lsapy/pull/122>`_).
+* Fix ``LandSuitabilityAnalysis.run`` to reassing attrs to each criteria in the return ``xr.Dataset`` (issue `#119 <https://github.com/baptistehamon/lsapy/issues/119>`_, PR `#124 <https://github.com/baptistehamon/lsapy/pull/124>`_).
 
 Breaking changes
 ^^^^^^^^^^^^^^^^

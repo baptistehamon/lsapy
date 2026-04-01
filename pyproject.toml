@@ -228,6 +228,7 @@ ignore = [
 "docs/*.py" = ["D100", "D101", "D102", "D103", "PLR6301"]
 "src/lsapy/**/__init__.py" = ["F401", "F403"]
 "tests/**/test*.py" = ["D101", "D102", "D103", "PLR2004", "PLR6301", "S101"]
+"tests/**/conftest.py" = ["S101"]
 
 [tool.ruff.lint.isort]
 case-sensitive = true

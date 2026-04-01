@@ -101,7 +101,7 @@ class TestLandSuitabilityAnalysis:
         with pytest.raises(TypeError, match="'agg_methods' must be a string or a dictionary. Got <class 'list'>."):
             lsa.run("overall", agg_methods=["mean", "gmean"])
 
-    def test_run_criteria(self, lsa):
+    def test_run_criteria(self, lsa, anpr_attrs, gdd_attrs, prd_attrs, drain_attrs, assert_criteria_attrs):
         res = lsa.run("criteria")
         # test format, shape and attrs
         assert isinstance(res, xr.Dataset)
@@ -115,6 +115,12 @@ class TestLandSuitabilityAnalysis:
         assert res.attrs["short_name"] == "test_land_use"
         assert res.attrs["long_name"] == "Test Land Use"
         assert res.attrs["description"] == "This is a test land use."
+        # test criteria attrs
+        assert_criteria_attrs(res.annual_precipitation.attrs, anpr_attrs)
+        assert_criteria_attrs(res.growing_degree_days.attrs, gdd_attrs)
+        assert_criteria_attrs(res.potential_rooting_depth.attrs, prd_attrs)
+        assert_criteria_attrs(res.drainage_class.attrs, drain_attrs)
+
         # test values
         np.testing.assert_array_almost_equal(res.growing_degree_days.values, 0.75, decimal=2)
         np.testing.assert_array_almost_equal(res.potential_rooting_depth.values, 0.95, decimal=2)

@@ -6,7 +6,7 @@ import nox
 nox.options.sessions = ("tests", "notebooks", "doctests")
 
 
-@nox.session(python=["3.10", "3.11", "3.12", "3.13"])
+@nox.session(python=["3.10", "3.11", "3.12", "3.13", "3.14"])
 def tests(session):
     session.install(".[dev]", "h5netcdf", "netCDF4")
     session.run("pytest")

@@ -1,0 +1,36 @@
+# To get started with Dependabot version updates, you'll need to specify which
+# package ecosystems to update and where the package manifests are located.
+# Please see the documentation for all configuration options:
+# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    directory: "/ci"
+    schedule:
+      interval: "daily"
+    group:
+      pip:
+        patterns:
+          - "requirements_ci.*"
+        update-types:
+          - patch
+          - minor
+          - major
+      cooldown:
+        default-days: 7
+
+  - package-ecosystem: "github-action"
+    directory: "/.github/workflows"
+    schedule:
+      interval: "daily"
+    group:
+      actions:
+        patterns:
+          - "*"
+        update-types:
+          - patch
+          - minor
+          - major
+      cooldown:
+        default-days: 7

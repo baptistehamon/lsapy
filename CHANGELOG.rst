@@ -27,6 +27,7 @@ Internal changes
 ^^^^^^^^^^^^^^^^
 * `h5py` has been added to the project dev dependencies (PR `#112 <https://github.com/baptistehamon/lsapy/pull/112>`_).
 * ``lsapy.aggregate._agg_weights`` has been modified to return a ``xr.DataArray`` where weights are distributed only along the ``variable`` dimension (issue `#117 <https://github.com/baptistehamon/lsapy/issues/117>`_, PR `#122 <https://github.com/baptistehamon/lsapy/pull/122>`_).
+* Dependabot has been configured to check version updates (issue `#129 <https://github.com/baptistehamon/lsapy/issues/129>`_, PR `#130 <https://github.com/baptistehamon/lsapy/pull/130>`_).
 
 v0.3.1 (2025-11-14)
 -------------------

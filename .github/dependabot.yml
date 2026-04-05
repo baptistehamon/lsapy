@@ -9,7 +9,7 @@ updates:
     directory: "/ci"
     schedule:
       interval: "quarterly"
-    group:
+    groups:
       pip:
         patterns:
           - "requirements_ci.*"
@@ -17,14 +17,14 @@ updates:
           - patch
           - minor
           - major
-      cooldown:
-        default-days: 7
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "github-actions"
     directory: "/.github/workflows"
     schedule:
       interval: "quarterly"
-    group:
+    groups:
       actions:
         patterns:
           - "*"
@@ -32,5 +32,5 @@ updates:
           - patch
           - minor
           - major
-      cooldown:
-        default-days: 7
+    cooldown:
+      default-days: 7

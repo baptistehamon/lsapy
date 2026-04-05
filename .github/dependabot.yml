@@ -8,7 +8,7 @@ updates:
   - package-ecosystem: "pip"
     directory: "/ci"
     schedule:
-      interval: "daily"
+      interval: "quarterly"
     group:
       pip:
         patterns:
@@ -20,10 +20,10 @@ updates:
       cooldown:
         default-days: 7
 
-  - package-ecosystem: "github-action"
+  - package-ecosystem: "github-actions"
     directory: "/.github/workflows"
     schedule:
-      interval: "daily"
+      interval: "quarterly"
     group:
       actions:
         patterns:

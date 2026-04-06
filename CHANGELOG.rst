@@ -9,6 +9,7 @@ Contributor to this version: Baptiste Hamon (@baptistehamon).
 New features
 ^^^^^^^^^^^^
 * ``SuitabilityCriteria`` now supports "inplace" computation, meaning that the suitability values are stored in the ``indicator`` attribute of the criteria (issue `#118 <https://github.com/baptistehamon/lsapy/issues/118>`_, PR `#123 <https://github.com/baptistehamon/lsapy/pull/123>`_).
+* `lsapy` is now supports Python 3.14 (issue `#127 <https://github.com/baptistehamon/lsapy/issues/127>`_, PR `#128 <https://github.com/baptistehamon/lsapy/pull/128>`_).
 
 Bug fixes
 ^^^^^^^^^

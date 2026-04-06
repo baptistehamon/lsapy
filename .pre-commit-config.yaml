@@ -25,13 +25,13 @@ repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
   # Use ruff as a substitute for black, flake8, isort, pyupgrade,
   # pylint.
-    rev: v0.15.4
+    rev: v0.15.9
     hooks:
       - id: ruff-check
         args: ['--fix', '--show-fixes']
       - id: ruff-format
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.4.1
+    rev: v2.4.2
     hooks:
       - id: codespell
         additional_dependencies: [ 'tomli']
@@ -42,7 +42,7 @@ repos:
       - id: numpydoc-validation
         exclude: ^docs/|^tests/|noxfile.py|^src/lsapy/core/formatting.py
   - repo: https://github.com/jendrikseipp/vulture
-    rev: 'v2.14'
+    rev: 'v2.16'
     hooks:
       - id: vulture
   - repo: https://github.com/kynan/nbstripout

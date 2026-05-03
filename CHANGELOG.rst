@@ -16,6 +16,7 @@ Bug fixes
 * Fix ``lsapy.core.formatting.sc_repr`` function  to handle ``SuitabilityCriteria`` with non-empty ``xr.DataArray`` indicators and undefined ``func`` (issue `#115 <https://github.com/baptistehamon/lsapy/issues/115>`_, PR `#116 <https://github.com/baptistehamon/lsapy/pull/116>`_).
 * Fix ``lsapy.aggregate.aggregate`` function for ``mean`` and ``gmean`` aggregation when weights are provided (issue `#121 <https://github.com/baptistehamon/lsapy/issues/121>`_, PR `#122 <https://github.com/baptistehamon/lsapy/pull/122>`_).
 * Fix ``LandSuitabilityAnalysis.run`` to reassign attrs to each criteria in the return ``xr.Dataset`` (issue `#119 <https://github.com/baptistehamon/lsapy/issues/119>`_, PR `#124 <https://github.com/baptistehamon/lsapy/pull/124>`_).
+* Fix ``open_data`` list of supported variables printing  (issue `#143 <https://github.com/baptistehamon/lsapy/issues/143>`_, PR `#144 <https://github.com/baptistehamon/lsapy/pull/144>`_).
 
 Breaking changes
 ^^^^^^^^^^^^^^^^
@@ -29,6 +30,7 @@ Internal changes
 * `h5py` has been added to the project dev dependencies (PR `#112 <https://github.com/baptistehamon/lsapy/pull/112>`_).
 * ``lsapy.aggregate._agg_weights`` has been modified to return a ``xr.DataArray`` where weights are distributed only along the ``variable`` dimension (issue `#117 <https://github.com/baptistehamon/lsapy/issues/117>`_, PR `#122 <https://github.com/baptistehamon/lsapy/pull/122>`_).
 * Dependabot has been configured to check version updates (issue `#129 <https://github.com/baptistehamon/lsapy/issues/129>`_, PR `#130 <https://github.com/baptistehamon/lsapy/pull/130>`_).
+* ``_check_realm_vars`` test has been updated to unsure supported variables are correctly printed (issue `#143 <https://github.com/baptistehamon/lsapy/issues/143>`_, PR `#144 <https://github.com/baptistehamon/lsapy/pull/144>`_).
 
 v0.3.1 (2025-11-14)
 -------------------

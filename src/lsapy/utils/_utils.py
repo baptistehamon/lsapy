@@ -78,9 +78,9 @@ def _check_realm_vars(realm: str, variables: str | list | None = None) -> list |
 
     for v in variables:
         if v not in DATA_REALMS[realm]:
+            vars_list = "', '".join(DATA_REALMS[realm])
             raise ValueError(
-                f"Variable '{v}' is not supported in realm '{realm}'. "
-                f"Supported variables are: '{'', ''.join(DATA_REALMS[realm])}'."
+                f"Variable '{v}' is not supported in realm '{realm}'. Supported variables are: '{vars_list}'."
             )
 
     return variables

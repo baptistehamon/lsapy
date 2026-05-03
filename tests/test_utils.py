@@ -29,7 +29,11 @@ class TestRealmVars:
             _check_realm_vars("invalid")
         with pytest.raises(TypeError, match="Variable must be a string or a list of strings."):
             _check_realm_vars("climate", 123)
-        with pytest.raises(ValueError, match="Variable 'invalid_var' is not supported in realm 'climate'."):
+        with pytest.raises(
+            ValueError,
+            match="Variable 'invalid_var' is not supported in realm 'climate'. "
+            "Supported variables are: 'pr', 'tas', 'tasmax', 'tasmin'.",
+        ):
             _check_realm_vars("climate", "invalid_var")
 
     def test_return_none(self):

@@ -17,6 +17,7 @@ Bug fixes
 * Fix ``lsapy.aggregate.aggregate`` function for ``mean`` and ``gmean`` aggregation when weights are provided (issue `#121 <https://github.com/baptistehamon/lsapy/issues/121>`_, PR `#122 <https://github.com/baptistehamon/lsapy/pull/122>`_).
 * Fix ``LandSuitabilityAnalysis.run`` to reassign attrs to each criteria in the return ``xr.Dataset`` (issue `#119 <https://github.com/baptistehamon/lsapy/issues/119>`_, PR `#124 <https://github.com/baptistehamon/lsapy/pull/124>`_).
 * Fix issue with ``open_data`` due to the release of the v2.0 of `NZGLID` (issue `#145 <https://github.com/baptistehamon/lsapy/issues/145>`_, PR `#146 <https://github.com/baptistehamon/lsapy/pull/146>`_).
+* Fix ``open_data`` list of supported variables printing and update docstring (issue `#143 <https://github.com/baptistehamon/lsapy/issues/143>`_, PR `#144 <https://github.com/baptistehamon/lsapy/pull/144>`_).
 
 Breaking changes
 ^^^^^^^^^^^^^^^^
@@ -35,6 +36,7 @@ Internal changes
 * ``lsapy.aggregate._agg_weights`` has been modified to return a ``xr.DataArray`` where weights are distributed only along the ``variable`` dimension (issue `#117 <https://github.com/baptistehamon/lsapy/issues/117>`_, PR `#122 <https://github.com/baptistehamon/lsapy/pull/122>`_).
 * Dependabot has been configured to check version updates (issue `#129 <https://github.com/baptistehamon/lsapy/issues/129>`_, PR `#130 <https://github.com/baptistehamon/lsapy/pull/130>`_).
 * The registry file for example data has been updated and the DOIs have been set to the v2.0 of `NZGLID` (issue `#145 <https://github.com/baptistehamon/lsapy/issues/145>`_, PR `#146 <https://github.com/baptistehamon/lsapy/pull/146>`_).
+* ``_check_realm_vars`` test has been updated to unsure supported variables are correctly printed (issue `#143 <https://github.com/baptistehamon/lsapy/issues/143>`_, PR `#144 <https://github.com/baptistehamon/lsapy/pull/144>`_).
 
 v0.3.1 (2025-11-14)
 -------------------

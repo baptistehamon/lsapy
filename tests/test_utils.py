@@ -19,8 +19,8 @@ class TestKuriPooch:
         _kuri = kuri()
         assert isinstance(_kuri, pooch.Pooch)
         assert "NEX-GDDP-CMIP6_day_ACCESS-CM2_historical_r1i1p1f1_20000101-20041231.nc" in _kuri.registry
-        assert "New-Zealand-Gridded-Land-Information-Dataset_NZ5km.nc" in _kuri.registry
-        assert "nzglid_5km.zip" in _kuri.registry
+        assert "NZGLID_5km_v2.0.nc" in _kuri.registry
+        assert "nzglid_5km_v2.0.zip" in _kuri.registry
 
 
 class TestRealmVars:

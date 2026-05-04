@@ -23,6 +23,7 @@ DATA_REALMS = {
         "cation_exchange_capacity",
         "depth_slowly_permeable_horizon",
         "drainage",
+        "elevation",
         "erosion_severity",
         "flood_return_interval",
         "land_cover",
@@ -35,12 +36,12 @@ DATA_REALMS = {
         "potential_rooting_depth",
         "profile_readily_available_water",
         "profile_total_available_water",
-        "rock",
+        "rock_outcrops_surface_boulders",
         "salinity",
         "slope",
         "soil_temperature_regime",
         "topsoil_gravel_content",
-        "total_carbon",
+        # "total_carbon", # not present in v2 of NZGLID
     ],
 }
 
@@ -116,10 +117,10 @@ def open_data(realm: str, variables: str | list | None = None, **kwargs: Any) ->
     if realm == "climate":
         fname = "NEX-GDDP-CMIP6_day_ACCESS-CM2_historical_r1i1p1f1_20000101-20041231.nc"
     elif realm == "land" and not variables:
-        fname = "New-Zealand-Gridded-Land-Information-Dataset_NZ5km.nc"
+        fname = "NZGLID_5km_v2.0.nc"
     elif realm == "land" and variables:
-        fname = "nzglid_5km.zip"
-        unpack = Unzip(members=[f"NZGLID_{v}_NZ5km.nc" for v in _format_vars_names(variables)])
+        fname = "nzglid_5km_v2.0.zip"
+        unpack = Unzip(members=[f"NZGLID_{v}_5km_v2.0.nc" for v in _format_vars_names(variables)])
     if "unpack" not in locals():
         unpack = None
 

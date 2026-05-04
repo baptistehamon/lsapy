@@ -103,7 +103,18 @@ def open_data(realm: str, variables: str | list | None = None, **kwargs: Any) ->
         The realm of the dataset, either 'climate' or 'land'.
     variables : str or list, optional
         The variable(s) to load from the dataset. If None (default), all variables for the realm
-        will be loaded.
+        will be loaded. The available variables are:
+
+        - For ``realm='climate'``: 'pr', 'tas', 'tasmax', 'tasmin'.
+        - For ``realm='land'``: 'aspect', 'cation_exchange_capacity',
+          'depth_slowly_permeable_horizon', 'drainage', 'elevation',
+          'erosion_severity', 'flood_return_interval', 'land_cover',
+          'land_use_capability', 'lucas_land_use', 'particle_size',
+          'permeability_profile', 'ph', 'phosphate_retention',
+          'potential_rooting_depth', 'profile_readily_available_water',
+          'profile_total_available_water', 'rock_outcrops_surface_boulders',
+          'salinity', 'slope', 'soil_temperature_regime', 'topsoil_gravel_content'.
+
     **kwargs : Any
         Additional keyword arguments to pass to `xarray.open_mfdataset`.
 

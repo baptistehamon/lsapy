@@ -18,6 +18,7 @@ Bug fixes
 * Fix ``LandSuitabilityAnalysis.run`` to reassign attrs to each criteria in the return ``xr.Dataset`` (issue `#119 <https://github.com/baptistehamon/lsapy/issues/119>`_, PR `#124 <https://github.com/baptistehamon/lsapy/pull/124>`_).
 * Fix issue with ``open_data`` due to the release of the v2.0 of `NZGLID` (issue `#145 <https://github.com/baptistehamon/lsapy/issues/145>`_, PR `#146 <https://github.com/baptistehamon/lsapy/pull/146>`_).
 * Fix ``open_data`` list of supported variables printing and update docstring (issue `#143 <https://github.com/baptistehamon/lsapy/issues/143>`_, PR `#144 <https://github.com/baptistehamon/lsapy/pull/144>`_).
+* Update sample data hash in the registry file after `NZGLID` v2.0 modifications (PR `#149 <https://github.com/baptistehamon/lsapy/pull/149>`_).
 
 Breaking changes
 ^^^^^^^^^^^^^^^^

@@ -17,8 +17,8 @@ LSA in Python easier and more accessible to users. It provides a set of objects 
 
 .. _`xarray`: https://xarray.pydata.org/en/stable/
 
-Quick Start
------------
+Quick Install
+-------------
 To install `LSAPy`, you can use `pip`:
 
 .. code-block:: shell
@@ -30,6 +30,8 @@ or `conda`:
 .. code-block:: shell
 
     conda install -c conda-forge lsapy
+
+You can find the development installation instructions in the `Contribution`_ section.
 
 You can now perform your LSA:
 
@@ -75,8 +77,6 @@ Contributing
 `LSAPy` is an open-source project and we welcome contributions from the community. If you are interested in contributing, please
 refer to the `Contribution`_ section for guidelines on how to get started helping us improve the library.
 
-.. _`Contribution`: https://lsapy.readthedocs.io/en/latest/community/contributing.html
-
 How to cite `LSAPy`
 -------------------
 
@@ -98,6 +98,7 @@ by the `University of Canterbury`_ in New Zealand.
 
 The Python package has been created following the `pyOpenSci Guidebook`_.
 
+.. _`Contribution`: https://lsapy.readthedocs.io/en/latest/community/contributing.html
 .. _`Food Transition 2050`: https://www.foodtransitions2050.ac.nz/
 .. _`University of Canterbury`: https://www.canterbury.ac.nz/
 .. _`pyOpenSci Guidebook`: https://www.pyopensci.org/python-package-guide/

@@ -12,9 +12,16 @@ LSAPy Documentation
 Description
 -----------
 
-`LSAPy` stands for Land Suitability Analysis (LSA) in Python. Its objective is to make conducting
-LSA in Python easier and more accessible to users. It provides a set of objects operating together
-making LSA's workflow straight forward and easy to understand.
+`LSAPy` (Land Suitability Analysis in Python) is a highly customizable, open-source Python library designed
+to streamline and enhance Land Suitability Analysis (LSA) workflows. Its objective is to make conducting LSA
+in Python easier and more accessible to users. The package implements a fuzzy-logic approach and provides a
+set of objects that work together to deliver a flexible and user-defined LSA framework.
+
+By relying on `xarray`_ objects for computation, `LSAPy` is specifically designed to facilitate LSA under climate
+change projections. Moreover, the use of `xarray`_ allows for seamless integration with the broader Python ecosystem,
+such as `dask`_ for efficient parallel processing and `matplotlib`_ for data visualisation. The modular design of
+`LSAPy` addresses some limitations of existing LSA tools by offering greater flexibility, reproducibility, and
+scalability for research and practical applications.
 
 .. toctree::
    :maxdepth: 2

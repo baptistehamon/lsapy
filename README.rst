@@ -11,15 +11,24 @@ LSAPy: Land Suitability Analysis in Python
 
 |pypi| |conda| |python-versions| |status| |testing| |coverage| |ruff| |pre-commit| |docs| |question| |preprint| |zenodo|
 
-`LSAPy` stands for Land Suitability Analysis (LSA) in Python. Its objective is to make conducting
-LSA in Python easier and more accessible to users. It provides a set of objects built around
-`xarray`_ and operating together, making LSA's workflow straight forward and easy to understand.
+*LSAPy* (Land Suitability Analysis in Python) is a highly customizable, open-source Python library designed
+to streamline and enhance Land Suitability Analysis (LSA) workflows. Its objective is to make conducting LSA
+in Python easier and more accessible to users. The package implements a fuzzy-logic approach and provides a
+set of objects that work together to deliver a flexible and user-defined LSA framework.
+
+By relying on `xarray`_ objects for computation, *LSAPy* is specifically designed to facilitate LSA under climate
+change projections. Moreover, the use of `xarray`_ allows for seamless integration with the broader Python ecosystem,
+such as `dask`_ for efficient parallel processing and `matplotlib`_ for data visualisation. The modular design of
+*LSAPy* addresses some limitations of existing LSA tools by offering greater flexibility, reproducibility, and
+scalability for research and practical applications.
 
 .. _`xarray`: https://xarray.pydata.org/en/stable/
+.. _`dask`: https://docs.dask.org/en/stable/
+.. _`matplotlib`: https://matplotlib.org/stable/
 
 Quick Install
 -------------
-To install `LSAPy`, you can use `pip`:
+To install *LSAPy*, you can use `pip`:
 
 .. code-block:: shell
 
@@ -36,8 +45,7 @@ You can find the development installation instructions in the `Contribution`_ se
 Land Suitability Analysis (LSA)
 -------------------------------
 
-Below is a quick example of how to conduct a land suitability analysis using `LSAPy`. For more detailed tutorials
-and examples, please refer to the `User Guide`_.
+Below is a quick example of how to conduct a land suitability analysis using *LSAPy*.
 
 .. _`User Guide`: https://lsapy.readthedocs.io/en/latest/notebooks/index.html
 
@@ -72,17 +80,18 @@ and examples, please refer to the `User Guide`_.
     # run your analysis
     lsa.run(params)
 
+For more detailed tutorials and examples, please refer to the `User Guide`_.
 
 Contributing
 ------------
 
-`LSAPy` is an open-source project and we welcome contributions from the community. If you are interested in contributing, please
+*LSAPy* is an open-source project and we welcome contributions from the community. If you are interested in contributing, please
 refer to the `Contribution`_ section for guidelines on how to get started helping us improve the library.
 
-How to cite `LSAPy`
+How to cite *LSAPy*
 -------------------
 
-If you use `LSAPy` in your research or project, please consider citing it. The software is currently under review by
+If you use *LSAPy* in your research or project, please consider citing it. The software is currently under review by
 `pyOpenSci <https://github.com/pyOpenSci/software-submission/issues/261>`__  for publication in the `Journal of Open Source Software`
 (JOSS), and we will update this section with the relevant reference once the review process is complete. In the meantime,
 you can cite the preprint, which is available on `Research Square` : https://doi.org/10.21203/rs.3.rs-8399348/v1.
@@ -93,7 +102,7 @@ https://doi.org/10.5281/zenodo.15015110.
 Credits
 -------
 
-The development of `LSAPy` started as part of a PhD, funded by the `Food Transition 2050`_  Joint Postgraduate School and hosted
+The development of *LSAPy* started as part of a PhD, funded by the `Food Transition 2050`_  Joint Postgraduate School and hosted
 by the `University of Canterbury`_ in New Zealand.
 
 |FT2050| |UC-white| |UC-black|

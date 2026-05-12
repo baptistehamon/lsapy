@@ -33,7 +33,13 @@ or `conda`:
 
 You can find the development installation instructions in the `Contribution`_ section.
 
-You can now perform your LSA:
+Land Suitability Analysis (LSA)
+-------------------------------
+
+Below is a quick example of how to conduct a land suitability analysis using `LSAPy`. For more detailed tutorials
+and examples, please refer to the `User Guide`_.
+
+.. _`User Guide`: https://lsapy.readthedocs.io/en/latest/notebooks/index.html
 
 .. code-block:: python
 
@@ -65,10 +71,6 @@ You can now perform your LSA:
 
     # run your analysis
     lsa.run(params)
-
-More detailed tutorials and examples can be found in the `User Guide`_.
-
-.. _`User Guide`: https://lsapy.readthedocs.io/en/latest/notebooks/index.html
 
 
 Contributing

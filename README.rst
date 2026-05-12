@@ -1,3 +1,7 @@
+==========================================
+LSAPy: Land Suitability Analysis in Python
+==========================================
+
 .. image:: https://raw.githubusercontent.com/baptistehamon/lsapy/main/docs/logos/lsapy/LSAPy_Logo_FullColour.png
     :class: dark-light
     :align: center
@@ -5,9 +9,7 @@
     :width: 400px
     :alt: LSAPy Logo
 
-LSAPy: Land Suitability Analysis in Python
-==========================================
-|pypi| |conda| |python-versions| |status| |testing| |coverage| |ruff| |pre-commit| |docs| |question| |zenodo|
+|pypi| |conda| |python-versions| |status| |testing| |coverage| |ruff| |pre-commit| |docs| |question| |preprint| |zenodo|
 
 `LSAPy` stands for Land Suitability Analysis (LSA) in Python. Its objective is to make conducting
 LSA in Python easier and more accessible to users. It provides a set of objects built around
@@ -74,6 +76,17 @@ Contributing
 refer to the `Contribution`_ section for guidelines on how to get started helping us improve the library.
 
 .. _`Contribution`: https://lsapy.readthedocs.io/en/latest/community/contributing.html
+
+How to cite `LSAPy`
+-------------------
+
+If you use `LSAPy` in your research or project, please consider citing it. The software is currently under review by
+`pyOpenSci <https://github.com/pyOpenSci/software-submission/issues/261>`__  for publication in the `Journal of Open Source Software`
+(JOSS), and we will update this section with the relevant reference once the review process is complete. In the meantime,
+you can cite the preprint, which is available on `Research Square` : https://doi.org/10.21203/rs.3.rs-8399348/v1.
+
+If you wish to cite a specific version of the software, you can find the relevant reference on `Zenodo` :
+https://doi.org/10.5281/zenodo.15015110.
 
 Credits
 -------
@@ -156,3 +169,7 @@ The Python package has been created following the `pyOpenSci Guidebook`_.
 .. |python-versions| image:: https://img.shields.io/pypi/pyversions/lsapy
         :target: https://pypi.python.org/pypi/lsapy
         :alt: Supported Python Versions
+
+.. |preprint| image:: https://img.shields.io/badge/preprint-10.21203%2Frs.3.rs--8399348%2Fv1-brightgreen?style=flat&color=brightgreen
+    :target: https://doi.org/10.21203/rs.3.rs-8399348/v1
+    :alt: Link to preprint on Research Square

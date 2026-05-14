@@ -1,3 +1,7 @@
+==========================================
+LSAPy: Land Suitability Analysis in Python
+==========================================
+
 .. image:: https://raw.githubusercontent.com/baptistehamon/lsapy/main/docs/logos/lsapy/LSAPy_Logo_FullColour.png
     :class: dark-light
     :align: center
@@ -5,19 +9,26 @@
     :width: 400px
     :alt: LSAPy Logo
 
-LSAPy: Land Suitability Analysis in Python
-==========================================
-|pypi| |conda| |python-versions| |status| |testing| |coverage| |ruff| |pre-commit| |docs| |question| |zenodo|
+|pypi| |conda| |python-versions| |status| |testing| |coverage| |ruff| |pre-commit| |docs| |question| |preprint| |zenodo|
 
-`LSAPy` stands for Land Suitability Analysis (LSA) in Python. Its objective is to make conducting
-LSA in Python easier and more accessible to users. It provides a set of objects built around
-`xarray`_ and operating together, making LSA's workflow straight forward and easy to understand.
+*LSAPy* (Land Suitability Analysis in Python) is a highly customizable, open-source Python library designed
+to streamline and enhance Land Suitability Analysis (LSA) workflows. Its objective is to make conducting LSA
+in Python easier and more accessible to users. The package implements a fuzzy-logic approach and provides a
+set of objects that work together to deliver a flexible and user-defined LSA framework.
+
+By relying on `xarray`_ objects for computation, *LSAPy* is specifically designed to facilitate LSA under climate
+change projections. Moreover, the use of `xarray`_ allows for seamless integration with the broader Python ecosystem,
+such as `dask`_ for efficient parallel processing and `matplotlib`_ for data visualisation. The modular design of
+*LSAPy* addresses some limitations of existing LSA tools by offering greater flexibility, reproducibility, and
+scalability for research and practical applications.
 
 .. _`xarray`: https://xarray.pydata.org/en/stable/
+.. _`dask`: https://docs.dask.org/en/stable/
+.. _`matplotlib`: https://matplotlib.org/stable/
 
-Quick Start
------------
-To install `LSAPy`, you can use `pip`:
+Quick Install
+-------------
+To install *LSAPy*, you can use `pip`:
 
 .. code-block:: shell
 
@@ -29,7 +40,14 @@ or `conda`:
 
     conda install -c conda-forge lsapy
 
-You can now perform your LSA:
+You can find the development installation instructions in the `Contribution`_ section.
+
+Land Suitability Analysis (LSA)
+-------------------------------
+
+Below is a quick example of how to conduct a land suitability analysis using *LSAPy*.
+
+.. _`User Guide`: https://lsapy.readthedocs.io/en/latest/notebooks/index.html
 
 .. code-block:: python
 
@@ -62,29 +80,36 @@ You can now perform your LSA:
     # run your analysis
     lsa.run(params)
 
-More detailed tutorials and examples can be found in the `User Guide`_.
-
-.. _`User Guide`: https://lsapy.readthedocs.io/en/latest/notebooks/index.html
-
+For more detailed tutorials and examples, please refer to the `User Guide`_.
 
 Contributing
 ------------
 
-`LSAPy` is an open-source project and we welcome contributions from the community. If you are interested in contributing, please
+*LSAPy* is an open-source project and we welcome contributions from the community. If you are interested in contributing, please
 refer to the `Contribution`_ section for guidelines on how to get started helping us improve the library.
 
-.. _`Contribution`: https://lsapy.readthedocs.io/en/latest/community/contributing.html
+How to cite *LSAPy*
+-------------------
+
+If you use *LSAPy* in your research or project, please consider citing it. The software is currently under review by
+`pyOpenSci <https://github.com/pyOpenSci/software-submission/issues/261>`__  for publication in the `Journal of Open Source Software`
+(JOSS), and we will update this section with the relevant reference once the review process is complete. In the meantime,
+you can cite the preprint, which is available on `Research Square` : https://doi.org/10.21203/rs.3.rs-8399348/v1.
+
+If you wish to cite a specific version of the software, you can find the relevant reference on `Zenodo` :
+https://doi.org/10.5281/zenodo.15015110.
 
 Credits
 -------
 
-The development of `LSAPy` started as part of a PhD, funded by the `Food Transition 2050`_  Joint Postgraduate School and hosted
+The development of *LSAPy* started as part of a PhD, funded by the `Food Transition 2050`_  Joint Postgraduate School and hosted
 by the `University of Canterbury`_ in New Zealand.
 
 |FT2050| |UC-white| |UC-black|
 
 The Python package has been created following the `pyOpenSci Guidebook`_.
 
+.. _`Contribution`: https://lsapy.readthedocs.io/en/latest/community/contributing.html
 .. _`Food Transition 2050`: https://www.foodtransitions2050.ac.nz/
 .. _`University of Canterbury`: https://www.canterbury.ac.nz/
 .. _`pyOpenSci Guidebook`: https://www.pyopensci.org/python-package-guide/
@@ -156,3 +181,7 @@ The Python package has been created following the `pyOpenSci Guidebook`_.
 .. |python-versions| image:: https://img.shields.io/pypi/pyversions/lsapy
         :target: https://pypi.python.org/pypi/lsapy
         :alt: Supported Python Versions
+
+.. |preprint| image:: https://img.shields.io/badge/preprint-10.21203%2Frs.3.rs--8399348%2Fv1-brightgreen?style=flat&color=brightgreen
+    :target: https://doi.org/10.21203/rs.3.rs-8399348/v1
+    :alt: Link to preprint on Research Square

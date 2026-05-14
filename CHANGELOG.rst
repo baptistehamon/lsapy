@@ -9,16 +9,16 @@ Contributor to this version: Baptiste Hamon (@baptistehamon).
 New features
 ^^^^^^^^^^^^
 * ``SuitabilityCriteria`` now supports "inplace" computation, meaning that the suitability values are stored in the ``indicator`` attribute of the criteria (issue `#118 <https://github.com/baptistehamon/lsapy/issues/118>`_, PR `#123 <https://github.com/baptistehamon/lsapy/pull/123>`_).
-* `lsapy` is now supports Python 3.14 (issue `#127 <https://github.com/baptistehamon/lsapy/issues/127>`_, PR `#128 <https://github.com/baptistehamon/lsapy/pull/128>`_).
+* LSAPy is now supports Python 3.14 (issue `#127 <https://github.com/baptistehamon/lsapy/issues/127>`_, PR `#128 <https://github.com/baptistehamon/lsapy/pull/128>`_).
 
 Bug fixes
 ^^^^^^^^^
 * Fix ``lsapy.core.formatting.sc_repr`` function  to handle ``SuitabilityCriteria`` with non-empty ``xr.DataArray`` indicators and undefined ``func`` (issue `#115 <https://github.com/baptistehamon/lsapy/issues/115>`_, PR `#116 <https://github.com/baptistehamon/lsapy/pull/116>`_).
 * Fix ``lsapy.aggregate.aggregate`` function for ``mean`` and ``gmean`` aggregation when weights are provided (issue `#121 <https://github.com/baptistehamon/lsapy/issues/121>`_, PR `#122 <https://github.com/baptistehamon/lsapy/pull/122>`_).
 * Fix ``LandSuitabilityAnalysis.run`` to reassign attrs to each criteria in the return ``xr.Dataset`` (issue `#119 <https://github.com/baptistehamon/lsapy/issues/119>`_, PR `#124 <https://github.com/baptistehamon/lsapy/pull/124>`_).
-* Fix issue with ``open_data`` due to the release of the v2.0 of `NZGLID` (issue `#145 <https://github.com/baptistehamon/lsapy/issues/145>`_, PR `#146 <https://github.com/baptistehamon/lsapy/pull/146>`_).
+* Fix issue with ``open_data`` due to the release of the v2.0 of *NZGLID* (issue `#145 <https://github.com/baptistehamon/lsapy/issues/145>`_, PR `#146 <https://github.com/baptistehamon/lsapy/pull/146>`_).
 * Fix ``open_data`` list of supported variables printing and update docstring (issue `#143 <https://github.com/baptistehamon/lsapy/issues/143>`_, PR `#144 <https://github.com/baptistehamon/lsapy/pull/144>`_).
-* Update sample data hash in the registry file after `NZGLID` v2.0 modifications (PR `#149 <https://github.com/baptistehamon/lsapy/pull/149>`_).
+* Update sample data hash in the registry file after *NZGLID* v2.0 modifications (PR `#149 <https://github.com/baptistehamon/lsapy/pull/149>`_).
 
 Breaking changes
 ^^^^^^^^^^^^^^^^
@@ -26,18 +26,23 @@ Breaking changes
     * The ``SuitabilityFunction`` class has been removed.
     * All the standardization functions contained in this module have been removed and are now only available in the ``lsapy.standardize`` module.
     * The ``fit_membership`` function has been removed and ``lsapy.standardize.fit`` should be used instead.
-* The example data provided for the `land` realm with the package has been updated reflecting the changes in the v2.0 of `NZGLID` dataset (issue `#145 <https://github.com/baptistehamon/lsapy/issues/145>`_, PR `#146 <https://github.com/baptistehamon/lsapy/pull/146>`_):
+* The example data provided for the *land* realm with the package has been updated reflecting the changes in the v2.0 of *NZGLID* dataset (issue `#145 <https://github.com/baptistehamon/lsapy/issues/145>`_, PR `#146 <https://github.com/baptistehamon/lsapy/pull/146>`_):
     * Minor changes in the data values have been introduced.
-    * The variable `rock` has been renamed to `rock_outcrops_surface_boulders`.
-    * The variable `carbon_content` has been removed.
+    * The variable *rock* has been renamed to *rock_outcrops_surface_boulders*.
+    * The variable *carbon_content* has been removed.
 
 Internal changes
 ^^^^^^^^^^^^^^^^
-* `h5py` has been added to the project dev dependencies (PR `#112 <https://github.com/baptistehamon/lsapy/pull/112>`_).
+* ``h5py`` has been added to the project dev dependencies (PR `#112 <https://github.com/baptistehamon/lsapy/pull/112>`_).
 * ``lsapy.aggregate._agg_weights`` has been modified to return a ``xr.DataArray`` where weights are distributed only along the ``variable`` dimension (issue `#117 <https://github.com/baptistehamon/lsapy/issues/117>`_, PR `#122 <https://github.com/baptistehamon/lsapy/pull/122>`_).
 * Dependabot has been configured to check version updates (issue `#129 <https://github.com/baptistehamon/lsapy/issues/129>`_, PR `#130 <https://github.com/baptistehamon/lsapy/pull/130>`_).
 * The registry file for example data has been updated and the DOIs have been set to the v2.0 of `NZGLID` (issue `#145 <https://github.com/baptistehamon/lsapy/issues/145>`_, PR `#146 <https://github.com/baptistehamon/lsapy/pull/146>`_).
 * ``_check_realm_vars`` test has been updated to unsure supported variables are correctly printed (issue `#143 <https://github.com/baptistehamon/lsapy/issues/143>`_, PR `#144 <https://github.com/baptistehamon/lsapy/pull/144>`_).
+* Update LSAPy description in the README file and documentation home page (PR `#151 <https://github.com/baptistehamon/lsapy/pull/151>`_).
+* The links to the development installation instructions have been added to the README and documentation (issue `#142 <https://github.com/baptistehamon/lsapy/issues/142>`_, PR `#151 <https://github.com/baptistehamon/lsapy/pull/151>`_).
+* Update the README file:
+    * A new section *Citation* has been added with the citation information of LSAPy (issue `#142 <https://github.com/baptistehamon/lsapy/issues/142>`_, PR `#151 <https://github.com/baptistehamon/lsapy/pull/151>`_).
+    * The *Quick Start* section has been split into two sections: *Quick install* and *Land Suitability Analysis (LSA)* (PR `#151 <https://github.com/baptistehamon/lsapy/pull/151>`_).
 
 v0.3.1 (2025-11-14)
 -------------------
@@ -53,7 +58,7 @@ Contributor to this version: Baptiste Hamon (@baptistehamon).
 
 Announcements
 ^^^^^^^^^^^^^
-* `LSAPy` is now available on `conda-forge <https://anaconda.org/conda-forge/lsapy>`_ (issue `#68 <https://github.com/baptistehamon/lsapy/issues/68>`_, PR `#74 <https://github.com/baptistehamon/lsapy/pull/74>`_).
+* LSAPy is now available on `conda-forge <https://anaconda.org/conda-forge/lsapy>`_ (issue `#68 <https://github.com/baptistehamon/lsapy/issues/68>`_, PR `#74 <https://github.com/baptistehamon/lsapy/pull/74>`_).
 
 New features
 ^^^^^^^^^^^^
@@ -93,7 +98,7 @@ New features
 ^^^^^^^^^^^^
 * Functions' alternative names can now be used in ``SuitabilityFunction`` (PR `#43 <https://github.com/baptistehamon/lsapy/pull/43>`_).
 * The documentation of membership functions has been improved (PR `#43 <https://github.com/baptistehamon/lsapy/pull/43>`_).
-* `LSAPy` officially supports Python>=3.10 and is OS independent (PR `#46 <https://github.com/baptistehamon/lsapy/pull/46>`_).
+* LSAPy officially supports Python>=3.10 and is OS independent (PR `#46 <https://github.com/baptistehamon/lsapy/pull/46>`_).
 * ``repr`` methods of ``SuitabilityFunction``, ``SuitabilityCriteria`` and ``LandSuitabilityAnalysis`` have been modified to provide more user-friendly information (issue `#55 <https://github.com/baptistehamon/lsapy/issues/55>`_, PR `#59 <https://github.com/baptistehamon/lsapy/pull/59>`_).
 * A setter has been added to the ``attrs`` method of ``SuitabilityCriteria`` and ``LandSuitabilityAnalysis`` (issue `#55 <https://github.com/baptistehamon/lsapy/issues/55>`_, PR `#59 <https://github.com/baptistehamon/lsapy/pull/59>`_).
 * The ``open_data`` function has been added to the ``lsapy.utils`` module to load data from the LSAPy data repository (issue `#60 <https://github.com/baptistehamon/lsapy/issues/60>`_, PR `#62 <https://github.com/baptistehamon/lsapy/pull/62>`_).
@@ -113,7 +118,7 @@ Breaking changes
 
 Internal changes
 ^^^^^^^^^^^^^^^^
-* Tests have been added for currently implemented `LSAPy` functionalities (issue `#7 <https://github.com/baptistehamon/lsapy/issues/7>`_, PR `#46 <https://github.com/baptistehamon/lsapy/pull/46>`_).
+* Tests have been added for currently implemented LSAPy functionalities (issue `#7 <https://github.com/baptistehamon/lsapy/issues/7>`_, PR `#46 <https://github.com/baptistehamon/lsapy/pull/46>`_).
     * ``pytest`` is used as the testing framework to run all unit tests, doctests and test notebooks.
     * ``nox`` has been set up and is used to run tests in CI workflows.
 * A CI GitHub Actions workflow has been added (issue `#8 <https://github.com/baptistehamon/lsapy/issues/8>`_, PR `#46 <https://github.com/baptistehamon/lsapy/pull/46>`_)
@@ -126,17 +131,17 @@ Internal changes
     * Update package metadata: keywords, classifiers (python versions) and project URLs.
     * Update package sdist files.
 * The ``lsapy.core.formatting`` module has been added and contains ``repr`` formatting functions (issue `#55 <https://github.com/baptistehamon/lsapy/issues/55>`_, PR `#59 <https://github.com/baptistehamon/lsapy/pull/59>`_).
-* `LSAPy` sample data management has been improved (issue `#60 <https://github.com/baptistehamon/lsapy/issues/60>`_, PR `#62 <https://github.com/baptistehamon/lsapy/pull/62>`_):
-    * `LSAPy` now uses `pooch` to fetch sample data.
+* LSAPy sample data management has been improved (issue `#60 <https://github.com/baptistehamon/lsapy/issues/60>`_, PR `#62 <https://github.com/baptistehamon/lsapy/pull/62>`_):
+    * LSAPy now uses ``pooch`` to fetch sample data.
     * Old data files have been removed from the data folder, and the new climate data file has been added.
     * A registry file has been added to store sample data file names, hashes and URLs.
-* Aggregation functions have been moved to the `lsapy.core.aggregation` module (PR `#63 <https://github.com/baptistehamon/lsapy/pull/63>`_).
-* A relaxed configuration of `mypy` has been added to the project (PR `#66 <https://github.com/baptistehamon/lsapy/pull/66>`_).
+* Aggregation functions have been moved to the ``lsapy.core.aggregation`` module (PR `#63 <https://github.com/baptistehamon/lsapy/pull/63>`_).
+* A relaxed configuration of ``mypy`` has been added to the project (PR `#66 <https://github.com/baptistehamon/lsapy/pull/66>`_).
 
 Bug fixes
 ^^^^^^^^^
 * Fix issues with representations of ``SuitabilityFunction`` when no parameters are provided (issue `#61 <https://github.com/baptistehamon/lsapy/issues/61>`_, PR `#65 <https://github.com/baptistehamon/lsapy/pull/65>`_).
-* Add `**kwargs` to `SuitabilityCriteria.compute` and `LandSuitabilityAnalysis.run` to allow handling Dask arrays (issue `#64 <https://github.com/baptistehamon/lsapy/issues/64>`_, PR `#65 <https://github.com/baptistehamon/lsapy/pull/65>`_).
+* Add ``**kwargs`` to ``SuitabilityCriteria.compute`` and ``LandSuitabilityAnalysis.run`` to allow handling Dask arrays (issue `#64 <https://github.com/baptistehamon/lsapy/issues/64>`_, PR `#65 <https://github.com/baptistehamon/lsapy/pull/65>`_).
 * The codebase has been modified to improve typing and fix mypy errors (issue `#35 <https://github.com/baptistehamon/lsapy/issues/35>`_, PR `#66 <https://github.com/baptistehamon/lsapy/pull/66>`_).
 
 v0.1.1 (2025-07-26)
@@ -171,8 +176,8 @@ Internal changes
 * Templates for requesting new features, asking question and submitting PR have been added (issue `#11 <https://github.com/baptistehamon/lsapy/issues/11>`_, PR `#12 <https://github.com/baptistehamon/lsapy/pull/12>`_).
 * The README has been updated to make links permanent and to add a docs badge (PR `#13 <https://github.com/baptistehamon/lsapy/pull/13>`_).
 * A configuration file for Zenodo integration has been added to the repository (PR `#14 <https://github.com/baptistehamon/lsapy/pull/14>`_).
-* `Pre-commit` has been setup and `ruff`, `codespell` and `numpydoc` hooks have been added (issue `#8 <https://github.com/baptistehamon/lsapy/issues/8>`_, PR `#18 <https://github.com/baptistehamon/lsapy/pull/18>`_/PR `#19 <https://github.com/baptistehamon/lsapy/pull/19>`_).
-* The autoupdate schedule of `pre-commit` has been set to weekly (PR `#21 <https://github.com/baptistehamon/lsapy/pull/21>`_)
+* *Pre-commit* has been setup and ``ruff``, ``codespell`` and ``numpydoc`` hooks have been added (issue `#8 <https://github.com/baptistehamon/lsapy/issues/8>`_, PR `#18 <https://github.com/baptistehamon/lsapy/pull/18>`_/PR `#19 <https://github.com/baptistehamon/lsapy/pull/19>`_).
+* The autoupdate schedule of ``pre-commit`` has been set to weekly (PR `#21 <https://github.com/baptistehamon/lsapy/pull/21>`_)
 * The unused ``introduction.ipynb`` notebook has been removed (issue `#15 <https://github.com/baptistehamon/lsapy/issues/15>`_, PR `#20 <https://github.com/baptistehamon/lsapy/pull/20>`_).
 * The structure around ``SuitabilityFunction`` (PR `#30 <https://github.com/baptistehamon/lsapy/pull/30>`_):
     * The ``SuitabilityFunction`` has been moved to LSAPy ``function._suitability`` module.
@@ -193,7 +198,7 @@ Internal changes
 ^^^^^^^^^^^^^^^^
 * Major changes for documentation (issue `#2 <https://github.com/baptistehamon/lsapy/issues/2>`_, PR `#9 <https://github.com/baptistehamon/lsapy/pull/9>`_):
     * All public objects are now documented using the `NumPy-style <https://numpydoc.readthedocs.io/en/latest/format.html>`_.
-    * *introduction.ipynb* has been slip into three different ones: *criteria.ipynb*, *function.ipynb*, and *lsa.ipynb*.
+    * ``introduction.ipynb`` has been slip into three different ones: ``criteria.ipynb``, ``function.ipynb``, and ``lsa.ipynb``.
     * The top-level documentation has been updated/created:
         * The format of README and CHANGELOG files is now reStructuredText (RST).
         * A proper README has been created.
@@ -203,7 +208,7 @@ Internal changes
     * The documentation building using `Sphinx <https://www.sphinx-doc.org/en/master/>`_ has been setup:
         * The documentation uses the `PyData theme <https://pydata-sphinx-theme.readthedocs.io/en/stable/>`_.
         * A User-facing documentation is now available and has been published on `Read the Docs <https://readthedocs.org/>`_.
-    * The project dependencies have been updated and made consistent across *pyproject.toml* and *environments.yml* files.
+    * The project dependencies have been updated and made consistent across ``pyproject.toml`` and ``environments.yml`` files.
 
 v0.1.0-dev1 (2025-05-16)
 ------------------------

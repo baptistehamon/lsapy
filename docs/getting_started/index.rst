@@ -5,6 +5,7 @@ Getting Started
 Installation
 ------------
 
+.. _`Contribution`: https://lsapy.readthedocs.io/en/latest/community/contributing.html
 .. _PyPI: https://pypi.org/project/laspy/
 .. _conda-forge: https://conda-forge.org/
 
@@ -19,6 +20,8 @@ or from `conda-forge`_ using `conda`:
 .. code-block:: shell
 
    conda install -c conda-forge lsapy
+
+You can find the development installation instructions in the `Contribution`_ section.
 
 Land Suitability Analysis (LSA)
 -------------------------------

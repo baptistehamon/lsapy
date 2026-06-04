@@ -2,6 +2,14 @@
 Changelog
 =========
 
+v0.5.0 (unreleased)
+-------------------
+Contributor to this version: Baptiste Hamon (@baptistehamon).
+
+Internal changes
+^^^^^^^^^^^^^^^^
+* The ``lsapy.standardize.fit`` function has been modified to fix ``ruff``'s ``PLW0717`` error (PR `#155 <https://github.com/baptistehamon/lsapy/pull/155>`_).
+
 v0.4.0 (2026-05-14)
 -------------------
 Contributor to this version: Baptiste Hamon (@baptistehamon).

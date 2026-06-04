@@ -354,19 +354,20 @@ def fit(x, y=None, kind: str | list[str] = "all", plot: bool = False, verbose: b
     rms_errors = []
     f_params = []
     for func in functions:
+        f = get_function_from_name(func)
+        p0 = _get_function_p0(func, x)
         try:
-            f = get_function_from_name(func)
-            p0 = _get_function_p0(func, x)
             popt, _ = curve_fit(f, x, y, p0=p0, maxfev=15000)
-            y_ = f(x_, *popt)
-            f_params.append(popt)
-            rmse = _rmse(y, f(x, *popt))
-            rms_errors.append(rmse)
-            if plot:
-                plt.plot(x_, y_, label=func + f" (RMSE={rmse:.2f})")
         except Exception:
             skipped.append(func)
             warnings.warn(f"Failed to fit `{func}`. Skipped.", stacklevel=2)
+            continue
+        _y = f(x_, *popt)
+        f_params.append(popt)
+        rmse = _rmse(y, f(x, *popt))
+        rms_errors.append(rmse)
+        if plot and plt is not None:
+            plt.plot(x_, _y, label=func + f" (RMSE={rmse:.2f})")
 
     if all([f in skipped for f in functions]):
         warnings.warn(f"No methods to fit. Skipping: {', '.join(skipped)}.", stacklevel=2)

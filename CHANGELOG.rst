@@ -9,6 +9,7 @@ Contributor to this version: Baptiste Hamon (@baptistehamon).
 Internal changes
 ^^^^^^^^^^^^^^^^
 * The ``lsapy.standardize.fit`` function has been modified to fix ``ruff``'s ``PLW0717`` error (PR `#155 <https://github.com/baptistehamon/lsapy/pull/155>`_).
+* The optional netCDF dependencies have been added to the *Getting Started* section of the documentation (PR `#162 <https://github.com/baptistehamon/lsapy/pull/162>`_).
 
 v0.4.0 (2026-05-14)
 -------------------

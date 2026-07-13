@@ -23,6 +23,16 @@ or from `conda-forge`_ using `conda`:
 
 You can find the development installation instructions in the `Contribution`_ section.
 
+Optional Dependencies
+^^^^^^^^^^^^^^^^^^^^^
+In order to use the sample data provided by `LSAPy` or to read/write netCDF files as part of the LSA workflow, a netCDF library is required. We recommend installing one of the following libraries:
+
+* `netCDF4`_
+* `h5netcdf`_
+
+.. _netCDF4: https://github.com/Unidata/netcdf4-python
+.. _h5netcdf: https://h5netcdf.org/
+
 Land Suitability Analysis (LSA)
 -------------------------------
 

@@ -10,6 +10,9 @@ Internal changes
 ^^^^^^^^^^^^^^^^
 * The ``lsapy.standardize.fit`` function has been modified to fix ``ruff``'s ``PLW0717`` error (PR `#155 <https://github.com/baptistehamon/lsapy/pull/155>`_).
 * The optional netCDF dependencies have been added to the *Getting Started* section of the documentation (PR `#162 <https://github.com/baptistehamon/lsapy/pull/162>`_).
+* A ``py.typed`` file has been added and ``mypy`` python version has been updated to support downstream type checking (issue `#164 <https://github.com/baptistehamon/lsapy/issues/164>`_, PR `#166 <https://github.com/baptistehamon/lsapy/pull/166>`_).
+* A ``CITATION.cff`` referring to the prepint paper has been added (issue `#164 <https://github.com/baptistehamon/lsapy/issues/164>`_, PR `#166 <https://github.com/baptistehamon/lsapy/pull/166>`_).
+* A ``AUTHORS.rst`` has been added (issue `#165 <https://github.com/baptistehamon/lsapy/issues/165>`_, PR `#166 <https://github.com/baptistehamon/lsapy/pull/166>`_).
 
 v0.4.0 (2026-05-14)
 -------------------

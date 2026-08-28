@@ -149,7 +149,7 @@ exclude = [
 ]
 
 [tool.mypy]
-python_version = "3.10"
+python_version = "3.12"
 plugins = ["numpy.typing.mypy_plugin"]
 # strict = true
 show_error_context = true

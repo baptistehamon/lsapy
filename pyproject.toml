@@ -136,6 +136,7 @@ include = [
   "docs/conf.py",
   "docs/make.bat",
   "src/lsapy/**/*.py",
+  "src/lsapy/py.typed",
   "test/**/*.py",
   "noxfile.py",
 ]

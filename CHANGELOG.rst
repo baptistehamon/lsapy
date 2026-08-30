@@ -6,6 +6,10 @@ v0.5.0 (unreleased)
 -------------------
 Contributor to this version: Baptiste Hamon (@baptistehamon).
 
+Bug fixes
+^^^^^^^^^
+* Fix standardization functions registry populating by importing ``lsapy.standardize`` module in ``__init__`` (issue `#164 <https://github.com/baptistehamon/lsapy/issues/164>`_, PR `#167 <https://github.com/baptistehamon/lsapy/pull/167>`_).
+
 Internal changes
 ^^^^^^^^^^^^^^^^
 * The ``lsapy.standardize.fit`` function has been modified to fix ``ruff``'s ``PLW0717`` error (PR `#155 <https://github.com/baptistehamon/lsapy/pull/155>`_).

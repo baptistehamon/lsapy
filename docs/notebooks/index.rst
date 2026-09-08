@@ -13,3 +13,4 @@ and explaining how they operate together to perform Land Suitability Analysis (L
 
    criteria
    lsa
+   chunked

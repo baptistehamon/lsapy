@@ -23,6 +23,10 @@ such as `dask`_ for efficient parallel processing and `matplotlib`_ for data vis
 `LSAPy` addresses some limitations of existing LSA tools by offering greater flexibility, reproducibility, and
 scalability for research and practical applications.
 
+.. _xarray: https://docs.xarray.dev/en/stable/
+.. _dask: https://docs.dask.org/en/stable/
+.. _matplotlib: https://matplotlib.org/stable/
+
 .. toctree::
    :maxdepth: 2
    :caption: Table of Contents:

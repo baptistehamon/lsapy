@@ -51,32 +51,34 @@ Below is a quick example of how to conduct a land suitability analysis using *LS
 
 .. code-block:: python
 
-    import numpy as np
-    import xarray as xr
-
+    # import modules
     from lsapy import LandSuitabilityAnalysis, SuitabilityCriteria
 
-    # Synthetic indicator; replace with your own gridded data.
-    temperature = xr.DataArray(
-        np.arange(12, dtype=float).reshape(3, 4),
-        dims=("y", "x"),
-        coords={"y": range(3), "x": range(4)},
-        name="temperature",
-    )
+    # define your criteria
     criteria = {
-        "temperature": SuitabilityCriteria(
-            name="temperature",
-            indicator=temperature,
-            func="logistic",
-            fparams={
-                "a": 1.0,
-                "b": 5.0,
-            },  # Illustrative parameters, not a calibrated crop model.
-        )
+        "crit1": SuitabilityCriteria(
+            name="criteria1",
+            indicator=indicator1,  # xarray object
+            func="function_name",
+            fparams={"param1": value1, "param2": value2},
+        ),
+        "crit2": SuitabilityCriteria(
+            name="criteria2",
+            indicator=indicator2,  # xarray object
+            func="another_function_name",
+            fparams={"param1": value1, "param2": value2},
+        ),
+        # add all necessary criteria
     }
-    lsa = LandSuitabilityAnalysis(land_use="example_crop", criteria=criteria)
-    result = lsa.run()
-    print(result.suitability)
+
+    # define your land suitability
+    lsa = LandSuitabilityAnalysis(
+        land_use="land_use_name",
+        criteria=criteria,
+    )
+
+    # run your analysis
+    lsa.run(params)
 
 For more detailed tutorials and examples, please refer to the `User Guide`_.
 

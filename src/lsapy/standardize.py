@@ -205,9 +205,8 @@ def vetharaniam2022_eq5(x, a, b) -> np.ndarray:
     r"""
     Sigmoid like function.
 
-    This function is a modified version of the logistic function for both increasing and decreasing
-    sigmoid-like data. Its real-valued domain requires ``x >= 0`` and ``b >= 0``; zero is valid.
-    Negative values produce NaN and NumPy runtime warnings. Missing input values remain NaN.
+    This function is a modified version of the logistic function that can for both increasing and decreasing
+    sigmoid-like data, but only for positive values of `x`.
 
     Parameters
     ----------
@@ -226,10 +225,6 @@ def vetharaniam2022_eq5(x, a, b) -> np.ndarray:
     Notes
     -----
     Alternative name: `VTR22_eq5`.
-    Use :func:`logistic` or :func:`vetharaniam2022_eq3` for indicators that can be negative,
-    such as temperature in degrees Celsius, when those functions suit the intended model.
-    Do not clip or shift inputs solely to satisfy this domain without also considering the
-    scientific meaning and fitted parameters.
     The sigmoid like function is defined as:
 
     .. math::

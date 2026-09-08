@@ -1,5 +1,5 @@
-Chunked indicators and function domains
-=======================================
+Chunked indicators
+==================
 
 Install ``lsapy[dask]`` to use Dask-backed indicators. Standardization is applied
 independently to each chunk by default, and the analysis result remains lazy until
@@ -57,21 +57,3 @@ execution assumes an elementwise standardization function. Choose chunks that fi
 in memory; chunking alone does not guarantee a speed improvement.
 
 .. _xarray apply_ufunc documentation: https://docs.xarray.dev/en/stable/generated/xarray.apply_ufunc.html
-
-Choosing a valid function domain
---------------------------------
-
-``vetharaniam2022_eq5`` takes square roots of both the indicator ``x`` and midpoint
-``b``. Both must be non-negative; zero is valid. Negative values yield NaN with a
-NumPy runtime warning, and missing input values remain NaN. On lazy arrays, these
-warnings can occur when the result is computed. ``logistic`` and
-``vetharaniam2022_eq3`` support negative indicators, so consider those when
-scientifically appropriate. Any change of units or offset must be consistent with
-the function parameters and the intended model.
-
-NaN behavior during aggregation depends on the method: arithmetic and weighted
-means, medians, and limiting factors skip missing criteria by default; geometric
-means require all selected criteria to be present. An invalid criterion therefore
-does not always make the overall suitability NaN. Inspect criterion outputs as
-well as the final map. Configurable aggregation of missing values is tracked in
-`issue #69 <https://github.com/baptistehamon/lsapy/issues/69>`_.

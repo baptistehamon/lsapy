@@ -1,4 +1,4 @@
-"""Run public examples in a fresh interpreter to catch import side effects."""
+"""Run the chunked example in a fresh interpreter."""
 
 import os
 import subprocess  # noqa: S404
@@ -6,13 +6,10 @@ import sys
 from pathlib import Path
 from textwrap import dedent
 
-import pytest
 
-
-@pytest.mark.parametrize("document", ["README.rst", "docs/notebooks/chunked.rst"])
-def test_public_example(document):
+def test_chunked_example():
     root = Path(__file__).resolve().parents[1]
-    text = (root / document).read_text(encoding="utf-8")
+    text = (root / "docs/notebooks/chunked.rst").read_text(encoding="utf-8")
     lines = text.split(".. code-block:: python\n", 1)[1].splitlines()
     block = []
     for line in lines:

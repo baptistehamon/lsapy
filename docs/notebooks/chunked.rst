@@ -4,7 +4,7 @@ Chunked indicators
 Install ``lsapy[dask]`` to use Dask-backed indicators. Standardization is applied
 independently to each chunk by default, and the analysis result remains lazy until
 you explicitly compute it. This example uses synthetic data and illustrative
-parameters, not a calibrated crop model.
+parameters, not calibrated crop parameters.
 
 .. code-block:: python
 
@@ -19,14 +19,14 @@ parameters, not a calibrated crop model.
         coords={"y": range(4), "x": range(6)},
         name="temperature",
     ).chunk({"y": 2, "x": 3})
-    criterion = SuitabilityCriteria(
+    sc = SuitabilityCriteria(
         name="temperature",
         indicator=temperature,
         func="logistic",
         fparams={"a": 1.0, "b": 12.0},
     )
     lsa = LandSuitabilityAnalysis(
-        land_use="example_crop", criteria={"temperature": criterion}
+        land_use="example_crop", criteria={"temperature": sc}
     )
     result = lsa.run()
     assert result.suitability.chunks is not None
@@ -47,7 +47,7 @@ to each criterion. Explicit options are respected:
   sample call for dtype inference. Without this option, Dask infers the dtype from
   a small synthetic sample, without computing the full indicator. Custom functions
   that cannot accept that sample should supply dtype information explicitly.
-* ``criterion.compute(dask_gufunc_kwargs={"meta": np.array([], dtype=float)})``
+* ``sc.compute(dask_gufunc_kwargs={"meta": np.array([], dtype=float)})``
   is an alternative to ``output_dtypes``; do not supply both.
 
 For custom functions that reduce core dimensions or change output shape, supply

@@ -7,6 +7,12 @@
       "orcid": "0009-0007-4530-9772"
     }
   ],
+  "contributors": [
+    {
+      "name": "Agarwal, Akrita",
+      "type": "Other"
+    }
+  ],
   "keywords": [
     "LSAPy",
     "land suitability analysis",

@@ -1,4 +1,4 @@
-"""Run the chunked example in a fresh interpreter."""
+"""Run the RST chunked example, which nbval does not collect, in a fresh interpreter."""
 
 import os
 import subprocess  # noqa: S404

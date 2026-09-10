@@ -19,21 +19,21 @@ def indicator():
 @pytest.mark.parametrize("inplace", [False, True])
 @pytest.mark.parametrize("func,fparams", [("logistic", {"a": 1.0, "b": 5.0}), (np.isfinite, {})])
 def test_chunked_criterion(indicator, inplace, func, fparams):
-    eager = SuitabilityCriteria(name="temperature", indicator=indicator, func=func, fparams=fparams).compute()
-    criterion = SuitabilityCriteria(
+    exp = SuitabilityCriteria(name="temperature", indicator=indicator, func=func, fparams=fparams).compute()
+    sc = SuitabilityCriteria(
         name="temperature", indicator=indicator.chunk({"y": 2, "x": 2}), func=func, fparams=fparams
     )
     tasks = []
     with Callback(pretask=lambda key, *_: tasks.append(key)):
-        result = criterion.compute(inplace=inplace)
+        res = sc.compute(inplace=inplace)
     assert not tasks
     if inplace:
-        assert result is None
-        assert criterion.is_computed
-        result = criterion.indicator
-    assert result.chunks == ((2, 1), (2, 2, 1))
-    assert result.dtype == eager.dtype
-    xr.testing.assert_identical(result.compute(), eager)
+        assert res is None
+        assert sc.is_computed
+        res = sc.indicator
+    assert res.chunks == ((2, 1), (2, 2, 1))
+    assert res.dtype == exp.dtype
+    xr.testing.assert_identical(res.compute(), exp)
 
 
 @pytest.mark.parametrize(
@@ -45,23 +45,23 @@ def test_chunked_criterion(indicator, inplace, func, fparams):
     ],
 )
 def test_chunked_overrides(indicator, kwargs):
-    criterion = SuitabilityCriteria(
+    sc = SuitabilityCriteria(
         name="temperature", indicator=indicator.chunk({"x": 2}), func="logistic", fparams={"a": 1.0, "b": 5.0}
     )
-    result = criterion.compute(**kwargs)
-    assert result.chunks is not None
-    eager = SuitabilityCriteria(
+    res = sc.compute(**kwargs)
+    assert res.chunks is not None
+    exp = SuitabilityCriteria(
         name="temperature", indicator=indicator, func="logistic", fparams={"a": 1.0, "b": 5.0}
     ).compute()
-    xr.testing.assert_identical(result.compute(), eager)
+    xr.testing.assert_identical(res.compute(), exp)
 
 
 def test_chunked_forbidden(indicator):
-    criterion = SuitabilityCriteria(
+    sc = SuitabilityCriteria(
         name="temperature", indicator=indicator.chunk({"x": 2}), func="logistic", fparams={"a": 1.0, "b": 5.0}
     )
     with pytest.raises(ValueError, match="chunked array"):
-        criterion.compute(dask="forbidden")
+        sc.compute(dask="forbidden")
 
 
 @pytest.mark.parametrize("by_category", [False, True])
@@ -77,10 +77,10 @@ def test_chunked_analysis(indicator, by_category):
             ),
         }
         analyses.append(LandSuitabilityAnalysis(land_use="crop", criteria=criteria))
-    eager = analyses[0].run(by_category=by_category)
+    exp = analyses[0].run(by_category=by_category)
     tasks = []
     with Callback(pretask=lambda key, *_: tasks.append(key)):
         lazy = analyses[1].run(by_category=by_category)
     assert not tasks
     assert all(value.chunks is not None for value in lazy.data_vars.values())
-    xr.testing.assert_allclose(lazy.compute(), eager)
+    xr.testing.assert_allclose(lazy.compute(), exp)

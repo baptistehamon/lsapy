@@ -25,9 +25,7 @@ parameters, not calibrated crop parameters.
         func="logistic",
         fparams={"a": 1.0, "b": 12.0},
     )
-    lsa = LandSuitabilityAnalysis(
-        land_use="example_crop", criteria={"temperature": sc}
-    )
+    lsa = LandSuitabilityAnalysis(land_use="example_crop", criteria={"temperature": sc})
     result = lsa.run()
     assert result.suitability.chunks is not None
     computed = result.compute()

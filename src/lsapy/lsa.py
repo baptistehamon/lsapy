@@ -487,7 +487,7 @@ class LandSuitabilityAnalysis:
             da = sc.compute(**kwargs)
             out.append(da)
             attrs[sc.name] = da.attrs
-        out = xr.merge(out, compat="override", combine_attrs="drop")
+        out = xr.merge(out, join="exact", compat="override", combine_attrs="drop")
 
         # Reassign attributes to each criteria
         for sc in out.data_vars:

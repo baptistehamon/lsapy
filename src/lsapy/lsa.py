@@ -324,6 +324,9 @@ class LandSuitabilityAnalysis:
             If True, compute the suitability in place. The default is False.
         **kwargs : dict
             Additional keyword arguments to pass to the suitability criteria compute method.
+            Chunked indicators use ``dask="parallelized"`` by default and remain lazy.
+            Explicit Dask options and output dtype information are passed through to
+            :meth:`SuitabilityCriteria.compute`.
 
         Returns
         -------

@@ -8,10 +8,12 @@ Contributor to this version: Baptiste Hamon (@baptistehamon).
 
 Bug fixes
 ^^^^^^^^^
+* Enable lazy standardization of chunked indicators by default, preserving explicit Dask options (issue `#164 <https://github.com/baptistehamon/lsapy/issues/164>`_).
 * Fix standardization functions registry populating by importing ``lsapy.standardize`` module in ``__init__`` (issue `#164 <https://github.com/baptistehamon/lsapy/issues/164>`_, PR `#167 <https://github.com/baptistehamon/lsapy/pull/167>`_).
 
 Internal changes
 ^^^^^^^^^^^^^^^^
+* Add a Dask optional extra, chunked workflow documentation and regression tests (issue `#164 <https://github.com/baptistehamon/lsapy/issues/164>`_).
 * The ``lsapy.standardize.fit`` function has been modified to fix ``ruff``'s ``PLW0717`` error (PR `#155 <https://github.com/baptistehamon/lsapy/pull/155>`_).
 * The optional netCDF dependencies have been added to the *Getting Started* section of the documentation (PR `#162 <https://github.com/baptistehamon/lsapy/pull/162>`_).
 * A ``py.typed`` file has been added and ``mypy`` python version has been updated to support downstream type checking (issue `#164 <https://github.com/baptistehamon/lsapy/issues/164>`_, PR `#166 <https://github.com/baptistehamon/lsapy/pull/166>`_).

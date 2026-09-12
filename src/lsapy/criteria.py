@@ -323,6 +323,10 @@ class SuitabilityCriteria:
             Default is False.
         **kwargs : dict
             Additional keyword arguments to pass to the xarray apply_ufunc function.
+            For chunked indicators, ``dask`` defaults to ``"parallelized"``; explicit
+            values such as ``"allowed"`` or ``"forbidden"`` are preserved. Dask infers
+            the output dtype by calling the function on a small sample. Provide
+            ``output_dtypes`` or ``dask_gufunc_kwargs={"meta": ...}`` to avoid this call.
 
         Returns
         -------
@@ -334,6 +338,8 @@ class SuitabilityCriteria:
         elif self.func is None:
             raise ValueError("The suitability function is not defined. Please provide a valid function.")
         else:
+            if self.indicator.chunks is not None:
+                kwargs.setdefault("dask", "parallelized")
             out = xr.apply_ufunc(self.func, self.indicator, **kwargs)
 
         attrs: dict[str, Any] = {"weight": self.weight}

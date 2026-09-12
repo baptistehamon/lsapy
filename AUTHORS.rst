@@ -9,3 +9,5 @@ Development Lead
 
 Contributors
 ------------
+
+* Akrita Agarwal `@akritaag <https://github.com/akritaag>`_

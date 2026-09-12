@@ -53,7 +53,7 @@ class LandSuitabilityAnalysis:
     >>> from xclim.indicators.atmos import growing_degree_days
 
     >>> drainage = open_data("land", variables="drainage")
-    >>> tas = open_data("climate", variables="tas")
+    >>> tas = open_data("climate", variables="tas").interp_like(drainage, method="nearest")
     >>> sc = {
     ...     "drainage_class": SuitabilityCriteria(
     ...         name="drainage_class",
@@ -346,7 +346,7 @@ class LandSuitabilityAnalysis:
         >>> from xclim.indicators.atmos import growing_degree_days
 
         >>> drainage = open_data("land", variables="drainage")
-        >>> tas = open_data("climate", variables="tas")
+        >>> tas = open_data("climate", variables="tas").interp_like(drainage, method="nearest")
         >>> sc = {
         ...     "drainage_class": SuitabilityCriteria(
         ...         name="drainage_class",
@@ -487,7 +487,7 @@ class LandSuitabilityAnalysis:
             da = sc.compute(**kwargs)
             out.append(da)
             attrs[sc.name] = da.attrs
-        out = xr.merge(out, compat="override", combine_attrs="drop")
+        out = xr.merge(out, join="exact", compat="override", combine_attrs="drop")
 
         # Reassign attributes to each criteria
         for sc in out.data_vars:

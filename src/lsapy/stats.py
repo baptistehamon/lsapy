@@ -73,7 +73,7 @@ def stats_summary(
     Let's first define a Land Suitability Analysis (LSA):
 
     >>> drainage = open_data("land", variables="drainage")
-    >>> tas = open_data("climate", variables="tas")
+    >>> tas = open_data("climate", variables="tas").interp_like(drainage, method="nearest")
     >>> sc = {
     ...     "drainage_class": SuitabilityCriteria(
     ...         name="drainage_class",
@@ -239,7 +239,7 @@ def spatial_stats_summary(
     Let's first define a Land Suitability Analysis (LSA):
 
     >>> drainage = open_data("land", variables="drainage")
-    >>> tas = open_data("climate", variables="tas")
+    >>> tas = open_data("climate", variables="tas").interp_like(drainage, method="nearest")
     >>> sc = {
     ...     "drainage_class": SuitabilityCriteria(
     ...         name="drainage_class",

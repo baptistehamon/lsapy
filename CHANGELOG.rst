@@ -4,11 +4,12 @@ Changelog
 
 v0.5.0 (unreleased)
 -------------------
-Contributor to this version: Baptiste Hamon (@baptistehamon).
+Contributor to this version: Baptiste Hamon (@baptistehamon), Akrita Agarwal (@akritaag).
 
 Bug fixes
 ^^^^^^^^^
-* Enable lazy standardization of chunked indicators by default, preserving explicit Dask options (issue `#164 <https://github.com/baptistehamon/lsapy/issues/164>`_).
+* Fix ``LandSuitabilityAnalysis.run`` to raise an error when criteria indicators have different dimensions (issue `#88 <https://github.com/baptistehamon/lsapy/issues/88>`_, PR `#171 <https://github.com/baptistehamon/lsapy/pull/171>`_).
+* Enable lazy standardization of chunked indicators by default, preserving explicit Dask options (issue `#164 <https://github.com/baptistehamon/lsapy/issues/164>`_, PR `#170 <https://github.com/baptistehamon/lsapy/pull/170>`_).
 * Fix standardization functions registry populating by importing ``lsapy.standardize`` module in ``__init__`` (issue `#164 <https://github.com/baptistehamon/lsapy/issues/164>`_, PR `#167 <https://github.com/baptistehamon/lsapy/pull/167>`_).
 
 Internal changes

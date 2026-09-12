@@ -53,7 +53,7 @@ class LandSuitabilityAnalysis:
     >>> from xclim.indicators.atmos import growing_degree_days
 
     >>> drainage = open_data("land", variables="drainage")
-    >>> tas = open_data("climate", variables="tas")
+    >>> tas = open_data("climate", variables="tas").interp_like(drainage, method="nearest")
     >>> sc = {
     ...     "drainage_class": SuitabilityCriteria(
     ...         name="drainage_class",
@@ -346,7 +346,7 @@ class LandSuitabilityAnalysis:
         >>> from xclim.indicators.atmos import growing_degree_days
 
         >>> drainage = open_data("land", variables="drainage")
-        >>> tas = open_data("climate", variables="tas")
+        >>> tas = open_data("climate", variables="tas").interp_like(drainage, method="nearest")
         >>> sc = {
         ...     "drainage_class": SuitabilityCriteria(
         ...         name="drainage_class",

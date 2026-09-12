@@ -127,6 +127,16 @@ class TestLandSuitabilityAnalysis:
         np.testing.assert_array_almost_equal(res.drainage_class.values, 0.5, decimal=2)
         np.testing.assert_array_almost_equal(res.annual_precipitation.values, 0.25, decimal=2)
 
+        # test indicators with different dims
+        lsa.criteria["growing_degree_days"].indicator = xr.DataArray(
+            np.ones((5, 5)).astype(np.int32) * 1500,
+            coords={"lat": range(3, 8), "lon": range(3, 8)},
+            dims=["lat", "lon"],
+            name="growing_degree_days",
+        )
+        with pytest.raises(xr.structure.alignment.AlignmentError):
+            lsa.run("criteria")
+
     def test_agg_kwargs_formatting(self, lsa):
         res = lsa._format_agg_kwargs(
             agg_methods={

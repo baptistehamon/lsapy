@@ -1,9 +1,7 @@
-===============
-Getting Started
-===============
+.. _installation:
 
 Installation
-------------
+============
 
 .. _`Contribution`: https://lsapy.readthedocs.io/en/latest/community/contributing.html
 .. _PyPI: https://pypi.org/project/laspy/
@@ -40,9 +38,3 @@ For lazy computation on chunked arrays, install the optional Dask extra:
    pip install "lsapy[dask]"
 
 See :doc:`../notebooks/chunked` for a complete example and explicit execution options.
-
-Land Suitability Analysis (LSA)
--------------------------------
-
-* You said LSA ?
-* LSA in Python: Introduction to LSAPy

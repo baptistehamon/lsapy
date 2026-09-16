@@ -5,7 +5,6 @@
 
 :html_theme.sidebar_secondary.remove:
 
-===================
 LSAPy Documentation
 ===================
 
@@ -28,10 +27,10 @@ scalability for research and practical applications.
    :caption: Table of Contents:
 
    About <readme>
-   Getting Started <getting_started/index>
-   User Guide <notebooks/index>
-   API Reference <api>
-   Community <community/index>
+   getting-started/index
+   user-guide/index
+   api
+   community/index
 
 .. toctree::
    :titlesonly:

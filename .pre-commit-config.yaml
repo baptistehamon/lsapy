@@ -67,6 +67,8 @@ repos:
     hooks:
       - id: mdformat
         exclude: '.github/\w+.md'
+        additional_dependencies:
+        - mdformat-myst
   - repo: https://github.com/keewis/blackdoc
     rev: v0.4.6
     hooks:

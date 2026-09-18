@@ -1,6 +1,6 @@
 """A Python package for Land Suitability Analysis."""
 
-from lsapy import standardize
+from lsapy import standardize, tutorial
 from lsapy.criteria import SuitabilityCriteria
 from lsapy.lsa import LandSuitabilityAnalysis
 

@@ -41,13 +41,9 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-  # dev tools and testing
-  "bump-my-version >=1.1.4",
-  "flit >=3.11",
   "h5netcdf >=1.4.0",
   "h5py",
   "matplotlib >=3.9.0",
-  "pre-commit >=4.0.0",
 ]
 parallel = ["dask[array]"]
 all = ["lsapy[dev]", "lsapy[parallel]"]
@@ -103,6 +99,16 @@ test = [
   "pytest >=8.3.0",
   "pytest-cov >=6.0.0",
   {include-group = "io"},
+]
+dev = [
+  # dev and testing tools
+  "bump-my-version >=1.1.4",
+  "flit >=3.11",
+  "pre-commit >=4.0.0",
+  {include-group = "lint"},
+  {include-group = "io"},
+  {include-group = "docs"},
+  {include-group = "test"}
 ]
 
 [tool.bumpversion]

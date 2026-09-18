@@ -8,26 +8,26 @@ nox.options.sessions = ("tests", "notebooks", "doctests")
 
 @nox.session(python=["3.10", "3.11", "3.12", "3.13", "3.14"])
 def tests(session):
-    session.install(".[dev]", "h5netcdf", "netCDF4")
+    session.install(".[test]")
     session.run("pytest")
 
 
 @nox.session
 def coverage(session):
-    session.install(".[dev]", "h5netcdf", "netCDF4", "coveralls")
+    session.install(".[test]", "coveralls")
     session.run("pytest", "--cov=lsapy", "--cov-report=term-missing")
     session.run("coveralls")
 
 
 @nox.session
 def notebooks(session):
-    session.install(".[dev]")
+    session.install(".[test]", ".[notebooks]")
     session.run("pytest", "--nbval", "docs/notebooks")
 
 
 @nox.session
 def doctests(session):
-    session.install(".[dev]")
+    session.install(".[test]")
     session.run("pytest", "--doctest-modules", "src/lsapy")
 
 

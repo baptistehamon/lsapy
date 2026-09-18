@@ -33,20 +33,20 @@ dependencies = [
   "geopandas >=0.14.0",
   "numpy >=1.26.0",
   "pandas >=2.2.0",
-  "pooch >=1.8.2",
   "regionmask >=0.13.0",
   "scipy >=1.15.0",
   "xarray >=2024.10.0"
 ]
 
 [project.optional-dependencies]
-dev = [
+parallel = ["dask[array]"]
+tutorial = [
   "h5netcdf >=1.4.0",
   "h5py",
   "matplotlib >=3.9.0",
+  "pooch >=1.8.2",
 ]
-parallel = ["dask[array]"]
-all = ["lsapy[dev]", "lsapy[parallel]"]
+all = ["lsapy[parallel]", "lsapy[tutorial]"]
 
 [project.urls]
 Homepage = "https://lsapy.readthedocs.io/en/stable/"
@@ -59,7 +59,6 @@ lint = [
   # linting tools
   "codespell >=2.4.1",
   "mypy >=1.17.1",
-  "nox >=2024.10.09",
   "numpydoc >=1.8.0",
   "ruff >=0.10.0",
   "vulture >=2.14",
@@ -98,15 +97,16 @@ test = [
   "nbval >=0.11.0",
   "pytest >=8.3.0",
   "pytest-cov >=6.0.0",
+  "xclim >=0.54.0", # for doctests
   {include-group = "io"},
 ]
 dev = [
   # dev and testing tools
   "bump-my-version >=1.1.4",
   "flit >=3.11",
+  "nox >=2024.10.09",
   "pre-commit >=4.0.0",
   {include-group = "lint"},
-  {include-group = "io"},
   {include-group = "docs"},
   {include-group = "test"}
 ]

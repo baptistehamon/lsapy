@@ -49,7 +49,6 @@ dev = [
   "flit >=3.11",
   "h5netcdf >=1.4.0",
   "h5py",
-  "ipython >=8.20.0",
   "matplotlib >=3.9.0",
   "nbval >=0.11.0",
   "pre-commit >=4.0.0",
@@ -57,20 +56,7 @@ dev = [
   "pytest-cov >=6.0.0",
   "xclim >=0.54.0",
 ]
-docs = [
-  # docs & examples
-  "ipykernel",
-  "matplotlib >=3.9.0",
-  "nbsphinx >=0.9.5",
-  "pybtex >=0.24.0",
-  "pydata-sphinx-theme >=0.16.0",
-  "sphinx >=8.2.0",
-  "sphinx-autodoc-typehints >=3.2.0",
-  "sphinx-copybutton",
-  "sphinx-mdinclude",
-  "sphinxcontrib-bibtex >=2.6.0"
-]
-all = ["lsapy[dev]", "lsapy[docs]"]
+all = ["lsapy[dev]"]
 
 [project.urls]
 Homepage = "https://lsapy.readthedocs.io/en/stable/"
@@ -88,6 +74,31 @@ lint = [
   "ruff >=0.10.0",
   "vulture >=2.14",
   "yamllint >=1.37.1"
+]
+notebooks = [
+  # notebook support
+  "ipykernel",
+  "ipython >=8.20.0",
+  "matplotlib >=3.9.0",
+  "pooch >=1.8.2",
+]
+docs = [
+  # docs & examples
+  "ipykernel",
+  "ipython >=8.20.0",
+  "nbsphinx >=0.9.5",
+  "pooch >=1.8.2",
+  "pybtex >=0.24.0",
+  "pydata-sphinx-theme >=0.16.0",
+  "sphinx >=8.2.0",
+  "sphinx-autodoc-typehints >=3.2.0",
+  "sphinx-copybutton",
+  "sphinx-mdinclude",
+  "sphinxcontrib-bibtex >=2.6.0",
+  {include-group = "notebooks"}
+]
+test = [
+  # testing tools
 ]
 
 [tool.bumpversion]

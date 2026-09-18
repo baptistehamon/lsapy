@@ -43,16 +43,11 @@ dependencies = [
 dev = [
   # dev tools and testing
   "bump-my-version >=1.1.4",
-  "coverage[toml] >=7.7.0",
   "flit >=3.11",
   "h5netcdf >=1.4.0",
   "h5py",
   "matplotlib >=3.9.0",
-  "nbval >=0.11.0",
   "pre-commit >=4.0.0",
-  "pytest >=8.3.0",
-  "pytest-cov >=6.0.0",
-  "xclim >=0.54.0",
 ]
 parallel = ["dask[array]"]
 all = ["lsapy[dev]", "lsapy[parallel]"]
@@ -74,17 +69,22 @@ lint = [
   "vulture >=2.14",
   "yamllint >=1.37.1"
 ]
+io = [
+  # I/O tools
+  "h5netcdf >=1.4.0",
+  "h5py",
+  "pooch >=1.8.2"
+]
 notebooks = [
   # notebook support
   "ipykernel",
   "ipython >=8.20.0",
   "matplotlib >=3.9.0",
   "pooch >=1.8.2",
+  "xclim >=0.54.0"
 ]
 docs = [
   # docs & examples
-  "ipykernel",
-  "ipython >=8.20.0",
   "nbsphinx >=0.9.5",
   "pooch >=1.8.2",
   "pybtex >=0.24.0",
@@ -98,6 +98,11 @@ docs = [
 ]
 test = [
   # testing tools
+  "coverage[toml] >=7.7.0",
+  "nbval >=0.11.0",
+  "pytest >=8.3.0",
+  "pytest-cov >=6.0.0",
+  {include-group = "io"},
 ]
 
 [tool.bumpversion]

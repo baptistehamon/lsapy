@@ -33,7 +33,7 @@ def doctests(session):
 
 @nox.session
 def lint(session):
-    session.install(".[dev]")
+    session.install(".[lint]", "pre-commit")
     # run pre-commit hooks manually to bypass no-commit-to-branch
     # leading to a failure in CI
     session.run("pre-commit", "run", "check-json", "-a")

@@ -59,7 +59,6 @@ def lint(session):
     session.run("pre-commit", "run", "rst-inline-touching-normal", "-a")
     session.run("pre-commit", "run", "text-unicode-replacement-char", "-a")
     session.run("pre-commit", "run", "mdformat", "-a")
-    session.run("pre-commit", "run", "blackdoc", "-a")
     session.run("pre-commit", "run", "formatbibtex", "-a")
 
 

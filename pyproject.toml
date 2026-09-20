@@ -74,7 +74,7 @@ notebooks = [
 ]
 docs = [
   # docs & examples
-  "nbsphinx >=0.9.5",
+  "myst-nb >=1.4.0",
   "pybtex >=0.24.0",
   "pydata-sphinx-theme >=0.16.0",
   "sphinx >=8.2.0",

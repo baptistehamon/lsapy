@@ -12,6 +12,7 @@ and explaining how they operate together to perform Land Suitability Analysis (L
 
    terminology
    indicator
+   standardization
    suitability-criteria
    lsa
    dask

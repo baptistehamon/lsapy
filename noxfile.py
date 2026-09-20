@@ -6,34 +6,40 @@ import nox
 nox.options.sessions = ("tests", "notebooks", "doctests")
 
 
+def _get_group_dependencies(*groups):
+    """Get dependencies from the pyproject.toml file for the given dependency groups."""
+    pyproject = nox.project.load_toml("pyproject.toml")
+    return nox.project.dependency_groups(pyproject, *groups)
+
+
 @nox.session(python=["3.10", "3.11", "3.12", "3.13", "3.14"])
 def tests(session):
-    session.install(".[test]")
+    session.install(*_get_group_dependencies("test"))
     session.run("pytest")
 
 
 @nox.session
 def coverage(session):
-    session.install(".[test]", "coveralls")
+    session.install(*_get_group_dependencies("test"), "coveralls")
     session.run("pytest", "--cov=lsapy", "--cov-report=term-missing")
     session.run("coveralls")
 
 
 @nox.session
 def notebooks(session):
-    session.install(".[test]", ".[notebooks]")
+    session.install(*_get_group_dependencies("test", "notebooks"))
     session.run("pytest", "--nbval", "docs/notebooks")
 
 
 @nox.session
 def doctests(session):
-    session.install(".[test]")
+    session.install(*_get_group_dependencies("test"))
     session.run("pytest", "--doctest-modules", "src/lsapy")
 
 
 @nox.session
 def lint(session):
-    session.install(".[lint]", "pre-commit")
+    session.install(*_get_group_dependencies("lint"), "pre-commit")
     # run pre-commit hooks manually to bypass no-commit-to-branch
     # leading to a failure in CI
     session.run("pre-commit", "run", "check-json", "-a")
@@ -64,7 +70,7 @@ def lint(session):
 
 @nox.session
 def docs(session):
-    session.install(".[docs]")
+    session.install(*_get_group_dependencies("docs"))
     session.chdir("docs")
     session.run("make", "clean", external=True)
     session.run("make", "html", external=True)

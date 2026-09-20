@@ -12,8 +12,15 @@ Bug fixes
 * Enable lazy standardization of chunked indicators by default, preserving explicit Dask options (issue `#164 <https://github.com/baptistehamon/lsapy/issues/164>`_, PR `#170 <https://github.com/baptistehamon/lsapy/pull/170>`_).
 * Fix standardization functions registry populating by importing ``lsapy.standardize`` module in ``__init__`` (issue `#164 <https://github.com/baptistehamon/lsapy/issues/164>`_, PR `#167 <https://github.com/baptistehamon/lsapy/pull/167>`_).
 
+Breaking changes
+^^^^^^^^^^^^^^^^
+* A major update of the installation recipes has been done to adopt `PEP-735 <https://peps.python.org/pep-0735/>`_. Most of the development dependencies are now install using ``dependency-group`` and installation recipes are now as follows (PR `#173 <https://github.com/baptistehamon/lsapy/pull/173>`_)
+    * ``optional-dependencies``: ``parallel`` (dask), ``tutorial`` (required tutorial dependencies), ``complete`` (all optional dependencies).
+    * ``dependency-group``: ``lint`` (linting tools), ``notebooks`` (minimal notebook dependencies), ``docs`` (documentation dependencies), ``test`` (testing dependencies), ``dev`` (all development dependencies).
+
 Internal changes
 ^^^^^^^^^^^^^^^^
+* ``blackdoc`` has been removed from pre-commit hooks and only ``ruff`` is used for code formatting (PR `#173 <https://github.com/baptistehamon/lsapy/pull/173>`_).
 * Add a Dask optional extra, chunked workflow documentation and regression tests (issue `#164 <https://github.com/baptistehamon/lsapy/issues/164>`_).
 * The ``lsapy.standardize.fit`` function has been modified to fix ``ruff``'s ``PLW0717`` error (PR `#155 <https://github.com/baptistehamon/lsapy/pull/155>`_).
 * The optional netCDF dependencies have been added to the *Getting Started* section of the documentation (PR `#162 <https://github.com/baptistehamon/lsapy/pull/162>`_).

@@ -6,34 +6,40 @@ import nox
 nox.options.sessions = ("tests", "notebooks", "doctests")
 
 
+def _get_group_dependencies(*groups):
+    """Get dependencies from the pyproject.toml file for the given dependency groups."""
+    pyproject = nox.project.load_toml("pyproject.toml")
+    return nox.project.dependency_groups(pyproject, *groups)
+
+
 @nox.session(python=["3.10", "3.11", "3.12", "3.13", "3.14"])
 def tests(session):
-    session.install(".[dev]", "h5netcdf", "netCDF4")
+    session.install(".[complete]", *_get_group_dependencies("test"))
     session.run("pytest")
 
 
 @nox.session
 def coverage(session):
-    session.install(".[dev]", "h5netcdf", "netCDF4", "coveralls")
+    session.install(".[complete]", *_get_group_dependencies("test"), "coveralls")
     session.run("pytest", "--cov=lsapy", "--cov-report=term-missing")
     session.run("coveralls")
 
 
 @nox.session
 def notebooks(session):
-    session.install(".[dev]")
+    session.install(".[complete]", *_get_group_dependencies("test", "notebooks"))
     session.run("pytest", "--nbval", "docs/notebooks")
 
 
 @nox.session
 def doctests(session):
-    session.install(".[dev]")
+    session.install(".[complete]", *_get_group_dependencies("test"))
     session.run("pytest", "--doctest-modules", "src/lsapy")
 
 
 @nox.session
 def lint(session):
-    session.install(".[dev]")
+    session.install(".[complete]", *_get_group_dependencies("lint"), "pre-commit")
     # run pre-commit hooks manually to bypass no-commit-to-branch
     # leading to a failure in CI
     session.run("pre-commit", "run", "check-json", "-a")
@@ -59,13 +65,12 @@ def lint(session):
     session.run("pre-commit", "run", "rst-inline-touching-normal", "-a")
     session.run("pre-commit", "run", "text-unicode-replacement-char", "-a")
     session.run("pre-commit", "run", "mdformat", "-a")
-    session.run("pre-commit", "run", "blackdoc", "-a")
     session.run("pre-commit", "run", "formatbibtex", "-a")
 
 
 @nox.session
 def docs(session):
-    session.install(".[docs]")
+    session.install(".[complete]", *_get_group_dependencies("docs"))
     session.chdir("docs")
     session.run("make", "clean", external=True)
     session.run("make", "html", external=True)

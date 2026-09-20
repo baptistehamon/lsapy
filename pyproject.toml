@@ -46,7 +46,7 @@ tutorial = [
   "matplotlib >=3.9.0",
   "pooch >=1.8.2",
 ]
-all = ["lsapy[parallel]", "lsapy[tutorial]"]
+complete = ["lsapy[parallel]", "lsapy[tutorial]"]
 
 [project.urls]
 Homepage = "https://lsapy.readthedocs.io/en/stable/"
@@ -64,12 +64,6 @@ lint = [
   "vulture >=2.14",
   "yamllint >=1.37.1"
 ]
-io = [
-  # I/O tools
-  "h5netcdf >=1.4.0",
-  "h5py",
-  "pooch >=1.8.2"
-]
 notebooks = [
   # notebook support
   "ipykernel",
@@ -81,7 +75,6 @@ notebooks = [
 docs = [
   # docs & examples
   "nbsphinx >=0.9.5",
-  "pooch >=1.8.2",
   "pybtex >=0.24.0",
   "pydata-sphinx-theme >=0.16.0",
   "sphinx >=8.2.0",
@@ -94,11 +87,13 @@ docs = [
 test = [
   # testing tools
   "coverage[toml] >=7.7.0",
+  "h5netcdf >=1.4.0",
+  "h5py",
   "nbval >=0.11.0",
+  "pooch >=1.8.2",
   "pytest >=8.3.0",
   "pytest-cov >=6.0.0",
   "xclim >=0.54.0", # for doctests
-  {include-group = "io"},
 ]
 dev = [
   # dev and testing tools

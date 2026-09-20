@@ -33,11 +33,11 @@ In order to use the sample data provided by `LSAPy` or to read/write netCDF file
 .. _netCDF4: https://github.com/Unidata/netcdf4-python
 .. _h5netcdf: https://h5netcdf.org/
 
-For lazy computation on chunked arrays, install the optional Dask extra:
+For lazy computation on chunked arrays, install the optional ``parallel`` extra:
 
 .. code-block:: shell
 
-   pip install "lsapy[dask]"
+   pip install "lsapy[parallel]"
 
 See :doc:`../notebooks/chunked` for a complete example and explicit execution options.
 

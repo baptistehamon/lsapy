@@ -6,41 +6,41 @@ dependencies:
   - geopandas >=0.14.0
   - numpy >=1.26.0
   - pandas >=2.2.0
-  - pooch >=1.8.2
   - regionmask >=0.13.0
   - scipy >=1.15.0
   - xarray >=2024.10.0
   # extras
-  # dev & testing
-  - blackdoc >=0.3.9
-  - bump-my-version >=1.1.4
+  - h5netcdf >=1.4.0
+  - h5py
+  - matplotlib >=3.9.0
+  - pooch >=1.8.2
+  # linting dependencies
   - codespell >=2.4.1
+  - mypy >=1.17.1
+  - numpydoc >=1.8.0
+  - ruff >=0.10.0
+  - vulture >=2.14
+  - yamllint >=1.37.1
+  # dev & testing
+  - bump-my-version >=1.1.4
   - coverage >=7.7.0
   - dask
   - deptry >=0.23.0
   - flit >=3.11
-  - h5netcdf >=1.4.0
-  - h5py
   - ipykernel
   - ipython >=8.20.0
-  - matplotlib >=3.9.0
-  - mypy >=1.17.1
   - nbsphinx >=0.9.5
   - nbval >=0.11.0
   - netcdf4
   - nox >=2024.10.09
-  - numpydoc >=1.8.0
   - pre-commit >=4.0.0
   - pybtex >=0.24.0
   - pydata-sphinx-theme >=0.16.0
   - pytest >=8.3.0
   - pytest-cov >=6.0.0
-  - ruff >=0.10.0
   - sphinx >=8.2.0
   - sphinx-autodoc-typehints >=3.2.0
   - sphinx-copybutton
   - sphinx-mdinclude
   - sphinxcontrib-bibtex >=2.6.0
-  - vulture >=2.14
   - xclim >=0.54.0 # for doctests
-  - yamllint >=1.37.1

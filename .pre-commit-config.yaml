@@ -69,12 +69,6 @@ repos:
         exclude: '.github/\w+.md'
         additional_dependencies:
         - mdformat-myst
-  - repo: https://github.com/keewis/blackdoc
-    rev: v0.4.6
-    hooks:
-      - id: blackdoc
-        additional_dependencies: [ 'black==25.9.0' ]
-        exclude: '.py'
   - repo: https://github.com/fluiddyn/formattex-pre-commit
     rev: 0.1.4
     hooks:

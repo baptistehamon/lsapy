@@ -22,7 +22,7 @@ Optional dependencies
 ^^^^^^^^^^^^^^^^^^^^^
 
 LSAPy has a few optional dependencies that are not required for the core functionality of the package, but may be needed for certain features or workflows.
-To open and use the sample datasets provided by LSAPy through the ``lsapy.tutorial.open_dataset`` function, `pooch`_ is required to download the datasets, and
+To open and use the sample datasets provided by LSAPy through the :py:func:`lsapy.tutorial.open_dataset` function, `pooch`_ is required to download the datasets, and
 a netCDF library is required to read the them. We recommend installing one of the following netCDF backend libraries:
 
 * `netCDF4`_

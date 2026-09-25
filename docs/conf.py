@@ -102,7 +102,8 @@ html_theme_options = {
         "*": ["page-toc", "edit-this-page", "sourcelink"],
         "api/*": ["page-toc", "edit-this-page", "sourcelink"],
         "community/*": ["page-toc", "edit-this-page", "sourcelink"],
-        "getting_started/*": ["page-toc", "edit-this-page", "sourcelink"],
+        "getting-started/*": ["page-toc", "edit-this-page", "sourcelink"],
+        "user-guide/*": ["page-toc", "edit-this-page", "sourcelink"],
         "notebooks/*": [],
     },
     # Pygments light and dark theme styles
@@ -115,7 +116,8 @@ html_sidebars = {
     "*": ["search-button-field"],
     "api/*": ["search-button-field", "sidebar-nav-bs"],
     "community/*": ["search-button-field", "sidebar-nav-bs"],
-    "getting_started/*": ["search-button-field", "sidebar-nav-bs"],
+    "getting-started/*": ["search-button-field", "sidebar-nav-bs"],
+    "user-guide/*": ["search-button-field", "sidebar-nav-bs"],
     "notebooks/*": ["search-button-field", "sidebar-nav-bs", "page-toc"],
 }
 

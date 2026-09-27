@@ -14,10 +14,8 @@ as some terms may have a slightly different meaning than its common usage in oth
 .. glossary::
 
     Indicator
-        A `xarray.DataArray`__ representing a measure or variable of a characteristic of
-        the system/component of interest (e.g., slope or precipitation for land).
-
-        __ https://docs.xarray.dev/en/stable/generated/xarray.DataArray.html
+        A :py:class:`xarray.DataArray` representing a measure or variable of a characteristic
+        of the system/component of interest (e.g., slope or precipitation for land).
 
     Standardization Function
         A function that converts input values into a common scale,
@@ -44,9 +42,7 @@ as some terms may have a slightly different meaning than its common usage in oth
         by aggregating a set of :term:`SuitabilityCriteria`.
 
     Aggregating
-        Aggregating refers to the process of combining several `xarray.DataArray`__
+        Aggregating refers to the process of combining several :py:class:`xarray.DataArray`
         objects into a single one, by applying a specific operation (e.g., min, mean,
         geometric mean...) across the input arrays. In LSAPy, this is used to combine
         multiple :term:`SuitabilityCriteria`.
-
-        __ https://docs.xarray.dev/en/stable/generated/xarray.DataArray.html

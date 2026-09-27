@@ -33,6 +33,7 @@ release = lsapy.__version__
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
+    "sphinx.ext.intersphinx",
     "sphinx.ext.viewcode",
     "sphinx.ext.mathjax",
     "sphinx.ext.napoleon",
@@ -121,6 +122,10 @@ html_static_path = ["_static"]
 # Redirects for moved pages
 rediraffe_redirects = {
     "getting_started/index": "getting-started/index",
+}
+
+intersphinx_mapping = {
+    "xarray": ("https://docs.xarray.dev/en/stable/", None),
 }
 
 

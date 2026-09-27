@@ -122,6 +122,7 @@ html_static_path = ["_static"]
 # Redirects for moved pages
 rediraffe_redirects = {
     "getting_started/index": "getting-started/index",
+    "api/utils.rst": "api/tutorial.rst",
 }
 
 intersphinx_mapping = {

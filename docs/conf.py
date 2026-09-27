@@ -3,6 +3,7 @@
 # For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
+import datetime
 import os
 import sys
 
@@ -18,7 +19,7 @@ import lsapy
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "lsapy"
-copyright = "2025, Baptiste Hamon"
+copyright = f"2025-{datetime.datetime.now().year}, Baptiste Hamon & contributors"
 author = "Baptiste Hamon"
 
 # The short X.Y version.

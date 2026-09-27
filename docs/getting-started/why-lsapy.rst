@@ -15,16 +15,16 @@ Alternative tools
 -----------------
 
 **PyLUSAT**
-    | *"Python Land-Use Suitability Analysis Toolkit"* (`Source code <https://github.com/chjch/pylusat>`_, `Documentation <https://pylusat.readthedocs.io/en/latest/>`_, `Article <https://doi.org/10.1016/j.envsoft.2022.105362>`_).
+    | *"Python Land-Use Suitability Analysis Toolkit"* (`Source code <https://github.com/chjch/pylusat>`__, `Documentation <https://pylusat.readthedocs.io/en/latest/>`__, `Article <https://doi.org/10.1016/j.envsoft.2022.105362>`__).
     | PyLUSAT is a Python library for vector-based LSA.
 
 **ALUES**
-    | *"Agricultural Land Use Evaluation System"* (`Source code <https://github.com/alstat/ALUES/tree/master>`_, `Documentation <https://alstat.github.io/ALUES/>`_, `Article <https://doi.org/10.21105/joss.04228>`_).
+    | *"Agricultural Land Use Evaluation System"* (`Source code <https://github.com/alstat/ALUES/tree/master>`__, `Documentation <https://alstat.github.io/ALUES/>`__, `Article <https://doi.org/10.21105/joss.04228>`__).
     | ALUES is a R package to evaluate the land suitability of different crops based on the Food and Agriculture Organization (FAO) and International Rice Research Institute (IRRI) methodology.
 
 **Other software (including early tools)**
-    * ALES (`Article <https://doi.org/10.1111/j.1475-2743.1991.tb00881.x>`_).
-    * Micro-LEIS: Computer-based land evaluation information system (`Article <https://doi.org/10.1111/j.1475-2743.1992.tb00900.x>`_).
-    * LEIGIS (`Article <https://doi.org/10.1016/S0198-9715(01)00031-X>`_).
-    * ALSE: Agricultural Land Suitability Evaluator (`Article <https://doi.org/10.1016/j.compag.2013.02.003>`_).
+    * ALES (`Article <https://doi.org/10.1111/j.1475-2743.1991.tb00881.x>`__).
+    * Micro-LEIS: Computer-based land evaluation information system (`Article <https://doi.org/10.1111/j.1475-2743.1992.tb00900.x>`__).
+    * LEIGIS (`Article <https://doi.org/10.1016/S0198-9715(01)00031-X>`__).
+    * ALSE: Agricultural Land Suitability Evaluator (`Article <https://doi.org/10.1016/j.compag.2013.02.003>`__).
     * General-purpose platforms (e.g., ArcGIS, QGIS).

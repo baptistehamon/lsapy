@@ -95,33 +95,16 @@ html_theme_options = {
         {"name": "GitHub", "url": "https://github.com/baptistehamon/lsapy", "icon": "fa-brands fa-github"},
     ],
     # header and footer options
-    "navbar_persistent": [],
     "footer_start": ["copyright"],
     "footer_center": ["sphinx-version"],
     # secondary sidebar options
     "use_edit_page_button": True,
-    "secondary_sidebar_items": {
-        "*": ["page-toc", "edit-this-page", "sourcelink"],
-        "api/*": ["page-toc", "edit-this-page", "sourcelink"],
-        "community/*": ["page-toc", "edit-this-page", "sourcelink"],
-        "getting-started/*": ["page-toc", "edit-this-page", "sourcelink"],
-        "user-guide/*": ["page-toc", "edit-this-page", "sourcelink"],
-        "notebooks/*": [],
-    },
     # Pygments light and dark theme styles
     "pygments_light_style": "xcode",
     "pygments_dark_style": "lightbulb",
 }
-
-# primary sidebar options
-html_sidebars = {
-    "*": ["search-button-field"],
-    "api/*": ["search-button-field", "sidebar-nav-bs"],
-    "community/*": ["search-button-field", "sidebar-nav-bs"],
-    "getting-started/*": ["search-button-field", "sidebar-nav-bs"],
-    "user-guide/*": ["search-button-field", "sidebar-nav-bs"],
-    "notebooks/*": ["search-button-field", "sidebar-nav-bs", "page-toc"],
-}
+# use pydata_sphinx_theme's default
+html_show_sourcelink = False
 
 html_context = {
     "github_user": "baptistehamon",

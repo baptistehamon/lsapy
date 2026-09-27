@@ -4,46 +4,48 @@ file_format: mystnb
 
 # Indicator: How to open your data?
 
-In LSAPy, an [indicator](./terminology.rst#term-Indicator) refers to the input spatial gridded data used for downstream analysis and is expected to be a [`xarray.DataArray`] object. However, such data can be stored in various file formats and this guide describes how to open them in a ready-to-use format for LSAPy. A short example of how to convert vector data to raster data is also provided.
+In LSAPy, an [indicator](./terminology.rst#term-Indicator) is the input spatial gridded data used in downstream analysis. It is expected to be a {py:class}`xarray.DataArray` object, but the source data are often stored in various file format.
+
+This guide explains how to open common spatial data formats in a ready-to-use form for LSAPy. It also includes a short example showing how to convert vector data into raster data before analysis.
 
 ````{tip}
-Overall, [xarray] should be able to open your data if it is stored in a common format for spatial gridded data (e.g., GeoTIFF, netCDF, GRIB, etc.). You can find a list of supported formats [here](https://docs.xarray.dev/en/stable/user-guide/io.html).
+In most cases, [xarray] can open common gridded spatial formats directly (e.g., GeoTIFF, netCDF, GRIB, etc.). A full list of supported formats is available in the [xarray I/O documentation](https://docs.xarray.dev/en/stable/user-guide/io.html).
 
 ```python
 import xarray as xr
 
-ind = xr.open_dataarray("file.nc") # or "file.tif", "file.grib", etc.
+ind = xr.open_dataarray("file.nc")  # or "file.tif", "file.grib", etc.
 ```
 ````
 
 ## GeoTIFF
 
-GeoTIFF is one of the most common formats for raster data, and you will likely encounter it when working with spatial data. To open a GeoTIFF file as [`xarray.DataArray`], you can use the [xarray] package using the [rasterio] backend engine.
+GeoTIFF is one of the most common formats for raster data and is frequently encountered in geospatial workflows. To open a GeoTIFF file as an {py:class}`xarray.DataArray`, you can use [xarray] with the [rasterio] backend.
 
 ```python
 import xarray as xr
 
-ind = xr.open_dataarray("file.tif")
+ind = xr.open_dataarray("file.tif", engine="rasterio")
 ```
 
 ```{note}
-[rasterio] is a optional dependency of [xarray], so you may need to install it separately if you want to use this functionality.
+[rasterio] is an optional dependency of [xarray], so you may need to install it separately if this functionality is not already available in your environment.
 ```
 
-Alternatively, you can also use the [rioxarray] package, which relies on [rasterio] to read the data and metadata, and which provides additional functionality such as reprojection and clipping.
+Alternatively, you can use the [rioxarray] package, which relies on [rasterio] to read both the data and geospatial metadata. It also adds useful functionality such as reprojection and clipping.
 
 ```python
 import rioxarray
 
 ind = rioxarray.open_rasterio("file.tif")
 
-# reproject to a different coordinate reference system (CRS)
+# Reproject to a different coordinate reference system (CRS)
 ind = ind.rio.reproject("EPSG:4326")
 ```
 
 ## netCDF
 
-Another common format for spatial gridded data, especially for climate data, is [netCDF](https://fr.wikipedia.org/wiki/NetCDF). Files in this format can easily be opened as [`xarray.DataArray`] using [xarray] directly. To read a netCFD file, you will first need to install one the the backend libraries (e.g., [netCDF4](https://github.com/Unidata/netcdf4-python), [h5netcdf](https://h5netcdf.org/)).
+Another common format for spatial gridded data, especially for climate data, is [netCDF](https://fr.wikipedia.org/wiki/NetCDF). Files in this format can easily be opened as {py:class}`xarray.DataArray` using [xarray] directly. You may need to install a backend such as [netCDF4](https://github.com/Unidata/netcdf4-python) or [h5netcdf](https://h5netcdf.org/).
 
 ```python
 import xarray as xr
@@ -52,16 +54,18 @@ ind = xr.open_dataarray("file.nc")
 ind
 ```
 
-If the variable is store in a netCDF file with multiple variables, you can use [`xarray.open_dataset`](https://docs.xarray.dev/en/stable/generated/xarray.open_dataset.html#xarray.open_dataset) to open the file as an [`xarray.Dataset`] and then select the variable you want to use.
+If a netCDF file contains multiple variables, you can use {py:func}`xarray.open_dataset` to open the file as an {py:class}`xarray.Dataset` and then select the variable you want to use.
 
 ```python
+import xarray as xr
+
 ds = xr.open_dataset("dataset.nc")
 ind = ds["variable_name"]
 ```
 
 ## From vector data
 
-Some data you want to use may be stored as vector data (e.g., Shapefile, GeoJSON, GeoPackage) and will need to be rasterized before it can be used with LSAPy. You can use the [geocube] package and the `make_geocube` function for this purpose.
+Some datasets are stored as vector data (for example, Shapefile, GeoJSON, or GeoPackage) and must be rasterized before they can be used with LSAPy. In these cases, the [geocube] package and its `make_geocube` function are useful.
 
 ```python
 from geocube.api.core import make_geocube
@@ -71,7 +75,7 @@ layer = gpd.read_file("file.shp")  # or "file.gpkg", "file.geojson", etc.
 
 ds = make_geocube(
     layer,
-    measurements=["column_name"],  # attribute to rasterize (you can also use a list of attributes)
+    measurements=["column_name"],  # attribute to rasterize (you can also supply a list of attributes)
     output_crs="EPSG:4326",  # output coordinate reference system
     resolution=(-0.1, 0.1),  # output resolution (x, y)
 )
@@ -79,16 +83,14 @@ ind = ds["column_name"]  # select the rasterized variable
 ```
 
 ```{note}
-You can also use the `like` parameter to specify a reference a [`xarray.Dataset`] to define the output grid.
+You can also use the `like` parameter to specify a reference a {py:class}`xarray.Dataset` to define the output grid from that object.
 ```
 
 ## Other formats
 
-If your data are in another format not covered in this guide, we suggest you to have a look to this [guide](https://docs.xarray.dev/en/stable/user-guide/io.html) describing in more details how to open data from various formats using [xarray].
+If your data are in another format not covered in this guide, we suggest you to consult the [xarray IO guide](https://docs.xarray.dev/en/stable/user-guide/io.html), which describes how to open data from a wide range of formats.
 
 [geocube]: https://corteva.github.io/geocube/stable/index.html
 [rasterio]: https://rasterio.readthedocs.io/en/stable/
 [rioxarray]: https://corteva.github.io/rioxarray/stable/
 [xarray]: https://docs.xarray.dev/en/stable/
-[`xarray.dataarray`]: https://docs.xarray.dev/en/stable/generated/xarray.DataArray.html
-[`xarray.dataset`]: https://docs.xarray.dev/en/stable/generated/xarray.Dataset.html

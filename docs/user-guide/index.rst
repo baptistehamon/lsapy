@@ -15,6 +15,7 @@ and explaining how they operate together to perform Land Suitability Analysis (L
    standardization
    suitability-criteria
    lsa
+   aggregation
    dask
    spatial-statistics
    citrus-example

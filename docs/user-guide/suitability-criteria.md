@@ -2,15 +2,23 @@
 file_format: mystnb
 ---
 
+```{eval-rst}
+.. currentmodule:: lsapy
+```
+
+(suitability-criteria)=
+
 # Defining a SuitabilityCriteria
 
-{py:class}`lsapy.SuitabilityCriteria` connects an indicator to the rule that
+{py:class}`SuitabilityCriteria` connects an indicator to the rule that
 converts it into a suitability score. A criteria contains:
 
 - a `name` and a {py:class}`xarray.DataArray` `indicator`;
 - a suitability function and its parameters;
 - an optional `weight` and `category` for aggregation; and
 - optional metadata describing the criteria.
+
+(sc.create)=
 
 ## Creating a SuitabilityCriteria
 
@@ -34,9 +42,9 @@ slope_data = xr.DataArray(
 )
 ```
 
-We can then create a {py:class}`lsapy.SuitabilityCriteria` using the
+We can then create a {py:class}`SuitabilityCriteria` using the
 indicator and a standardization function. In this example, we use the
-{py:func}`lsapy.standardize.logistic` function with parameters `a=-1`
+{py:func}`standardize.logistic` function with parameters `a=-1`
 and `b=15`, which means that suitability decreases from 1 to 0
 with a midpoint at 15 degrees.
 
@@ -53,6 +61,8 @@ slope = SuitabilityCriteria(
 *See the [Standardizing your data](./standardization.md) guide to learn more
 about the available standardization functions and how to choose their
 parameters.*
+
+(sc.compute)=
 
 ## Computing suitability
 
@@ -77,10 +87,12 @@ print(slope.is_computed)
 After this, `slope.indicator` contains suitability values and subsequent calls
 to `compute()` use those values directly.
 
+(sc.options)=
+
 ## Weights and categories
 
 Depending on the method you want to use to compute the suitability using
-{py:class}`lsapy.LandSuitabilityAnalysis`, criteria can be assigned a `weight`
+{py:class}`LandSuitabilityAnalysis`, criteria can be assigned a `weight`
 and a `category`:
 
 - Weights control the relative contribution of criteria when a weighted
@@ -107,11 +119,13 @@ drainage = SuitabilityCriteria(
 The metadata is copied to the computed `DataArray`, making the output
 self-describing when it is saved or passed to another workflow.
 
+(sc.computed)=
+
 ## Using precomputed suitability values
 
 Sometimes, the indicator may already contain suitability values, for example
 if it was computed in a previous step or provided by an external source. In this case,
-you can create a {py:class}`lsapy.SuitabilityCriteria` with `is_computed=True`.
+you can create a {py:class}`SuitabilityCriteria` with `is_computed=True`.
 This tells LSAPy that the indicator already contains suitability values and that
 no further computation is needed.
 
@@ -121,10 +135,12 @@ precomputed = SuitabilityCriteria(name="criteria_name", indicator=ind, is_comput
 result = precomputed.compute()
 ```
 
+(sc.lsa)=
+
 ## Combining criteria in an analysis
 
 Once each criteria has been defined, put them in a dictionary and pass it to
-{py:class}`lsapy.LandSuitabilityAnalysis`. The dictionary keys conventionally
+{py:class}`LandSuitabilityAnalysis`. The dictionary keys conventionally
 match the criteria names.
 
 ```{code-cell} ipython3

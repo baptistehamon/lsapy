@@ -6,6 +6,8 @@ file_format: mystnb
 .. currentmodule:: lsapy
 ```
 
+(dask)=
+
 # Parallel Computing with Dask
 
 By relying on [xarray], LSAPy computations can be parallelized with [Dask] without changing your workflow.
@@ -20,6 +22,8 @@ machines.
 This guide only briefly covers Dask usage. For more information, see the
 [Dask documentation](https://docs.dask.org/en/stable/) and the xarray
 [parallel computing guide](https://docs.xarray.dev/en/stable/user-guide/dask.html).
+
+(dask.install)=
 
 ## Installation
 
@@ -37,6 +41,8 @@ python -m pip install dask
 # or
 conda install dask
 ```
+
+(dask.chunking)=
 
 ## Chunking
 
@@ -71,9 +77,13 @@ temperature = xr.open_dataarray(
 Chunking sizes is important and bad chunking choice can lead to poor performance or memory errors. Moreover, chunking alone does not guarantee a speed improvement. See the Dask [best practices guide](https://docs.dask.org/en/stable/best-practices.html) for more information.
 ```
 
+(dask.lsapy)=
+
 ## Dask in LSAPy
 
 LSAPy automatically detects chunked data and defaults to using [Dask] for parallelization. Therefore, the workflow remains the same when using Dask. However, there are some key concepts and characteristics you need to understand or be aware of when using Dask with LSAPy.
+
+(dask.sc)=
 
 ### SuitabilityCriteria
 
@@ -99,6 +109,8 @@ The computation is not executed until you call `.compute()` on the result:
 computed = res.compute()
 computed
 ```
+
+(dask.lsa)=
 
 ### LandSuitabilityAnalysis
 
@@ -145,6 +157,8 @@ If you write the results of the LSA to disk, it not necessary to explicitly trig
 res = lsa.run()
 res.to_netcdf("filename.nc")  # triggers computation and writes to disk
 ```
+
+(dask.options)=
 
 ### Dask options in LSAPy
 

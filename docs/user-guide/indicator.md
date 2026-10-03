@@ -2,6 +2,8 @@
 file_format: mystnb
 ---
 
+(indicator)=
+
 # Indicator: How to open your data?
 
 In LSAPy, an [indicator](./terminology.rst#term-Indicator) is the input spatial gridded data used in downstream analysis. It is expected to be a {py:class}`xarray.DataArray` object, but the source data are often stored in various file format.
@@ -17,6 +19,8 @@ import xarray as xr
 ind = xr.open_dataarray("file.nc")  # or "file.tif", "file.grib", etc.
 ```
 ````
+
+(ind.gtiff)=
 
 ## GeoTIFF
 
@@ -43,6 +47,8 @@ ind = rioxarray.open_rasterio("file.tif")
 ind = ind.rio.reproject("EPSG:4326")
 ```
 
+(ind.netcdf)=
+
 ## netCDF
 
 Another common format for spatial gridded data, especially for climate data, is [netCDF](https://fr.wikipedia.org/wiki/NetCDF). Files in this format can easily be opened as {py:class}`xarray.DataArray` using [xarray] directly. You may need to install a backend such as [netCDF4](https://github.com/Unidata/netcdf4-python) or [h5netcdf](https://h5netcdf.org/).
@@ -62,6 +68,8 @@ import xarray as xr
 ds = xr.open_dataset("dataset.nc")
 ind = ds["variable_name"]
 ```
+
+(ind.vector)=
 
 ## From vector data
 
@@ -85,6 +93,8 @@ ind = ds["column_name"]  # select the rasterized variable
 ```{note}
 You can also use the `like` parameter to specify a reference a {py:class}`xarray.Dataset` to define the output grid from that object.
 ```
+
+(ind.other)=
 
 ## Other formats
 

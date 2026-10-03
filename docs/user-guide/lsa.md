@@ -2,18 +2,22 @@
 file_format: mystnb
 ---
 
+```{eval-rst}
+.. currentmodule:: lsapy
+```
+
 (lsa)=
 
 # Performing a Land Suitability Analysis
 
-{py:class}`lsapy.LandSuitabilityAnalysis` combines several
-{py:class}`lsapy.SuitabilityCriteria` objects to perform a
+{py:class}`LandSuitabilityAnalysis` combines several
+{py:class}`SuitabilityCriteria` objects to perform a
 Land Suitability Analysis (LSA). It computes the suitability
 of each criteria and can then aggregate those scores into
 category and overall suitability values. A LSA is defined by:
 
 - `land_use`, the land use being evaluated;
-- `criteria`, a dictionary of {py:class}`lsapy.SuitabilityCriteria`;
+- `criteria`, a dictionary of {py:class}`SuitabilityCriteria`;
 - optional metadata set using `attrs`
 
 The criteria workflow is described in [Defining a SuitabilityCriteria](./suitability-criteria.md).
@@ -58,7 +62,7 @@ inds = xr.Dataset(
 inds
 ```
 
-We can now create the relevant {py:class}`lsapy.SuitabilityCriteria` objects with the above indicators, and define the {py:class}`lsapy.LandSuitabilityAnalysis`.
+We can now create the relevant {py:class}`SuitabilityCriteria` objects with the above indicators, and define the {py:class}`LandSuitabilityAnalysis`.
 
 ```{code-cell} ipython3
 import lsapy.standardize as lstd
@@ -120,7 +124,7 @@ lsa.weights_by_category
 
 ## Computing suitability
 
-{py:meth}`lsapy.LandSuitabilityAnalysis.run` is the only method needed to compute suitability. Several types of suitability can be computed, depending on the `suitability_type` argument, and are described below.
+{py:meth}`LandSuitabilityAnalysis.run` is the only method needed to compute suitability. Several types of suitability can be computed, depending on the `suitability_type` argument, and are described below.
 
 (lsa.run.criteria)=
 

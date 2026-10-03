@@ -2,12 +2,16 @@
 file_format: mystnb
 ---
 
+```{eval-rst}
+.. currentmodule:: lsapy
+```
+
 (aggregation)=
 
 # Aggregating data
 
-Aggregation is the process of combining multiple variables into a single value. In `LSAPy`, it is used in {py:meth}`lsapy.LandSuitabilityAnalysis.run` to combine suitability scores from multiple criteria into a single overall suitability score.
-The aggregation function can also be used directly on an `xarray.Dataset` of suitability scores with {py:func}`lsapy.aggregate.aggregate`.
+Aggregation is the process of combining multiple variables into a single value. In `LSAPy`, it is used in {py:meth}`LandSuitabilityAnalysis.run` to combine suitability scores from multiple criteria into a single overall suitability score.
+The aggregation function can also be used directly on an `xarray.Dataset` of suitability scores with {py:func}`aggregate.aggregate`.
 
 (agg.methods)=
 
@@ -24,7 +28,7 @@ The following aggregation methods are available:
 | `wgmean`    | Weighted geometric mean                         |
 | `limfactor` | Minimum suitability score and limiting variable |
 
-The weighted methods, `wmean` and `wgmean`, use the weight assigned to each criterion. In a `LandSuitabilityAnalysis`, these weights come from each criterion's `weight` attribute. If you call the lower-level {py:func}`lsapy.aggregate.aggregate` helper directly, you can pass a `weights` list explicitly.
+The weighted methods, `wmean` and `wgmean`, use the weight assigned to each criterion. In a `LandSuitabilityAnalysis`, these weights come from each criterion's `weight` attribute. If you call the lower-level {py:func}`aggregate.aggregate` helper directly, you can pass a `weights` list explicitly.
 
 (agg.comparison)=
 
@@ -100,7 +104,7 @@ aggregate(ds, method="wmean", variables=["var1", "var2"], weights=[1, 2])
 
 ### Limiting variable format
 
-When using the `limfactor` method, {py:meth}`lsapy.aggregate.aggregate` returns the limiting variable (i.e., the variable that had the lowest value) alongside the limiting factor value. It is stored in the `limiting_variable` variable in the aggregated dataset, and corresponds to an {py:class}`xarray.DataArray` with the same shape as the input dataset, but with an additional `variable` dimension that contains boolean values indicating if the variable was the limiting factor.
+When using the `limfactor` method, {py:meth}`aggregate.aggregate` returns the limiting variable (i.e., the variable that had the lowest value) alongside the limiting factor value. It is stored in the `limiting_variable` variable in the aggregated dataset, and corresponds to an {py:class}`xarray.DataArray` with the same shape as the input dataset, but with an additional `variable` dimension that contains boolean values indicating if the variable was the limiting factor.
 
 ```{code-cell} ipython3
 limvar = ds_agg["limiting_variable"]

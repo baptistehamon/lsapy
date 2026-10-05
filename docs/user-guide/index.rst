@@ -17,5 +17,5 @@ and explaining how they operate together to perform Land Suitability Analysis (L
    lsa
    aggregation
    dask
-   spatial-statistics
+   stats
    citrus-example

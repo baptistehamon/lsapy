@@ -126,6 +126,8 @@ rediraffe_redirects = {
 }
 
 intersphinx_mapping = {
+    "geopandas": ("https://geopandas.org/en/stable/", None),
+    "pandas": ("https://pandas.pydata.org/pandas-docs/stable/", None),
     "xarray": ("https://docs.xarray.dev/en/stable/", None),
 }
 

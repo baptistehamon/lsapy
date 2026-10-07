@@ -42,6 +42,7 @@ extensions = [
     "sphinx_autodoc_typehints",
     "sphinxcontrib.bibtex",
     "sphinx_copybutton",
+    "sphinx_design",
     "sphinx_mdinclude",
     "myst_nb",
     "sphinxext.rediraffe",
@@ -96,6 +97,8 @@ html_theme_options = {
         {"name": "GitHub", "url": "https://github.com/baptistehamon/lsapy", "icon": "fa-brands fa-github"},
     ],
     # header and footer options
+    "header_links_before_dropdown": 6,
+    "navbar_align": "left",
     "footer_start": ["copyright"],
     "footer_center": ["sphinx-version"],
     # secondary sidebar options

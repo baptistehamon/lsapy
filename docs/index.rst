@@ -3,10 +3,16 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-:html_theme.sidebar_secondary.remove:
 
 LSAPy Documentation
 ===================
+
+**Land Suitability**
+   | *"The fitness of a given type of land for a specified kind of land use"*, FAO (1976).
+
+**Land Suitability Analysis (LSA)** (or Land Evaluation)
+   | *"A tool that aims at identifying the most appropriate spatial pattern for future land uses
+     according to specified requirements, preferences, or predictors of some activity"*, Malczewski (2004).
 
 Description
 -----------
@@ -29,6 +35,7 @@ scalability for research and practical applications.
    About <readme>
    getting-started/index
    user-guide/index
+   examples/index
    api
    community/index
 

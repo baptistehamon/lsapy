@@ -18,4 +18,3 @@ and explaining how they operate together to perform Land Suitability Analysis (L
    aggregation
    dask
    stats
-   citrus-example

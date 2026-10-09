@@ -137,7 +137,7 @@ values = [
 
 [tool.codespell]
 skip = '*docs/_build, *docs/*.bib'
-ignore-words-list = "ALUES, ALSE"
+ignore-words-list = "ALUES, ALSE, FLE"
 
 [tool.deptry]
 extend_exclude = ["docs"]

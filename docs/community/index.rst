@@ -16,4 +16,5 @@ If you are interested in contributing to the project, please read the :doc:`Cont
     :hidden:
 
     Contributing <contributing>
+    ../roadmap
     Code of Conduct <code_of_conduct>

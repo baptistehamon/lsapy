@@ -11,4 +11,4 @@ This getting started guide is intended for user who are new to LSAPy and it prov
 
    why-lsapy
    installation
-   lsapy-introduction
+   overview

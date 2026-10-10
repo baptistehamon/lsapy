@@ -32,7 +32,6 @@ scalability for research and practical applications.
    :maxdepth: 2
    :caption: Table of Contents:
 
-   About <readme>
    getting-started/index
    user-guide/index
    examples/index

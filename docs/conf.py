@@ -97,7 +97,7 @@ html_theme_options = {
         {"name": "GitHub", "url": "https://github.com/baptistehamon/lsapy", "icon": "fa-brands fa-github"},
     ],
     # header and footer options
-    "header_links_before_dropdown": 6,
+    "header_links_before_dropdown": 5,
     "navbar_align": "left",
     "footer_start": ["copyright"],
     "footer_center": ["sphinx-version"],
@@ -126,6 +126,7 @@ html_static_path = ["_static"]
 rediraffe_redirects = {
     "getting_started/index": "getting-started/index",
     "api/utils.rst": "api/tutorial.rst",
+    "readme": "index",
 }
 
 intersphinx_mapping = {

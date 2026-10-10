@@ -81,7 +81,7 @@ bibtex_reference_style = "author_year"
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_title = "LSAPy Documentation"
+html_title = ""
 html_short_title = "LSAPy"
 html_logo = "logos/lsapy/LSAPy_Logo_FullColour.svg"
 html_favicon = "logos/lsapy/LSAPy_Icon.png"

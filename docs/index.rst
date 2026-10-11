@@ -3,43 +3,72 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+:html_theme.sidebar_secondary.remove: true
 
 LSAPy Documentation
 ===================
 
-**Land Suitability**
-   | *"The fitness of a given type of land for a specified kind of land use"*, FAO (1976).
+**Version**: |release| - `What's new? <changelog.html>`__
 
-**Land Suitability Analysis (LSA)** (or Land Evaluation)
-   | *"A tool that aims at identifying the most appropriate spatial pattern for future land uses
-     according to specified requirements, preferences, or predictors of some activity"*, Malczewski (2004).
+**Useful links**:
+`Code Repository <https://github.com/baptistehamon/lsapy>`__ |
+`Issues <https://github.com/baptistehamon/lsapy/issues>`__ |
+`Releases <https://github.com/baptistehamon/lsapy/releases>`__ |
+`Example Gallery <examples/index.html>`__
 
-Description
------------
-
-`LSAPy` (Land Suitability Analysis in Python) is a highly customizable, open-source Python library designed
+LSAPy (Land Suitability Analysis in Python) is a highly customizable, open-source Python library designed
 to streamline and enhance Land Suitability Analysis (LSA) workflows. Its objective is to make conducting LSA
 in Python easier and more accessible to users. The package implements a fuzzy-logic approach and provides a
 set of objects that work together to deliver a flexible and user-defined LSA framework.
 
-By relying on `xarray`_ objects for computation, `LSAPy` is specifically designed to facilitate LSA under climate
-change projections. Moreover, the use of `xarray`_ allows for seamless integration with the broader Python ecosystem,
-such as `dask`_ for efficient parallel processing and `matplotlib`_ for data visualisation. The modular design of
-`LSAPy` addresses some limitations of existing LSA tools by offering greater flexibility, reproducibility, and
-scalability for research and practical applications.
+.. grid:: 1 1 2 2
+   :gutter: 2
+
+   .. grid-item-card:: Get Started!
+        :img-top: _static/fast-forward.svg
+        :class-card: intro-card
+        :link: getting-started/index
+        :link-type: doc
+
+        *New to LSAPy?*
+        Learn how to install and get started with LSAPy in a few simple steps.
+
+   .. grid-item-card:: User Guide
+        :img-top: _static/book-half.svg
+        :class-card: intro-card
+        :link: user-guide/index
+        :link-type: doc
+
+        *Want to learn more?*
+        Explore the LSAPy user guides to understand its features and functionalities.
+
+   .. grid-item-card:: API Reference
+        :img-top: _static/braces-asterisk.svg
+        :class-card: intro-card
+        :link: api
+        :link-type: doc
+
+        *Need technical details?*
+        Access the LSAPy API reference for comprehensive information on its classes and methods.
+
+   .. grid-item-card:: Contribute
+        :img-top: _static/terminal.svg
+        :class-card: intro-card
+        :link: community/index
+        :link-type: doc
+
+        *Have ideas or improvements? Found a bug?*
+        Read our contribution guidelines and get involved in LSAPy development.
+
 
 .. toctree::
    :maxdepth: 2
-   :caption: Table of Contents:
+   :hidden:
 
-   getting-started/index
-   user-guide/index
-   examples/index
-   api
-   community/index
-
-.. toctree::
-   :titlesonly:
-
-   changelog
-   references
+   Get Started <getting-started/index>
+   User Guide <user-guide/index>
+   Examples Gallery <examples/index>
+   API Reference <api>
+   Community <community/index>
+   Changelog <changelog>
+   Bibliography <references>

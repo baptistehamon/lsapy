@@ -76,6 +76,21 @@ class TestStatsSummary:
         np.testing.assert_array_equal(df["variable"].unique(), ["var1", "var3"])
         np.testing.assert_array_equal(df["time"].unique(), data.time.values[:3])
 
+    def test_spatial_only_dims_excluded_from_variables(self):
+        # https://github.com/baptistehamon/lsapy/issues/185 — with only
+        # spatial dims, x/y must not leak into the variable column.
+        ds = xr.Dataset(
+            {
+                "slope": (("y", "x"), [[2, 8, 10], [12, 15, 20]]),
+                "temperature": (("y", "x"), [[10, 12, 14], [16, 18, 20]]),
+            },
+            coords={"y": [45, 46], "x": [2, 3, 4]},
+        )
+        df = stats_summary(ds)
+        np.testing.assert_array_equal(df["variable"].unique(), ["slope", "temperature"])
+        assert df.shape == (2, 9)
+        np.testing.assert_allclose(df.loc[df["variable"] == "slope"]["mean"].values, 11.166667, rtol=1e-5)
+
     def test_bins(self, data):
         df = stats_summary(
             data,

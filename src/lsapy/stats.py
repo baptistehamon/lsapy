@@ -157,6 +157,8 @@ def stats_summary(
     df = data.to_dataframe().reset_index()
     if len(on_dims) > 0:
         df = df.drop(columns=[c for c in data.coords if c not in on_dims])
+    else:
+        df = df.drop(columns=[c for c in data.dims])
 
     df = df.melt(id_vars=on_dims)
     _dims = ["variable"] + on_dims

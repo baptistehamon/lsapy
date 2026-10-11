@@ -1,6 +1,13 @@
 Why LSAPy?
 ==========
 
+**Land Suitability**
+   | *"The fitness of a given type of land for a specified kind of land use"*, :cite:ct:`fao1976`.
+
+**Land Suitability Analysis (LSA)** (or Land Evaluation)
+   | *"A tool that aims at identifying the most appropriate spatial pattern for future land uses
+     according to specified requirements, preferences, or predictors of some activity"*, :cite:ct:`malczewski2004`.
+
 Purpose
 -------
 

@@ -125,7 +125,7 @@ def open_dataset(
         )
         filepaths.append(filepath)
 
-    ds = xr.open_mfdataset(filepaths, **kwargs)
+    ds = xr.merge([xr.open_dataset(f, **kwargs) for f in filepaths])
 
     if not cache:
         ds = ds.load()

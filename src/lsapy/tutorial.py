@@ -15,16 +15,18 @@ base_url = "https://github.com/baptistehamon/lsapy-data"
 default_branch = "main"
 
 citrus_dataset = [
+    # soil variables
     "drainage",
     "ph",
     "potential-rooting-depth",
-    "prcptot",
     "profile-total-available-water",
     "salinity",
     "slope",
+    "topsoil-gravel-content",
+    # climate variables
+    "prcptot",
     "tgmean_0915-1115",
     "tnmean_0815-1015",
-    "topsoil-gravel-content",
     "txmean_0101-0215",
     "year-with-hotweek_1201-0228",
 ]

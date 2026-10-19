@@ -13,6 +13,9 @@ The following examples showcase the capabilities of LSAPy through practical appl
         **Citrus: A real-world LSA example**
         +++
 
+        .. image:: ../_static/thumbnails/citrus-dataset.png
+            :alt: Citrus dataset example
+
     .. grid-item-card::
         :text-align: center
         :link: risk-example.html

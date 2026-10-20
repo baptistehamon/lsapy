@@ -6,6 +6,7 @@ import sys
 from importlib.util import find_spec
 from pathlib import Path
 
+import geopandas as gpd
 import xarray as xr
 
 __all__ = ["open_dataset", "load_dataset"]
@@ -68,6 +69,7 @@ def open_dataset(
     * ``"year-with-hotweek_1201-0228"``: Number of years with at least one hot week (3 days over 35C in a 7-day period)
       between Dec 1 and Feb 28 (over 10 years)*
     * ``"citrus-dataset"``: A dataset containing various soil and climate variables for a citrus suitability analysis*
+    * ``"nz-regions"``: New Zealand North Island regions vector dataset (GeoPackage format)
 
     *These datasets covers the North Island of New Zealand at ~5 km resolution.
 
@@ -112,13 +114,22 @@ def open_dataset(
         else:
             names = [names]
 
+    if "nz-regions" in names:
+        if len(names) > 1:
+            raise ValueError(
+                "The 'nz-regions' dataset cannot be opened with other datasets. Please open it separately."
+            )
+        else:
+            names = ["regions"]
+
     headers = {"User-Agent": f"lsapy {sys.modules['lsapy'].__version__}"}
     downloader = pooch.HTTPDownloader(headers=headers)
 
     # retrieve file(s)
     filepaths = []
     for name in names:
-        url = f"{base_url}/raw/{default_branch}/{name + '_nz-north-island.nc'}"
+        extension = "gpkg" if name == "regions" else "nc"
+        url = f"{base_url}/raw/{default_branch}/{name + '_nz-north-island.' + extension}"
         filepath = pooch.retrieve(
             url=url,
             known_hash=None,
@@ -127,14 +138,17 @@ def open_dataset(
         )
         filepaths.append(filepath)
 
-    ds = xr.merge([xr.open_dataset(f, **kwargs) for f in filepaths])
+    if "regions" in names:
+        out = gpd.read_file(filepaths[0])
+    else:
+        out = xr.merge([xr.open_dataset(f, **kwargs) for f in filepaths])
+        out = out.load() if not cache else out
 
     if not cache:
-        ds = ds.load()
         for f in filepaths:
             Path(f).unlink()  # delete the file if not cached
 
-    return ds
+    return out
 
 
 def load_dataset(*args, **kwargs) -> xr.Dataset:  # numpydoc ignore=PR01,PR02
@@ -159,6 +173,7 @@ def load_dataset(*args, **kwargs) -> xr.Dataset:  # numpydoc ignore=PR01,PR02
     * ``"year-with-hotweek_1201-0228"``: Number of years with at least one hot week (3 days over 35C in a 7-day period)
       between Dec 1 and Feb 28 (over 10 years)*
     * ``"citrus-dataset"``: A dataset containing various soil and climate variables for a citrus suitability analysis*
+    * ``"nz-regions"``: New Zealand North Island regions vector dataset (GeoPackage format)
 
     *These datasets covers the North Island of New Zealand at ~5 km resolution.
 
@@ -182,5 +197,5 @@ def load_dataset(*args, **kwargs) -> xr.Dataset:  # numpydoc ignore=PR01,PR02
     --------
     open_dataset
     """
-    with open_dataset(*args, **kwargs) as ds:
-        return ds.load()
+    out = open_dataset(*args, **kwargs)
+    return out.load() if isinstance(out, xr.Dataset) else out

@@ -59,6 +59,7 @@ def open_dataset(
     * ``"ph"``: Soil pH*
     * ``"potential-rooting-depth"``: Soil potential rooting depth*
     * ``"prcptot"``: Annual total precipitation*
+    * ``"prcptot_0301-0430"``: Total precipitation between Mar 1 and Apr 30*
     * ``"profile-total-available-water"``: Soil profile total available water*
     * ``"salinity"``: Soil salinity*
     * ``"slope"``: Slope*
@@ -163,6 +164,7 @@ def load_dataset(*args, **kwargs) -> xr.Dataset:  # numpydoc ignore=PR01,PR02
     * ``"ph"``: Soil pH*
     * ``"potential-rooting-depth"``: Soil potential rooting depth*
     * ``"prcptot"``: Annual total precipitation*
+    * ``"prcptot_0301-0430"``: Total precipitation between Mar 1 and Apr 30*
     * ``"profile-total-available-water"``: Soil profile total available water*
     * ``"salinity"``: Soil salinity*
     * ``"slope"``: Slope*

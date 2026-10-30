@@ -20,8 +20,12 @@ The following examples showcase the capabilities of LSAPy through practical appl
         :text-align: center
         :link: risk-example.html
 
-        **Risk Assessment**
+        | **Risk Assessment:**
+        | **Botrytis on wine grapes**
         +++
+
+        .. image:: ../_static/thumbnails/botrytis-suitability-risk-curves.png
+            :alt: Botrytis suitability and risk curves example
 
 
 .. toctree::

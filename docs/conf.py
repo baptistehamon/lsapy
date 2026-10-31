@@ -127,6 +127,10 @@ rediraffe_redirects = {
     "getting_started/index": "getting-started/index",
     "api/utils.rst": "api/tutorial.rst",
     "readme": "index",
+    "notebooks/index": "user-guide/index",
+    "notebooks/criteria.ipynb": "user-guide/suitability-criteria.md",
+    "notebooks/lsa.ipynb": "user-guide/lsa.md",
+    "notebooks/chunked.rst": "user-guide/dask.md",
 }
 
 intersphinx_mapping = {

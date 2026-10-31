@@ -23,7 +23,8 @@ Goals
         :class-card: sd-border-0 sd-bg-transparent
         :shadow: none
 
-        What we work on now
+        | What we work on now
+        |
 
     .. grid-item-card:: Near-term
         :text-align: center
@@ -59,6 +60,8 @@ Goals
         **Development**
         ^^^
         Implement different LSA frameworks, such as the `FAO FLE`_ and a fuzzy-logic framework.
+        +++
+        *Discussed here*: `#193 <https://github.com/baptistehamon/lsapy/issues/193>`_
 
     .. grid-item-card:: Land Use Models
         :class-header: sd-bg-danger sd-text-white

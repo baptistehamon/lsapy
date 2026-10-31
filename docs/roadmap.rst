@@ -61,7 +61,7 @@ Goals
         ^^^
         Implement different LSA frameworks, such as the `FAO FLE`_ and a fuzzy-logic framework.
         +++
-        *Discussed here*: `#193 <https://github.com/baptistehamon/lsapy/issues/193>`_
+        *Discussed here*: `#193 <https://github.com/baptistehamon/lsapy/issues/193>`_.
 
     .. grid-item-card:: Land Use Models
         :class-header: sd-bg-danger sd-text-white
@@ -69,6 +69,8 @@ Goals
         **Development**
         ^^^
         Extend LSAPy scope to include land use optimization or allocation models.
+        +++
+        *Discussed here*: `#194 <https://github.com/baptistehamon/lsapy/issues/194>`_.
 
 
 .. div:: sd-text-center sd-font-italic

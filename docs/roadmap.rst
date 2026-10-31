@@ -4,12 +4,14 @@ Roadmap
 .. The layout is inspired by the Zenodo roadmap
 .. https://about.zenodo.org/roadmap/
 
-This page provides an overview of current and future development goals for LSAPy. We value feedback from the community and
+This page provides an overview of current and future goals for LSAPy. We value feedback from the community and
 encourage you to contribute to the discussion on these goals; you can find the list of roadmap elements in the issue tracker,
 under the `roadmap`_ label.
 
 .. _roadmap: https://github.com/baptistehamon/lsapy/issues?q=is%3Aissue+state%3Aopen+label%3Aroadmap
 
+Goals
+-----
 
 .. grid:: 3
     :gutter: 2
@@ -47,6 +49,9 @@ under the `roadmap`_ label.
         **Science/Research**
         ^^^
         Publish a paper describing LSAPy in the Journal of Open Source Software (JOSS).
+        +++
+        *Discussed here*: `#16 <https://github.com/baptistehamon/lsapy/issues/16>`_, `#142 <https://github.com/baptistehamon/lsapy/issues/142>`_,
+        `#164 <https://github.com/baptistehamon/lsapy/issues/164>`_, & `#72 <https://github.com/baptistehamon/lsapy/issues/72>`_.
 
     .. grid-item-card:: LSA Frameworks
         :class-header: sd-bg-danger sd-text-white
@@ -62,19 +67,28 @@ under the `roadmap`_ label.
         ^^^
         Extend LSAPy scope to include land use optimization or allocation models.
 
-    .. grid-item-card:: Improve Documentation
-        :class-header: sd-bg-primary sd-text-white
-
-        **Documentation/Website**
-        ^^^
-        Enhance the documentation with a proper introduction to LSAPy, user-guides, and examples to help users get started with the library.
-        +++
-        *Discuss here*: [#77](https://github.com/baptistehamon/lsapy/issues/77)
-
 
 .. div:: sd-text-center sd-font-italic
 
-    Last updated: October 9, 2026
+    Last updated: October 31, 2026
+
+Completed
+---------
+
+.. dropdown:: 2026
+
+    .. grid:: 2
+        :gutter: 2
+
+        .. grid-item-card:: Improve Documentation
+            :class-header: sd-bg-primary sd-text-white
+
+            **Documentation/Website**
+            ^^^
+            Enhanced the documentation with a proper introduction to LSAPy, user-guides,
+            and examples to help users get started with the library.
+            +++
+            *Discussed here*: `#77 <https://github.com/baptistehamon/lsapy/issues/77>`_
 
 
 Guidelines for maintainers

@@ -6,6 +6,17 @@ v0.5.0 (unreleased)
 -------------------
 Contributor to this version: Baptiste Hamon (@baptistehamon), Akrita Agarwal (@akritaag).
 
+New features
+^^^^^^^^^^^^
+* A major update of the documentation has been done (issue `#83 <https://github.com/baptistehamon/lsapy/issues/83>`_, PR `#197 <https://github.com/baptistehamon/lsapy/pull/197>`_):
+    * The *Getting Started* has been updated and now include a *Why LSAPy?*, *Installation*, and *LSAPy Overview* sections.
+    * A detailed *User Guide* and an *Examples Gallery* have been added to the documentation (issue `#77 <https://github.com/baptistehamon/lsapy/issues/77>`_).
+    * A *Roadmap* has been added to the *Community* section of the documentation.
+* The tutorial data management has been revised (PR `#197 <https://github.com/baptistehamon/lsapy/pull/197>`_):
+    * Tutorial data are now stored in the `lsapy-data <https://github.com/baptistehamon/lsapy-data>`_ repository.
+    * Tutorial data now include a wide range of indicators at a 5km resolution for the North Island of New Zealand, as well as its administrative boundaries.
+    * The ``lsapy.tutorial`` module has been added to access tutorial data with the ``open_dataset`` and ``load_dataset`` functions.
+
 Bug fixes
 ^^^^^^^^^
 * Fix ``LandSuitabilityAnalysis.run`` to raise an error when criteria indicators have different dimensions (issue `#88 <https://github.com/baptistehamon/lsapy/issues/88>`_, PR `#171 <https://github.com/baptistehamon/lsapy/pull/171>`_).
@@ -17,6 +28,7 @@ Breaking changes
 * A major update of the installation recipes has been done to adopt `PEP-735 <https://peps.python.org/pep-0735/>`_. Most of the development dependencies are now install using ``dependency-group`` and installation recipes are now as follows (PR `#173 <https://github.com/baptistehamon/lsapy/pull/173>`_)
     * ``optional-dependencies``: ``parallel`` (dask), ``tutorial`` (required tutorial dependencies), ``complete`` (all optional dependencies).
     * ``dependency-group``: ``lint`` (linting tools), ``notebooks`` (minimal notebook dependencies), ``docs`` (documentation dependencies), ``test`` (testing dependencies), ``dev`` (all development dependencies).
+* The ``lsapy.utils`` module and its functions have been removed in favor of the use of ``lsapy.tutorial`` module to access tutorial data (PR `#197 <https://github.com/baptistehamon/lsapy/pull/197>`_).
 
 Internal changes
 ^^^^^^^^^^^^^^^^
@@ -27,6 +39,7 @@ Internal changes
 * A ``py.typed`` file has been added and ``mypy`` python version has been updated to support downstream type checking (issue `#164 <https://github.com/baptistehamon/lsapy/issues/164>`_, PR `#166 <https://github.com/baptistehamon/lsapy/pull/166>`_).
 * A ``CITATION.cff`` referring to the prepint paper has been added (issue `#164 <https://github.com/baptistehamon/lsapy/issues/164>`_, PR `#166 <https://github.com/baptistehamon/lsapy/pull/166>`_).
 * A ``AUTHORS.rst`` has been added (issue `#165 <https://github.com/baptistehamon/lsapy/issues/165>`_, PR `#166 <https://github.com/baptistehamon/lsapy/pull/166>`_).
+* ``lstd`` import alias has been added for ``lsapy.standardize`` module (PR `#197 <https://github.com/baptistehamon/lsapy/pull/197>`_).
 
 v0.4.0 (2026-05-14)
 -------------------

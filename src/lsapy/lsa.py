@@ -46,36 +46,44 @@ class LandSuitabilityAnalysis:
 
     Examples
     --------
-    Let first define the ``SuitabilityCriteria`` (we use `xclim` package for the GDD computation):
+    Here is an example using synthetic slope and temperature data, starting by creating the data:
 
-    >>> from lsapy.utils import open_data
+    >>> import numpy as np
+    >>> import xarray as xr
     >>> import lsapy.standardize as lstd
-    >>> from xclim.indicators.atmos import growing_degree_days
 
-    >>> drainage = open_data("land", variables="drainage")
-    >>> tas = open_data("climate", variables="tas").interp_like(drainage, method="nearest")
+    >>> coords = {"y": range(2), "x": range(3)}
+    >>> data = xr.Dataset(
+    ...     {
+    ...         "slope": xr.DataArray(
+    ...             np.array([[2, 8, 10], [12, 15, 20]]), dims=("y", "x"), coords=coords, attrs={"units": "degrees"}
+    ...         ),
+    ...         "temperature": xr.DataArray(
+    ...             np.array([[5, 8, 10], [15, 8, 20]]), dims=("y", "x"), coords=coords, attrs={"units": "degC"}
+    ...         ),
+    ...     }
+    ... )
+
+    Define the ``SuitabilityCriteria`` using the slope and temperature data as indicators:
+
     >>> sc = {
-    ...     "drainage_class": SuitabilityCriteria(
-    ...         name="drainage_class",
-    ...         long_name="Drainage Class Suitability",
-    ...         weight=3,
-    ...         category="soilTerrain",
-    ...         indicator=drainage,
-    ...         func=lstd.discrete,
-    ...         fparams={"rules": {0: 0, 1: 0.1, 2: 0.5, 3: 0.9, 4: 1}},
+    ...     "slope": SuitabilityCriteria(
+    ...         name="slope",
+    ...         long_name="Slope Suitability",
+    ...         indicator=data["slope"],
+    ...         func=lstd.logistic,
+    ...         fparams={"a": -1.0, "b": 15.0},
     ...     ),
-    ...     "growing_degree_days": SuitabilityCriteria(
-    ...         name="growing_degree_days",
-    ...         long_name="Growing Degree Days Suitability",
-    ...         weight=1,
-    ...         category="climate",
-    ...         indicator=growing_degree_days(tas, thresh="10 degC", freq="YS-JUL"),
-    ...         func=lstd.vetharaniam2022_eq5,
-    ...         fparams={"a": -1.41, "b": 801},
+    ...     "temperature": SuitabilityCriteria(
+    ...         name="temperature",
+    ...         long_name="Temperature Suitability",
+    ...         indicator=data["temperature"],
+    ...         func=lstd.logistic,
+    ...         fparams={"a": 1.0, "b": 12.5},
     ...     ),
     ... }
 
-    Now we can define the ``LandSuitabilityAnalysis`` :
+    Define the ``LandSuitabilityAnalysis`` :
 
     >>> lsa = LandSuitabilityAnalysis(
     ...     land_use="land_use",
@@ -84,9 +92,9 @@ class LandSuitabilityAnalysis:
     ...     criteria=sc,
     ... )
 
-    The land suitability analysis can now be run:
+    Run the land suitability analysis:
 
-    >>> lsa.run(inplace=True)
+    >>> suitability = lsa.run()
     """
 
     def __init__(
@@ -339,36 +347,44 @@ class LandSuitabilityAnalysis:
 
         Examples
         --------
-        Let first define the ``SuitabilityCriteria`` (we use `xclim` package for the GDD computation):
+        Here is an example using synthetic slope and temperature data, starting by creating the data:
 
-        >>> from lsapy.utils import open_data
+        >>> import numpy as np
+        >>> import xarray as xr
         >>> import lsapy.standardize as lstd
-        >>> from xclim.indicators.atmos import growing_degree_days
 
-        >>> drainage = open_data("land", variables="drainage")
-        >>> tas = open_data("climate", variables="tas").interp_like(drainage, method="nearest")
+        >>> coords = {"y": range(2), "x": range(3)}
+        >>> data = xr.Dataset(
+        ...     {
+        ...         "slope": xr.DataArray(
+        ...             np.array([[2, 8, 10], [12, 15, 20]]), dims=("y", "x"), coords=coords, attrs={"units": "degrees"}
+        ...         ),
+        ...         "temperature": xr.DataArray(
+        ...             np.array([[5, 8, 10], [15, 8, 20]]), dims=("y", "x"), coords=coords, attrs={"units": "degC"}
+        ...         ),
+        ...     }
+        ... )
+
+        Define the ``SuitabilityCriteria`` using the slope and temperature data as indicators:
+
         >>> sc = {
-        ...     "drainage_class": SuitabilityCriteria(
-        ...         name="drainage_class",
-        ...         long_name="Drainage Class Suitability",
-        ...         weight=3,
-        ...         category="soilTerrain",
-        ...         indicator=drainage,
-        ...         func=lstd.discrete,
-        ...         fparams={"rules": {0: 0, 1: 0.1, 2: 0.5, 3: 0.9, 4: 1}},
+        ...     "slope": SuitabilityCriteria(
+        ...         name="slope",
+        ...         long_name="Slope Suitability",
+        ...         indicator=data["slope"],
+        ...         func=lstd.logistic,
+        ...         fparams={"a": -1.0, "b": 15.0},
         ...     ),
-        ...     "growing_degree_days": SuitabilityCriteria(
-        ...         name="growing_degree_days",
-        ...         long_name="Growing Degree Days Suitability",
-        ...         weight=1,
-        ...         category="climate",
-        ...         indicator=growing_degree_days(tas, thresh="10 degC", freq="YS-JUL"),
-        ...         func=lstd.vetharaniam2022_eq5,
-        ...         fparams={"a": -1.41, "b": 801},
+        ...     "temperature": SuitabilityCriteria(
+        ...         name="temperature",
+        ...         long_name="Temperature Suitability",
+        ...         indicator=data["temperature"],
+        ...         func=lstd.logistic,
+        ...         fparams={"a": 1.0, "b": 12.5},
         ...     ),
         ... }
 
-        Now we can define the ``LandSuitabilityAnalysis`` :
+        Define the ``LandSuitabilityAnalysis`` :
 
         >>> lsa = LandSuitabilityAnalysis(
         ...     land_use="land_use",
@@ -377,9 +393,9 @@ class LandSuitabilityAnalysis:
         ...     criteria=sc,
         ... )
 
-        The land suitability analysis can now be run:
+        Run the land suitability analysis:
 
-        >>> lsa.run(inplace=True)
+        >>> suitability = lsa.run()
         """
 
         def _pre_agg(suitability_type, by_category):

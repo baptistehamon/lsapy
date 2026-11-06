@@ -65,58 +65,39 @@ def stats_summary(
 
     Examples
     --------
-    >>> from lsapy.utils import open_data
-    >>> from lsapy import SuitabilityCriteria, LandSuitabilityAnalysis
-    >>> import lsapy.standardize as lstd
-    >>> from xclim.indicators.atmos import growing_degree_days
+    >>> import numpy as np
+    >>> import xarray as xr
 
-    Let's first define a Land Suitability Analysis (LSA):
-
-    >>> drainage = open_data("land", variables="drainage")
-    >>> tas = open_data("climate", variables="tas").interp_like(drainage, method="nearest")
-    >>> sc = {
-    ...     "drainage_class": SuitabilityCriteria(
-    ...         name="drainage_class",
-    ...         long_name="Drainage Class Suitability",
-    ...         weight=3,
-    ...         category="soilTerrain",
-    ...         indicator=drainage,
-    ...         func=lstd.discrete,
-    ...         fparams={"rules": {0: 0, 1: 0.1, 2: 0.5, 3: 0.9, 4: 1}},
-    ...     ),
-    ...     "growing_degree_days": SuitabilityCriteria(
-    ...         name="growing_degree_days",
-    ...         long_name="Growing Degree Days Suitability",
-    ...         weight=1,
-    ...         category="climate",
-    ...         indicator=growing_degree_days(tas, thresh="10 degC", freq="YS-JUL"),
-    ...         func=lstd.vetharaniam2022_eq5,
-    ...         fparams={"a": -1.41, "b": 801},
-    ...     ),
-    ... }
-    >>> lsa = LandSuitabilityAnalysis("land_use", sc)
-    >>> lsa.run(inplace=True)
+    >>> data = xr.Dataset(
+    ...     {
+    ...         "slope": (("y", "x"), np.array([[2, 8, 10], [12, 15, 20]])),
+    ...         "temperature": (("y", "x"), np.array([[5, 8, 10], [15, 8, 20]]), {"units": "degC"}),
+    ...         "suitability": (("y", "x"), np.array([[0.2, 0.5, 0.8], [0.9, 0.6, 0.3]])),
+    ...     },
+    ...     coords={"y": range(2), "x": range(3)},
+    ... )
 
     We can then compute the statistics summary for the data:
 
-    >>> stats = stats_summary(lsa.data)
+    >>> stats = stats_summary(data)
 
     `on_vars`, `on_dims`, and `on_dim_values` parameters can be used to filter the data.
-    If we want to get the statistics summary for only 'growing_degree_days', 'suitability', and
-    the first three years, we can do:
+    If we want to get the statistics summary for only 'temperature', 'suitability', and
+    the two first longitude ('x') values:
 
     >>> stats = stats_summary(
-    ...     lsa.data,
-    ...     on_vars=["growing_degree_days", "suitability"],  # select variables
-    ...     on_dim_values={"time": slice("2000", "2002")},  # select values of the time dimension
+    ...     data,
+    ...     on_vars=["temperature", "suitability"],  # select variables
+    ...     on_dims_values={"x": slice(0, 1)},  # select values of the x dimension
     ... )
 
-    This will compute the statistics for the two variables and for each year of the 2000-2002 period.
+    This will compute the statistics for the two variables and for the longitude values 0 and 1.
     We can also provide bins to group the data into intervals. For example, if we want to get the statistics
     for four bins (0-0.25, 0.25-0.5, 0.5-0.75, 0.75-1), we can do:
 
     >>> stats = stats_summary(
-    ...     lsa.data,
+    ...     data,
+    ...     on_vars=["suitability"],
     ...     bins=[0, 0.25, 0.5, 0.75, 1],  # define bins
     ...     bins_labels=["unsuitable", "poorly suitable", "moderately suitable", "highly suitable"],  # define labels
     ...     all_bins=True,  # add an additional bin for the overall range (i.e., 0-1)
@@ -126,7 +107,8 @@ def stats_summary(
     Assuming that each cell has an area of 5 hectares (ha), we can do:
 
     >>> stats = stats_summary(
-    ...     lsa.data,
+    ...     data,
+    ...     on_vars=["suitability"],
     ...     bins=[0, 0.25, 0.5, 0.75, 1],
     ...     bins_labels=["unsuitable", "poorly suitable", "moderately suitable", "highly suitable"],
     ...     all_bins=True,

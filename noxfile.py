@@ -28,7 +28,7 @@ def coverage(session):
 @nox.session
 def notebooks(session):
     session.install(".[complete]", *_get_group_dependencies("test", "notebooks"))
-    session.run("pytest", "--nbval", "docs/notebooks")
+    session.run("pytest", "--nbval", "docs/examples")
 
 
 @nox.session

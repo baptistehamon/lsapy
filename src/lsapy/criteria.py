@@ -52,37 +52,35 @@ class SuitabilityCriteria:
 
     Examples
     --------
-    Here is an example using the sample soil data with the drainage class (DRC) as indicator for the criteria.
+    Here is an example using synthetic slope data, starting by creating the data:
 
-    >>> from lsapy.utils import open_data
+    >>> import numpy as np
+    >>> import xarray as xr
     >>> import lsapy.standardize as lstd
-    >>> from xclim.indicators.atmos import growing_degree_days
 
-    >>> drainage = open_data("land", variables="drainage")
+    >>> slope = xr.DataArray(
+    ...     np.array([[2, 8, 10], [12, 15, 20]]),
+    ...     dims=("y", "x"),
+    ...     coords={"y": [45, 46], "x": [2, 3, 4]},
+    ...     name="slope",
+    ...     attrs={"unit": "degrees"},
+    ... )
+
+    Initialize a SuitabilityCriteria object with the slope data as indicator:
+
     >>> sc = SuitabilityCriteria(
-    ...     name="drainage_class",
-    ...     long_name="Drainage Class Suitability",
+    ...     name="slope",
+    ...     long_name="Slope Suitability",
     ...     weight=3,
     ...     category="soilTerrain",
-    ...     indicator=drainage,
-    ...     func=lstd.discrete,
-    ...     fparams={"rules": {0: 0, 1: 0.1, 2: 0.5, 3: 0.9, 4: 1}},
+    ...     indicator=slope,
+    ...     func=lstd.logistic,
+    ...     fparams={"a": -1, "b": 15},
     ... )
 
-    Here is another example using the sample climate data with the growing degree days (GDD)
-    as indicator for the criteria computing using the `xclim` package.
+    The suitability values can be computed using the `compute` method:
 
-    >>> tas = open_data("climate", variables="tas")
-    >>> gdd = growing_degree_days(tas, thresh="10 degC", freq="YS-JUL")
-    >>> sc = SuitabilityCriteria(
-    ...     name="growing_degree_days",
-    ...     long_name="Growing Degree Days Suitability",
-    ...     weight=1,
-    ...     category="climate",
-    ...     indicator=gdd,
-    ...     func=lstd.vetharaniam2022_eq5,
-    ...     fparams={"a": -1.41, "b": 801},
-    ... )
+    >>> suitability = sc.compute()
     """
 
     def __init__(

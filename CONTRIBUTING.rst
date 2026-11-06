@@ -70,9 +70,10 @@ Below is the steps to follow for contributing to the project.
 
     .. code-block:: shell
 
-        pytest --nbval docs/notebooks/ # for only notebooks
-        pytest --doctest-modules src/lsapy/ # for only doctests
+        pytest --nbval docs/examples/ # for example notebooks only
+        pytest --doctest-modules src/lsapy/ # for doctests only
         pytest # for all unit tests, excluding doctests and notebooks.
+        pytest -m "not network" # for all unit tests excluding doctests, notebooks and tests requiring network access.
 
     Alternatively, you can run all tests using `nox`:
 

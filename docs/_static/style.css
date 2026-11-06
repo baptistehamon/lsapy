@@ -5,3 +5,29 @@
 .navbar-brand {
   height: 75px;
 }
+
+/* Adjust index cards, borrowed from Xarray
+/* Override SVG icon color */
+html[data-theme="dark"] .sd-card img[src*=".svg"] {
+  filter: invert(0.82) brightness(0.8) contrast(1.2);
+}
+/* More space around image */
+.intro-card {
+  padding: 30px 1px 1px 1px;
+}
+/* More prominent card borders */
+.intro-card .sd-card {
+  border: 2px solid var(--pst-color-border);
+  overflow: hidden;
+}
+/* Shrink SVG icons */
+.intro-card .sd-card-img-top {
+  margin: 1px;
+  height: 75px;
+  background-color: transparent !important;
+}
+/* Color titles like links */
+.intro-card .sd-card-title {
+  color: var(--pst-color-primary);
+  font-size: var(--pst-font-size-h5);
+}

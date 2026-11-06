@@ -1,0 +1,37 @@
+Why LSAPy?
+==========
+
+**Land Suitability**
+   | *"The fitness of a given type of land for a specified kind of land use"*, :cite:ct:`fao1976`.
+
+**Land Suitability Analysis (LSA)** (or Land Evaluation)
+   | *"A tool that aims at identifying the most appropriate spatial pattern for future land uses
+     according to specified requirements, preferences, or predictors of some activity"*, :cite:ct:`malczewski2004`.
+
+Purpose
+-------
+
+There is a growing interest of conducting Land Suitability Analysis (LSA) under climate change, as it is crucial to understand how changing climate conditions may affect the suitability of land for various uses.
+However, climate data are often provided in grid-based formats, such as netCDF files, which can be complex and large, making it challenging to analyze using existing tools.
+Moreover, existing tools (see `Alternative tools`_) for LSA often have limitations in terms of flexibility and scalability, which can hinder the ability to explore specific cases.
+These limitations motivated the development of **LSAPy**, a Python library that can handle grid-based data and integrate seamlessly with the broader Python ecosystem.
+Although LSAPy was initially developed for agricultural land suitability analysis, it is designed to be versatile and can be applied to various land use types,
+including forestry, urban planning, and conservation, or for risks assessment.
+
+Alternative tools
+-----------------
+
+**PyLUSAT**
+    | *"Python Land-Use Suitability Analysis Toolkit"* (`Source code <https://github.com/chjch/pylusat>`__, `Documentation <https://pylusat.readthedocs.io/en/latest/>`__, `Article <https://doi.org/10.1016/j.envsoft.2022.105362>`__).
+    | PyLUSAT is a Python library for vector-based LSA.
+
+**ALUES**
+    | *"Agricultural Land Use Evaluation System"* (`Source code <https://github.com/alstat/ALUES/tree/master>`__, `Documentation <https://alstat.github.io/ALUES/>`__, `Article <https://doi.org/10.21105/joss.04228>`__).
+    | ALUES is a R package to evaluate the land suitability of different crops based on the Food and Agriculture Organization (FAO) and International Rice Research Institute (IRRI) methodology.
+
+**Other software (including early tools)**
+    * ALES (`Article <https://doi.org/10.1111/j.1475-2743.1991.tb00881.x>`__).
+    * Micro-LEIS: Computer-based land evaluation information system (`Article <https://doi.org/10.1111/j.1475-2743.1992.tb00900.x>`__).
+    * LEIGIS (`Article <https://doi.org/10.1016/S0198-9715(01)00031-X>`__).
+    * ALSE: Agricultural Land Suitability Evaluator (`Article <https://doi.org/10.1016/j.compag.2013.02.003>`__).
+    * General-purpose platforms (e.g., ArcGIS, QGIS).

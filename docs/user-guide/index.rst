@@ -1,6 +1,5 @@
 :html_theme.sidebar_secondary.remove:
 
-==========
 User Guide
 ==========
 
@@ -11,6 +10,11 @@ and explaining how they operate together to perform Land Suitability Analysis (L
 .. toctree::
    :maxdepth: 2
 
-   criteria
+   terminology
+   indicator
+   standardization
+   suitability-criteria
    lsa
-   chunked
+   aggregation
+   dask
+   stats

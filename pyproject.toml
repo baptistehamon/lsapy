@@ -74,14 +74,16 @@ notebooks = [
 ]
 docs = [
   # docs & examples
-  "nbsphinx >=0.9.5",
+  "myst-nb >=1.4.0",
   "pybtex >=0.24.0",
   "pydata-sphinx-theme >=0.16.0",
   "sphinx >=8.2.0",
   "sphinx-autodoc-typehints >=3.2.0",
   "sphinx-copybutton",
+  "sphinx-design",
   "sphinx-mdinclude",
   "sphinxcontrib-bibtex >=2.6.0",
+  "sphinxext-rediraffe >=0.3.0",
   {include-group = "notebooks"}
 ]
 test = [
@@ -135,6 +137,7 @@ values = [
 
 [tool.codespell]
 skip = '*docs/_build, *docs/*.bib'
+ignore-words-list = "ALUES, ALSE, FLE"
 
 [tool.deptry]
 extend_exclude = ["docs"]
@@ -248,9 +251,17 @@ ignore = [
   "PLR6201", # literal-membership
 ]
 
+[tool.ruff.lint.flake8-import-conventions.aliases]
+"lsapy.standardize" = "lstd"
+numpy = "np"
+pandas = "pd"
+xarray = "xr"
+geopandas = "gpd"
+
 [tool.ruff.lint.per-file-ignores]
 "docs/*.py" = ["D100", "D101", "D102", "D103", "PLR6301"]
 "src/lsapy/**/__init__.py" = ["F401", "F403"]
+"src/lsapy/tutorial.py" = ["PLC0415"]
 "tests/**/test*.py" = ["D101", "D102", "D103", "PLR2004", "PLR6301", "S101"]
 "tests/**/conftest.py" = ["S101"]
 

@@ -212,43 +212,22 @@ def spatial_stats_summary(
 
     Examples
     --------
-    >>> from lsapy.utils import open_data
-    >>> from lsapy import SuitabilityCriteria, LandSuitabilityAnalysis
-    >>> import lsapy.standardize as lstd
-    >>> from xclim.indicators.atmos import growing_degree_days
-    >>> import geopandas as gpd
+    >>> import numpy as np
+    >>> import xarray as xr
 
-    Let's first define a Land Suitability Analysis (LSA):
-
-    >>> drainage = open_data("land", variables="drainage")
-    >>> tas = open_data("climate", variables="tas").interp_like(drainage, method="nearest")
-    >>> sc = {
-    ...     "drainage_class": SuitabilityCriteria(
-    ...         name="drainage_class",
-    ...         long_name="Drainage Class Suitability",
-    ...         weight=3,
-    ...         category="soilTerrain",
-    ...         indicator=drainage,
-    ...         func=lstd.discrete,
-    ...         fparams={"rules": {0: 0, 1: 0.1, 2: 0.5, 3: 0.9, 4: 1}},
-    ...     ),
-    ...     "growing_degree_days": SuitabilityCriteria(
-    ...         name="growing_degree_days",
-    ...         long_name="Growing Degree Days Suitability",
-    ...         weight=1,
-    ...         category="climate",
-    ...         indicator=growing_degree_days(tas, thresh="10 degC", freq="YS-JUL"),
-    ...         func=lstd.vetharaniam2022_eq5,
-    ...         fparams={"a": -1.41, "b": 801},
-    ...     ),
-    ... }
-    >>> lsa = LandSuitabilityAnalysis("land_use", sc)
-    >>> lsa.run(inplace=True)
+    >>> data = xr.Dataset(
+    ...     {
+    ...         "slope": (("y", "x"), np.array([[2, 8, 10], [12, 15, 20]])),
+    ...         "temperature": (("y", "x"), np.array([[5, 8, 10], [15, 8, 20]]), {"units": "degC"}),
+    ...         "suitability": (("y", "x"), np.array([[0.2, 0.5, 0.8], [0.9, 0.6, 0.3]])),
+    ...     },
+    ...     coords={"y": range(2), "x": range(3)},
+    ... )
 
     We can then load a GeoDataFrame of areas and compute the statistics summary for each area.
 
     >>> areas = gpd.read_file("path_to_your_areas_file.shp")  # doctest: +SKIP
-    >>> stats = spatial_stats_summary(lsa.data, areas)  # doctest: +SKIP
+    >>> stats = spatial_stats_summary(data, areas)  # doctest: +SKIP
     """
     if mask_kwargs is None:
         mask_kwargs = {}

@@ -31,3 +31,38 @@ html[data-theme="dark"] .sd-card img[src*=".svg"] {
   color: var(--pst-color-primary);
   font-size: var(--pst-font-size-h5);
 }
+
+/*  */
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+img.logo.no-theme {
+    display: none;
+    width: 0px;
+}
+
+img.logo.only-dark {
+    width: 300px;
+    height: 150px;
+    padding: 0;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border: none;
+    border-image-width: 0px;
+    background-image: url(https://raw.githubusercontent.com/baptistehamon/lsapy/logos/docs/_static/lsapy-logo/rgb/lsapy_logo_RGB_light.svg);
+}
+
+img.logo.only-light {
+    width: 300px;
+    height: 150px;
+    padding: 0;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border: none;
+    border-image-width: 0px;
+    background-image: url(https://raw.githubusercontent.com/baptistehamon/lsapy/logos/docs/_static/lsapy-logo/rgb/lsapy_logo_RGB.svg);
+}

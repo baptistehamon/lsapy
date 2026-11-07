@@ -11,17 +11,27 @@ LSAPy: Land Suitability Analysis in Python
 
 |logo-light| |logo-dark|
 
-.. |logo-light| image:: https://raw.githubusercontent.com/baptistehamon/lsapy/logos/docs/_static/lsapy-logo/rgb/lsapy_logo_RGB.png
-    :target: https://github.com/baptistehamon/lsapy
-    :alt: lsapy
-    :class: only-light center
-    :width: 400px
+.. |logo-light| image:: https://raw.githubusercontent.com/Ouranosinc/xclim/main/docs/logos/empty.png
+        :target: https://github.com/baptistehamon/lsapy
+        :alt: lsapy
+        :class: logo only-light center
 
-.. |logo-dark| image:: https://raw.githubusercontent.com/baptistehamon/lsapy/logos/docs/_static/lsapy-logo/rgb/lsapy_logo_RGB_light.png
-    :target: https://github.com/baptistehamon/lsapy
-    :alt: lsapy
-    :class: only-dark center
-    :width: 400px
+.. |logo-dark| image:: https://raw.githubusercontent.com/Ouranosinc/xclim/main/docs/logos/empty.png
+        :target: https://github.com/baptistehamon/lsapy
+        :alt: lsapy
+        :class: logo only-dark center
+
+.. .. |logo-light| image:: https://raw.githubusercontent.com/baptistehamon/lsapy/logos/docs/_static/lsapy-logo/rgb/lsapy_logo_RGB.png
+..     :target: https://github.com/baptistehamon/lsapy
+..     :alt: lsapy
+..     :class: only-light center
+..     :width: 400px
+
+.. .. |logo-dark| image:: https://raw.githubusercontent.com/baptistehamon/lsapy/logos/docs/_static/lsapy-logo/rgb/lsapy_logo_RGB_light.png
+..     :target: https://github.com/baptistehamon/lsapy
+..     :alt: lsapy
+..     :class: only-dark center
+..     :width: 400px
 
 |pypi| |conda| |python-versions| |status| |testing| |coverage| |ruff| |pre-commit| |docs| |question| |preprint| |zenodo|
 

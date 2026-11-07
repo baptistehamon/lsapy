@@ -10,7 +10,7 @@ file_format: mystnb
 
 # Aggregating data
 
-Aggregation is the process of combining multiple variables into a single value. In `LSAPy`, it is used in {py:meth}`LandSuitabilityAnalysis.run` to combine suitability scores from multiple criteria into a single overall suitability score.
+Aggregation is the process of combining multiple variables into a single value. In `lsapy`, it is used in {py:meth}`LandSuitabilityAnalysis.run` to combine suitability scores from multiple criteria into a single overall suitability score.
 The aggregation function can also be used directly on an `xarray.Dataset` of suitability scores with {py:func}`aggregate.aggregate`.
 
 (agg.methods)=

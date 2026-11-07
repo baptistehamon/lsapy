@@ -12,7 +12,7 @@ maintainers = [
 ]
 readme = "README.rst"
 requires-python = ">=3.10"
-keywords = ["LSAPy", "Land Suitability Analysis", "Geospatial Analysis", "GIS", "Geography"]
+keywords = ["lsapy", "Land Suitability Analysis", "Geospatial Analysis", "GIS", "Geography"]
 license = {file = "LICENSE"}
 classifiers = [
     "Development Status :: 3 - Alpha",

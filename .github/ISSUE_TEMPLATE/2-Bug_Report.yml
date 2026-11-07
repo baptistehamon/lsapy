@@ -1,5 +1,5 @@
 name: Bug report
-description: Help us improve LSAPy
+description: Help us improve lsapy
 labels: [ "bug" ]
 
 body:
@@ -13,10 +13,10 @@ body:
       label: Setup Information
       description: |
         What software versions are you running? Example:
-        - LSAPy version: 0.1.0-dev2
+        - lsapy version: 0.1.0-dev2
         - Python version: 4.2
       value: |
-        - LSAPy version:
+        - lsapy version:
         - Python version:
   - type: textarea
     id: description
@@ -48,7 +48,7 @@ body:
     attributes:
       label: Code of Conduct
       description:
-        By submitting this issue, you agree to follow LSAPy's
+        By submitting this issue, you agree to follow lsapy's
         [Code of Conduct](https://lsapy.readthedocs.io/en/latest/community/code_of_conduct.html).
       options:
         - label: I agree to follow this project's Code of Conduct

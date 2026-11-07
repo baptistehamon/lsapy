@@ -3,7 +3,7 @@
 Getting Started
 ===============
 
-This getting started guide is intended for user who are new to LSAPy and it provides an overview of the LSAPy package, its installation, and main features.
+This getting started guide is intended for user who are new to lsapy and it provides an overview of the lsapy package, its installation, and main features.
 
 .. toctree::
    :maxdepth: 2

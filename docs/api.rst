@@ -5,7 +5,7 @@
 API Reference
 =============
 
-This page provides an overview of all functions, modules, objects implemented in LSAPy.
+This page provides an overview of all functions, modules, objects implemented in lsapy.
 
 .. toctree::
    :maxdepth: 1

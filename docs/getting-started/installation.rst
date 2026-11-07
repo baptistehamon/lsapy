@@ -6,7 +6,7 @@ Installation
 Stable release
 ^^^^^^^^^^^^^^
 
-The stable version of LSAPy can be installed from `PyPI`_ using `pip`:
+The stable version of lsapy can be installed from `PyPI`_ using `pip`:
 
 .. code-block:: shell
 
@@ -21,8 +21,8 @@ or from `conda-forge`_ using `conda`:
 Optional dependencies
 ^^^^^^^^^^^^^^^^^^^^^
 
-LSAPy has a few optional dependencies that are not required for the core functionality of the package, but may be needed for certain features or workflows.
-To open and use the sample datasets provided by LSAPy through the :py:func:`lsapy.tutorial.open_dataset` function, `pooch`_ is required to download the datasets, and
+lsapy has a few optional dependencies that are not required for the core functionality of the package, but may be needed for certain features or workflows.
+To open and use the sample datasets provided by lsapy through the :py:func:`lsapy.tutorial.open_dataset` function, `pooch`_ is required to download the datasets, and
 a netCDF library is required to read the them. We recommend installing one of the following netCDF backend libraries:
 
 * `netCDF4`_
@@ -41,13 +41,13 @@ With `pip`, these optional dependencies can be installed using the ``tutorial`` 
 Development version
 ^^^^^^^^^^^^^^^^^^^
 
-The latest development version of LSAPy can be installed directly from the GitHub repository using `pip`:
+The latest development version of lsapy can be installed directly from the GitHub repository using `pip`:
 
 .. code-block:: shell
 
    python -m pip install git+https://github.com/baptistehamon/lsapy
 
-Or if you want to contribute to the development of LSAPy, you can clone the repository and install it in editable mode:
+Or if you want to contribute to the development of lsapy, you can clone the repository and install it in editable mode:
 
 .. code-block:: shell
 
@@ -55,7 +55,7 @@ Or if you want to contribute to the development of LSAPy, you can clone the repo
    cd lsapy
    python -m pip install -e .[dev]
 
-You can find more information about contributing to LSAPy in the `Contribution`_ section of the documentation.
+You can find more information about contributing to lsapy in the `Contribution`_ section of the documentation.
 
 .. _dask: https://docs.dask.org/en/stable/
 .. _netCDF4: https://github.com/Unidata/netcdf4-python

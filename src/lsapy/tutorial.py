@@ -49,7 +49,7 @@ def open_dataset(
     **kwargs,
 ) -> xr.Dataset:
     """
-    Open a dataset from the LSAPy tutorial data repository (requires internet).
+    Open a dataset from the lsapy tutorial data repository (requires internet).
 
     If a local copy of the file(s) exists, it will be used to avoid network traffic.
 
@@ -154,7 +154,7 @@ def open_dataset(
 
 def load_dataset(*args, **kwargs) -> xr.Dataset:  # numpydoc ignore=PR01,PR02
     """
-    Open, load and close a dataset from the LSAPy tutorial data repository (requires internet).
+    Open, load and close a dataset from the lsapy tutorial data repository (requires internet).
 
     if a local copy of the file(s) exists, it will be used to avoid network traffic.
 

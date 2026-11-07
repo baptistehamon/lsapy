@@ -12,7 +12,7 @@ body:
         [documentation](https://lsapy.readthedocs.io/en/latest/index.html) and that no similar question has already
         been reported as an [issue](https://github.com/baptistehamon/lsapy/labels/question).
       options:
-        - label: I confirm that I haven't found an answer in LSAPy's documentation.
+        - label: I confirm that I haven't found an answer in lsapy's documentation.
           required: true
         - label: I confirm that I haven't found a similar question in open/closed issues.
           required: true
@@ -26,7 +26,7 @@ body:
     attributes:
       label: Code of Conduct
       description:
-        By submitting this issue, you agree to follow LSAPy's
+        By submitting this issue, you agree to follow lsapy's
         [Code of Conduct](https://lsapy.readthedocs.io/en/latest/community/code_of_conduct.html).
       options:
         - label: I agree to follow this project's Code of Conduct

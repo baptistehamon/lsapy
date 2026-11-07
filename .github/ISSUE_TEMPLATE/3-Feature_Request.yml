@@ -34,7 +34,7 @@ body:
     attributes:
       label: Code of Conduct
       description:
-        By submitting this issue, you agree to follow LSAPy's
+        By submitting this issue, you agree to follow lsapy's
         [Code of Conduct](https://lsapy.readthedocs.io/en/latest/community/code_of_conduct.html).
       options:
         - label: I agree to follow this project's Code of Conduct

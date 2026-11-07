@@ -1,5 +1,5 @@
 {
-  "title": "LSAPy: Land Suitability Analysis in Python",
+  "title": "lsapy: Land Suitability Analysis in Python",
   "creators": [
     {
       "name": "Hamon, Baptiste",
@@ -14,7 +14,7 @@
     }
   ],
   "keywords": [
-    "LSAPy",
+    "lsapy",
     "land suitability analysis",
     "geospatial analysis",
     "gis",

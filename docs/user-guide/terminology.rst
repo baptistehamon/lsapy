@@ -3,12 +3,12 @@
 Terminology
 ===========
 
-*This guide defines the main terms used in LSAPy. Some terms may have a slightly
+*This guide defines the main terms used in lsapy. Some terms may have a slightly
 different meaning here than in other contexts.*
 
 .. note::
 
-    LSAPy is a relatively new package, so its terminology may evolve over time.
+    lsapy is a relatively new package, so its terminology may evolve over time.
     We aim to keep these definitions consistent as the package develops.
 
 .. glossary::
@@ -23,13 +23,13 @@ different meaning here than in other contexts.*
         A function that converts input values into a common scale,
         typically between 0 and 1, for subsequent analysis. The function
         can represent a threshold, discrete classes, or a gradual
-        response around an optimum. LSAPy provides a range of standardization
+        response around an optimum. lsapy provides a range of standardization
         functions in the ``lsapy.standardize`` module. In some contexts,
         this type of function is also called a `membership function`_.
 
     Suitability Score
         A standardized value expressing how suitable a location is for a
-        particular criteria. In the usual LSAPy workflow, a standardization
+        particular criteria. In the usual lsapy workflow, a standardization
         function produces the score from an :term:`Indicator`; scores are then
         combined to calculate overall suitability.
 
@@ -56,7 +56,7 @@ different meaning here than in other contexts.*
         .. note::
 
             While *criteria* in ``SuitabilityCriteria`` might suggest a plural form,
-            it refers to a single criteria in the context of LSAPy.
+            it refers to a single criteria in the context of lsapy.
 
     LandSuitabilityAnalysis
         A data structure that evaluates land suitability for a specific land use
@@ -68,7 +68,7 @@ different meaning here than in other contexts.*
         Aggregating refers to the process of combining several :py:class:`xarray.DataArray`
         objects into a single one, by applying a specific operation (e.g., min, mean,
         geometric mean...) across the input arrays. Weights and categories can be used to
-        control how criteria contribute to the result. In LSAPy, this is used to combine
+        control how criteria contribute to the result. In lsapy, this is used to combine
         multiple :term:`SuitabilityCriteria`.
 
 .. _membership function: https://en.wikipedia.org/wiki/Membership_function_(mathematics)

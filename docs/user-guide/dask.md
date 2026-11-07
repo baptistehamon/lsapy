@@ -10,7 +10,7 @@ file_format: mystnb
 
 # Parallel Computing with Dask
 
-By relying on [xarray], LSAPy computations can be parallelized with [Dask] without changing your workflow.
+By relying on [xarray], lsapy computations can be parallelized with [Dask] without changing your workflow.
 When an indicator is backed by Dask (i.e., it is chunked), {py:meth}`SuitabilityCriteria.compute` and
 {py:meth}`LandSuitabilityAnalysis.run` build a lazy task graph. The calculation is not started until
 the computation is triggered (e.g., by calling `compute()` or writing the results to disk).
@@ -27,8 +27,8 @@ This guide only briefly covers Dask usage. For more information, see the
 
 ## Installation
 
-To use [Dask] with LSAPy, you will first need to install Dask. You can do it using the
-`parallel` extra when installing LSAPy:
+To use [Dask] with lsapy, you will first need to install Dask. You can do it using the
+`parallel` extra when installing lsapy:
 
 ```console
 python -m pip install "lsapy[parallel]"
@@ -79,9 +79,9 @@ Chunking sizes is important and bad chunking choice can lead to poor performance
 
 (dask.lsapy)=
 
-## Dask in LSAPy
+## Dask in lsapy
 
-LSAPy automatically detects chunked data and defaults to using [Dask] for parallelization. Therefore, the workflow remains the same when using Dask. However, there are some key concepts and characteristics you need to understand or be aware of when using Dask with LSAPy.
+lsapy automatically detects chunked data and defaults to using [Dask] for parallelization. Therefore, the workflow remains the same when using Dask. However, there are some key concepts and characteristics you need to understand or be aware of when using Dask with lsapy.
 
 (dask.sc)=
 
@@ -160,9 +160,9 @@ res.to_netcdf("filename.nc")  # triggers computation and writes to disk
 
 (dask.options)=
 
-### Dask options in LSAPy
+### Dask options in lsapy
 
-LSAPy automatically detects chunked data and defaults to using [Dask] for parallelization. This default behavior can be changed or customized by passing `kwargs` accepted by {py:func}`xarray.apply_ufunc` to {py:meth}`SuitabilityCriteria.compute` or {py:meth}`LandSuitabilityAnalysis.run`. For example, the default behavior can be overridden by passing the `dask` argument:
+lsapy automatically detects chunked data and defaults to using [Dask] for parallelization. This default behavior can be changed or customized by passing `kwargs` accepted by {py:func}`xarray.apply_ufunc` to {py:meth}`SuitabilityCriteria.compute` or {py:meth}`LandSuitabilityAnalysis.run`. For example, the default behavior can be overridden by passing the `dask` argument:
 
 - `dask="parallelized"` (default) applies the standardization function to each chunk in parallel.
 - `dask="forbidden"` raises an error if the indicator is chunked.

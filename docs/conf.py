@@ -52,7 +52,7 @@ extensions = [
 # for a list of supported languages.
 #
 # This is also used if you do content translation via gettext catalogs.
-# Usually you set "language" from the command line for these cases.
+# Usually you set "language" from the command line for these caselsapys.
 language = "en"
 
 # List of patterns, relative to source directory, that match files and
@@ -82,9 +82,9 @@ bibtex_reference_style = "author_year"
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_title = ""
-html_short_title = "LSAPy"
-html_logo = "logos/lsapy/LSAPy_Logo_FullColour.svg"
-html_favicon = "logos/lsapy/LSAPy_Icon.png"
+html_short_title = "lsapy"
+html_logo = "_static/lsapy-logo/rgb/lsapy_logo_RGB.svg"
+html_favicon = "_static/lsapy-logo/icon/lsapy_icon.svg"
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
@@ -93,6 +93,7 @@ html_theme = "pydata_sphinx_theme"
 # Theme options are theme-specific and customize the look and feel of a theme further.
 # For a list of options available for each theme, see the documentation.
 html_theme_options = {
+    "logo": {"image_dark": "_static/lsapy-logo/rgb/lsapy_logo_RGB_light.svg"},
     "icon_links": [
         {"name": "GitHub", "url": "https://github.com/baptistehamon/lsapy", "icon": "fa-brands fa-github"},
     ],

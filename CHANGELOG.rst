@@ -40,6 +40,7 @@ Internal changes
 * A ``CITATION.cff`` referring to the prepint paper has been added (issue `#164 <https://github.com/baptistehamon/lsapy/issues/164>`_, PR `#166 <https://github.com/baptistehamon/lsapy/pull/166>`_).
 * A ``AUTHORS.rst`` has been added (issue `#165 <https://github.com/baptistehamon/lsapy/issues/165>`_, PR `#166 <https://github.com/baptistehamon/lsapy/pull/166>`_).
 * ``lstd`` import alias has been added for ``lsapy.standardize`` module (PR `#197 <https://github.com/baptistehamon/lsapy/pull/197>`_).
+* ``np.errstate(all="ignore")`` has been added for the ``curve_fit`` in ``lsapy.standardize.fit`` to avoid warnings when fitting functions (PR `#198 <https://github.com/baptistehamon/lsapy/pull/198>`_).
 
 v0.4.0 (2026-05-14)
 -------------------

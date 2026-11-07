@@ -9,7 +9,7 @@ Contributor to this version: Baptiste Hamon (@baptistehamon), Akrita Agarwal (@a
 New features
 ^^^^^^^^^^^^
 * A major update of the documentation has been done (issue `#83 <https://github.com/baptistehamon/lsapy/issues/83>`_, PR `#197 <https://github.com/baptistehamon/lsapy/pull/197>`_):
-    * The *Getting Started* has been updated and now include a *Why LSAPy?*, *Installation*, and *LSAPy Overview* sections.
+    * The *Getting Started* has been updated and now include a *Why lsapy?*, *Installation*, and *lsapy Overview* sections.
     * A detailed *User Guide* and an *Examples Gallery* have been added to the documentation (issue `#77 <https://github.com/baptistehamon/lsapy/issues/77>`_).
     * A *Roadmap* has been added to the *Community* section of the documentation.
 * The tutorial data management has been revised (PR `#197 <https://github.com/baptistehamon/lsapy/pull/197>`_):
@@ -41,6 +41,7 @@ Internal changes
 * A ``AUTHORS.rst`` has been added (issue `#165 <https://github.com/baptistehamon/lsapy/issues/165>`_, PR `#166 <https://github.com/baptistehamon/lsapy/pull/166>`_).
 * ``lstd`` import alias has been added for ``lsapy.standardize`` module (PR `#197 <https://github.com/baptistehamon/lsapy/pull/197>`_).
 * ``np.errstate(all="ignore")`` has been added for the ``curve_fit`` in ``lsapy.standardize.fit`` to avoid warnings when fitting functions (PR `#198 <https://github.com/baptistehamon/lsapy/pull/198>`_).
+* Logos has been updated, the full brand assets have been added to the repository and the used of *LSAPy* is now avoided in favor of *lsapy* (PR `#199 <https://github.com/baptistehamon/lsapy/pull/199>`_).
 
 v0.4.0 (2026-05-14)
 -------------------

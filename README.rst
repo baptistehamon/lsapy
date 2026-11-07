@@ -15,11 +15,13 @@ LSAPy: Land Suitability Analysis in Python
     :target: https://github.com/baptistehamon/lsapy
     :alt: lsapy
     :class: only-light center
+    :width: 400px
 
 .. |logo-dark| image:: https://raw.githubusercontent.com/baptistehamon/lsapy/logos/docs/_static/lsapy-logo/rgb/lsapy_logo_RGB_light.png
     :target: https://github.com/baptistehamon/lsapy
     :alt: lsapy
     :class: only-dark center
+    :width: 400px
 
 |pypi| |conda| |python-versions| |status| |testing| |coverage| |ruff| |pre-commit| |docs| |question| |preprint| |zenodo|
 

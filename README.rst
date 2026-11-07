@@ -9,17 +9,17 @@ LSAPy: Land Suitability Analysis in Python
 ..     :width: 400px
 ..     :alt: LSAPy Logo
 
-|logo-light| |logo-dark|
+|ouranos-light| |ouranos-dark|
 
-.. |logo-light| image:: https://raw.githubusercontent.com/Ouranosinc/xclim/main/docs/logos/empty.png
-        :target: https://github.com/baptistehamon/lsapy
-        :alt: lsapy
-        :class: logo only-light center
+.. |ouranos-light| image:: https://raw.githubusercontent.com/Ouranosinc/xclim/main/docs/logos/empty.png
+        :target: https://www.ouranos.ca/
+        :alt:
+        :class: ouranos-logo only-light center
 
-.. |logo-dark| image:: https://raw.githubusercontent.com/Ouranosinc/xclim/main/docs/logos/empty.png
-        :target: https://github.com/baptistehamon/lsapy
-        :alt: lsapy
-        :class: logo only-dark center
+.. |ouranos-dark| image:: https://raw.githubusercontent.com/Ouranosinc/xclim/main/docs/logos/empty.png
+        :target: https://www.ouranos.ca/
+        :alt:
+        :class: ouranos-logo only-dark center
 
 .. .. |logo-light| image:: https://raw.githubusercontent.com/baptistehamon/lsapy/logos/docs/_static/lsapy-logo/rgb/lsapy_logo_RGB.png
 ..     :target: https://github.com/baptistehamon/lsapy

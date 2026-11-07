@@ -8,9 +8,9 @@ kernelspec:
 .. currentmodule:: lsapy
 ```
 
-# LSAPy Overview
+# lsapy Overview
 
-LSAPy helps you turn gridded indicators into land suitability maps. It is built on [xarray], so indicators keep their dimensions, coordinates, and metadata throughout the analysis. This page gives a quick tour of the workflow. For complete explanations and
+lsapy helps you turn gridded indicators into land suitability maps. It is built on [xarray], so indicators keep their dimensions, coordinates, and metadata throughout the analysis. This page gives a quick tour of the workflow. For complete explanations and
 additional examples, follow the links at each step.
 
 For the purpose of the following examples, we first create a small synthetic dataset of two indicators: slope and annual mean temperature.

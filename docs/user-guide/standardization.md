@@ -10,7 +10,7 @@ file_format: mystnb
 
 # Standardizing your data
 
-In LSAPy, a standardization function converts raw indicator values into scores that can be compared and combined across criteria. The goal is usually to map environmental or spatial variables to a common scale, often between 0 and 1, before they are used in a land suitability analysis.
+In lsapy, a standardization function converts raw indicator values into scores that can be compared and combined across criteria. The goal is usually to map environmental or spatial variables to a common scale, often between 0 and 1, before they are used in a land suitability analysis.
 
 This step is essential because indicators often have different units and ranges. For example, slope, rainfall, temperature, and distance to roads are not directly comparable, but they can all be standardized to a suitability scale before aggregation.
 
@@ -32,8 +32,8 @@ The exact meaning depends on the function used. Some functions enforce hard thre
 
 ## Families of standardization functions
 
-LSAPy provide a range of standardization functions from simple one to more complex functions found in the literature. This section does not
-aim to provide an example for each function included in LSAPy, but rather to give an overview of the different families of functions and their intended use cases. You can find the full list of available functions in the [API reference](../api/standardize.rst).
+lsapy provide a range of standardization functions from simple one to more complex functions found in the literature. This section does not
+aim to provide an example for each function included in lsapy, but rather to give an overview of the different families of functions and their intended use cases. You can find the full list of available functions in the [API reference](../api/standardize.rst).
 
 (std.boolean)=
 
@@ -155,7 +155,7 @@ You can also visualize the fitted curves by setting `plot=True`.
 
 ## Using standardization with xarray indicators
 
-LSAPy is designed around the concept of {py:class}`xarray.DataArray` indicators, and standardization functions can be applied directly to these objects. This allows you to preserve the spatial coordinates and metadata.
+lsapy is designed around the concept of {py:class}`xarray.DataArray` indicators, and standardization functions can be applied directly to these objects. This allows you to preserve the spatial coordinates and metadata.
 
 ```{code-cell} ipython3
 import xarray as xr
@@ -182,9 +182,9 @@ A good standardization function depends on the criteria. Here are some general g
 
 (std.workflow)=
 
-## Standardization in the LSAPy workflow
+## Standardization in the lsapy workflow
 
-Standardization functions can be integrated into the LSAPy workflow by passing them as the `func` argument of a
+Standardization functions can be integrated into the lsapy workflow by passing them as the `func` argument of a
 {py:class}`SuitabilityCriteria`. The parameters for the function can be specified in the `fparams` dictionary.
 
 ```{code-cell} ipython3

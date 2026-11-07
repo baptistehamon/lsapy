@@ -126,7 +126,7 @@ self-describing when it is saved or passed to another workflow.
 Sometimes, the indicator may already contain suitability values, for example
 if it was computed in a previous step or provided by an external source. In this case,
 you can create a {py:class}`SuitabilityCriteria` with `is_computed=True`.
-This tells LSAPy that the indicator already contains suitability values and that
+This tells lsapy that the indicator already contains suitability values and that
 no further computation is needed.
 
 ```python

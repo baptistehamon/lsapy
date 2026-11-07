@@ -2,7 +2,7 @@
 LandSuitabilityAnalysis
 =======================
 
-The `LandSuitabilityAnalysis` is the top-level class in LSAPy and defines the LSA framework.
+The `LandSuitabilityAnalysis` is the top-level class in lsapy and defines the LSA framework.
 
 .. currentmodule:: lsapy
 

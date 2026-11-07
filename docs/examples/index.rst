@@ -1,7 +1,7 @@
 Examples Gallery
 ================
 
-The following examples showcase the capabilities of LSAPy through practical applications.
+The following examples showcase the capabilities of lsapy through practical applications.
 
 .. grid:: 2
     :gutter: 2

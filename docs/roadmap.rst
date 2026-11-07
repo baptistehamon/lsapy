@@ -4,7 +4,7 @@ Roadmap
 .. The layout is inspired by the Zenodo roadmap
 .. https://about.zenodo.org/roadmap/
 
-This page provides an overview of current and future goals for LSAPy. We value feedback from the community and
+This page provides an overview of current and future goals for lsapy. We value feedback from the community and
 encourage you to contribute to the discussion on these goals; you can find the list of roadmap elements in the issue tracker,
 under the `roadmap`_ label.
 
@@ -49,7 +49,7 @@ Goals
 
         **Science/Research**
         ^^^
-        Publish a paper describing LSAPy in the Journal of Open Source Software (JOSS).
+        Publish a paper describing lsapy in the Journal of Open Source Software (JOSS).
         +++
         *Discussed here*: `#16 <https://github.com/baptistehamon/lsapy/issues/16>`_, `#142 <https://github.com/baptistehamon/lsapy/issues/142>`_,
         `#164 <https://github.com/baptistehamon/lsapy/issues/164>`_, & `#72 <https://github.com/baptistehamon/lsapy/issues/72>`_.
@@ -68,7 +68,7 @@ Goals
 
         **Development**
         ^^^
-        Extend LSAPy scope to include land use optimization or allocation models.
+        Extend lsapy scope to include land use optimization or allocation models.
         +++
         *Discussed here*: `#194 <https://github.com/baptistehamon/lsapy/issues/194>`_.
 
@@ -90,7 +90,7 @@ Completed
 
             **Documentation/Website**
             ^^^
-            Enhanced the documentation with a proper introduction to LSAPy, user-guides,
+            Enhanced the documentation with a proper introduction to lsapy, user-guides,
             and examples to help users get started with the library.
             +++
             *Discussed here*: `#77 <https://github.com/baptistehamon/lsapy/issues/77>`_

@@ -6,9 +6,9 @@ file_format: mystnb
 
 # Indicator: How to open your data?
 
-In LSAPy, an [indicator](./terminology.rst#term-Indicator) is the input spatial gridded data used in downstream analysis. It is expected to be a {py:class}`xarray.DataArray` object, but the source data are often stored in various file format.
+In lsapy, an [indicator](./terminology.rst#term-Indicator) is the input spatial gridded data used in downstream analysis. It is expected to be a {py:class}`xarray.DataArray` object, but the source data are often stored in various file format.
 
-This guide explains how to open common spatial data formats in a ready-to-use form for LSAPy. It also includes a short example showing how to convert vector data into raster data before analysis.
+This guide explains how to open common spatial data formats in a ready-to-use form for lsapy. It also includes a short example showing how to convert vector data into raster data before analysis.
 
 ````{tip}
 In most cases, [xarray] can open common gridded spatial formats directly (e.g., GeoTIFF, netCDF, GRIB, etc.). A full list of supported formats is available in the [xarray I/O documentation](https://docs.xarray.dev/en/stable/user-guide/io.html).
@@ -73,7 +73,7 @@ ind = ds["variable_name"]
 
 ## From vector data
 
-Some datasets are stored as vector data (for example, Shapefile, GeoJSON, or GeoPackage) and must be rasterized before they can be used with LSAPy. In these cases, the [geocube] package and its `make_geocube` function are useful.
+Some datasets are stored as vector data (for example, Shapefile, GeoJSON, or GeoPackage) and must be rasterized before they can be used with lsapy. In these cases, the [geocube] package and its `make_geocube` function are useful.
 
 ```python
 from geocube.api.core import make_geocube

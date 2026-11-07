@@ -1,10 +1,10 @@
 =====================
-Contributing to LSAPy
+Contributing to lsapy
 =====================
 
 No matter the scope of your contribution, help is always welcome!
 
-The `issue tracker`_ is the best place to start if you want to contribute to `LSAPy`. You can get involved in different ways:
+The `issue tracker`_ is the best place to start if you want to contribute to `lsapy`. You can get involved in different ways:
 
 * **Submitting feedbacks**: We welcome any feedback on the library, whether it's about the API, the documentation, or anything else.
 * **Suggesting new features**: If you have an idea for a new feature or improvement. Explain your idea in details and provide any thoughts you have on how it could be implemented.
@@ -16,7 +16,7 @@ Contribution Workflow
 ---------------------
 Below is the steps to follow for contributing to the project.
 
-#. Fork the `LSAPy` repository on GitHub to your own account.
+#. Fork the `lsapy` repository on GitHub to your own account.
 
 #. Clone your forked repository to your local machine.
 
@@ -138,7 +138,7 @@ Packaging and Deployment
 
 .. note::
 
-    This section comes largely from the `xclim Contributing guidelines`_. Small edits have been made to match `LSAPy` project.
+    This section comes largely from the `xclim Contributing guidelines`_. Small edits have been made to match `lsapy` project.
 
 This section serves as a reminder for the maintainers on how to prepare the library for a tagged version and how to deploy packages to TestPyPI and PyPI.
 
@@ -172,7 +172,7 @@ With this performed, we can tag a version that will act as the GitHub-provided s
 The Automated Approach
 ~~~~~~~~~~~~~~~~~~~~~~
 
-The simplest way to package `LSAPy` is to "publish" a version on GitHub. GitHub CI Actions are presently configured to build the library and publish the packages on PyPI automatically.
+The simplest way to package `lsapy` is to "publish" a version on GitHub. GitHub CI Actions are presently configured to build the library and publish the packages on PyPI automatically.
 
 .. warning::
 

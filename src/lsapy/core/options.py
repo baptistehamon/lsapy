@@ -1,4 +1,4 @@
-"""LSAPy Options."""
+"""Options for lsapy."""
 
 from __future__ import annotations
 

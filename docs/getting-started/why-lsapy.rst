@@ -1,4 +1,4 @@
-Why LSAPy?
+Why lsapy?
 ==========
 
 **Land Suitability**
@@ -14,8 +14,8 @@ Purpose
 There is a growing interest of conducting Land Suitability Analysis (LSA) under climate change, as it is crucial to understand how changing climate conditions may affect the suitability of land for various uses.
 However, climate data are often provided in grid-based formats, such as netCDF files, which can be complex and large, making it challenging to analyze using existing tools.
 Moreover, existing tools (see `Alternative tools`_) for LSA often have limitations in terms of flexibility and scalability, which can hinder the ability to explore specific cases.
-These limitations motivated the development of **LSAPy**, a Python library that can handle grid-based data and integrate seamlessly with the broader Python ecosystem.
-Although LSAPy was initially developed for agricultural land suitability analysis, it is designed to be versatile and can be applied to various land use types,
+These limitations motivated the development of **lsapy**, a Python library that can handle grid-based data and integrate seamlessly with the broader Python ecosystem.
+Although lsapy was initially developed for agricultural land suitability analysis, it is designed to be versatile and can be applied to various land use types,
 including forestry, urban planning, and conservation, or for risks assessment.
 
 Alternative tools

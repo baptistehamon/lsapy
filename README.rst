@@ -7,7 +7,7 @@ lsapy: Land Suitability Analysis in Python
     <p align="center">
         <a href="https://github.com/baptistehamon/lsapy">
             <picture>
-                <img src="https://raw.githubusercontent.com/baptistehamon/lsapy/logos/docs/_static/lsapy-logo/rgb/lsapy_logo_RGB.png" width="400" alt="lsapy">
+                <img src="https://raw.githubusercontent.com/baptistehamon/lsapy/main/docs/_static/lsapy-logo/rgb/lsapy_logo_RGB.png" width="400" alt="lsapy">
             </picture>
         </a>
     </p>
@@ -117,13 +117,13 @@ The Python package has been created following the `pyOpenSci Guidebook`_.
 .. _`University of Canterbury`: https://www.canterbury.ac.nz/
 .. _`pyOpenSci Guidebook`: https://www.pyopensci.org/python-package-guide/
 
-.. |FT2050| image:: https://raw.githubusercontent.com/baptistehamon/lsapy/main/docs/logos/FT2050-full_colour.png
+.. |FT2050| image:: https://raw.githubusercontent.com/baptistehamon/lsapy/main/docs/_static/FT2050-full_colour.png
     :class: dark-light
     :target: https://www.foodtransitions2050.ac.nz/
     :width: 200px
     :alt: Food Transition 2050 Logo
 
-.. |UC-black| image:: https://raw.githubusercontent.com/baptistehamon/lsapy/main/docs/logos/UCBlack.png
+.. |UC-black| image:: https://raw.githubusercontent.com/baptistehamon/lsapy/main/docs/_static/UCBlack.png
     :class: only-light
     :target: https://www.canterbury.ac.nz/
     :width: 100px

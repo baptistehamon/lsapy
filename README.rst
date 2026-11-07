@@ -2,6 +2,18 @@
 LSAPy: Land Suitability Analysis in Python
 ==========================================
 
+.. raw:: html
+
+    <p align="center">
+        <a href="https://github.com/baptistehamon/lsapy">
+            <picture>
+                <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/baptistehamon/lsapy/main/docs/logos/lsapy/LSAPy_Logo_FullColour.png" width="400" />
+                <img src="https://raw.githubusercontent.com/baptistehamon/lsapy/main/docs/logos/lsapy/LSAPy_Logo_FullColour.png" width="400" alt="lsapy" />
+            </picture>
+        </a>
+    </p>
+
+
 .. .. image:: https://raw.githubusercontent.com/baptistehamon/lsapy/main/docs/logos/lsapy/LSAPy_Logo_FullColour.png
 ..     :class: dark-light
 ..     :align: center
@@ -9,24 +21,25 @@ LSAPy: Land Suitability Analysis in Python
 ..     :width: 400px
 ..     :alt: LSAPy Logo
 
-.. image:: https://raw.githubusercontent.com/baptistehamon/lsapy/logos/docs/_static/lsapy-logo/rgb/lsapy_logo_RGB.svg
-        :target: https://github.com/baptistehamon/lsapy
-        :align: center
-        :class: ouranos-logo no-theme center
+.. .. image:: https://raw.githubusercontent.com/baptistehamon/lsapy/logos/docs/_static/lsapy-logo/rgb/lsapy_logo_RGB.svg
+..         :target: https://github.com/baptistehamon/lsapy
+..         :align: center
+..         :class: ouranos-logo no-theme center
+..         :width: 400px
 
-|logo-light| |logo-dark|
-
-
-.. |logo-light| image:: https://raw.githubusercontent.com/Ouranosinc/xclim/main/docs/logos/empty.png
-        :target: https://github.com/baptistehamon/lsapy
-        :alt:
-        :class: ouranos-logo only-light center
+.. .. |logo-light| |logo-dark|
 
 
-.. |logo-dark| image:: https://raw.githubusercontent.com/Ouranosinc/xclim/main/docs/logos/empty.png
-        :target: https://github.com/baptistehamon/lsapy
-        :alt:
-        :class: ouranos-logo only-dark center
+.. .. |logo-light| image:: https://raw.githubusercontent.com/Ouranosinc/xclim/main/docs/logos/empty.png
+..         :target: https://github.com/baptistehamon/lsapy
+..         :alt:
+..         :class: ouranos-logo only-light center
+
+
+.. .. |logo-dark| image:: https://raw.githubusercontent.com/Ouranosinc/xclim/main/docs/logos/empty.png
+..         :target: https://github.com/baptistehamon/lsapy
+..         :alt:
+..         :class: ouranos-logo only-dark center
 
 
 .. .. |logo-light| image:: https://raw.githubusercontent.com/baptistehamon/lsapy/logos/docs/_static/lsapy-logo/rgb/lsapy_logo_RGB.png

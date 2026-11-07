@@ -40,7 +40,7 @@ html[data-theme="dark"] .sd-card img[src*=".svg"] {
   width: 50%;
 }
 
-img.ouranos-logo.only-dark {
+img.logo.only-dark {
     width: 300px;
     height: 150px;
     padding: 0;
@@ -48,10 +48,10 @@ img.ouranos-logo.only-dark {
     background-repeat: no-repeat;
     border: none;
     border-image-width: 0px;
-    background-image: url(https://raw.githubusercontent.com/Ouranosinc/.github/refs/heads/main/images/logo-ouranos-vertical-blanc.svg);
+    background-image: url(https://raw.githubusercontent.com/baptistehamon/lsapy/logos/docs/_static/lsapy-logo/rgb/lsapy_logo_RGB_light.svg);
 }
 
-img.ouranos-logo.only-light {
+img.logo.only-light {
     width: 300px;
     height: 150px;
     padding: 0;
@@ -59,10 +59,10 @@ img.ouranos-logo.only-light {
     background-repeat: no-repeat;
     border: none;
     border-image-width: 0px;
-    background-image: url(https://raw.githubusercontent.com/Ouranosinc/.github/refs/heads/main/images/logo-ouranos-vertical-couleur.svg);
+    background-image: url(https://raw.githubusercontent.com/baptistehamon/lsapy/logos/docs/_static/lsapy-logo/rgb/lsapy_logo_RGB.svg);
 }
 
-img.ouranos-logo.no-theme {
+img.logo.no-theme {
     display: none;
     width: 0px;
 }

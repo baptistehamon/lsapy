@@ -67,6 +67,9 @@ by the `University of Canterbury`_ in New Zealand.
 
 |FT2050| |UC-white| |UC-black|
 
+.. _`Food Transition 2050`: https://www.foodtransitions2050.ac.nz/
+.. _`University of Canterbury`: https://www.canterbury.ac.nz/
+
 .. |FT2050| image:: https://raw.githubusercontent.com/baptistehamon/lsapy/main/docs/_static/FT2050-full_colour.png
     :class: dark-light
     :target: https://www.foodtransitions2050.ac.nz/

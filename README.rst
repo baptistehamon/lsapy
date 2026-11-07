@@ -7,8 +7,8 @@ LSAPy: Land Suitability Analysis in Python
     <p align="center">
         <a href="https://github.com/baptistehamon/lsapy">
             <picture>
-                <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/baptistehamon/lsapy/main/docs/logos/lsapy/LSAPy_Logo_FullColour.png" width="400" />
-                <img src="https://raw.githubusercontent.com/baptistehamon/lsapy/main/docs/logos/lsapy/LSAPy_Logo_FullColour.png" width="400" alt="lsapy" />
+                <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/baptistehamon/lsapy/logos/docs/_static/lsapy-logo/rgb/lsapy_logo_RGB_light.png" width="400" />
+                <img src="https://raw.githubusercontent.com/baptistehamon/lsapy/logos/docs/_static/lsapy-logo/rgb/lsapy_logo_RGB.png" width="400" alt="lsapy" />
             </picture>
         </a>
     </p>

@@ -60,6 +60,32 @@ set of objects that work together to deliver a flexible and user-defined LSA fra
         *Have ideas or improvements? Found a bug?*
         Read our contribution guidelines and get involved in LSAPy development.
 
+Supported by
+------------
+
+The development of *lsapy* started as part of a PhD, funded by the `Food Transition 2050`_  Joint Postgraduate School and hosted
+by the `University of Canterbury`_ in New Zealand.
+
+|FT2050| |UC-white| |UC-black|
+
+.. |FT2050| image:: https://raw.githubusercontent.com/baptistehamon/lsapy/main/docs/_static/FT2050-full_colour.png
+    :class: dark-light
+    :target: https://www.foodtransitions2050.ac.nz/
+    :width: 200px
+    :alt: Food Transition 2050 Logo
+
+.. |UC-white| image:: https://raw.githubusercontent.com/baptistehamon/lsapy/main/docs/_static/UCWhite.png
+    :class: only-dark
+    :target: https://www.canterbury.ac.nz/
+    :width: 100px
+    :alt: University of Canterbury Logo
+
+.. |UC-black| image:: https://raw.githubusercontent.com/baptistehamon/lsapy/main/docs/_static/UCBlack.png
+    :class: only-light
+    :target: https://www.canterbury.ac.nz/
+    :width: 100px
+    :alt: University of Canterbury Logo
+
 
 .. toctree::
    :maxdepth: 2

@@ -357,7 +357,8 @@ def fit(x, y=None, kind: str | list[str] = "all", plot: bool = False, verbose: b
         f = get_function_from_name(func)
         p0 = _get_function_p0(func, x)
         try:
-            popt, _ = curve_fit(f, x, y, p0=p0, maxfev=15000)
+            with np.errstate(all="ignore"):
+                popt, _ = curve_fit(f, x, y, p0=p0, maxfev=15000)
         except Exception:
             skipped.append(func)
             warnings.warn(f"Failed to fit `{func}`. Skipped.", stacklevel=2)

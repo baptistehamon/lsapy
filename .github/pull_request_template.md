@@ -15,4 +15,8 @@
 ### Does this PR introduce a breaking change?
 
 
-### Other information:
+### Other information and AI policy compliance
+<!--
+Please provide any additional information about your PR here.
+If AI tools were used to assist in the creation of this PR, please describe how they were used.
+-->

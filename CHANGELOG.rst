@@ -2,7 +2,7 @@
 Changelog
 =========
 
-v0.5.0 (unreleased)
+v0.5.0 (2026-11-09)
 -------------------
 Contributor to this version: Baptiste Hamon (@baptistehamon), Akrita Agarwal (@akritaag).
 

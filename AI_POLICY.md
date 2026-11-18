@@ -25,8 +25,7 @@ Mark AI involvement in commit messages with a trailer:
 Assisted-by: <tool name>
 ```
 
-PRs must disclose AI usage in the PR description under the "Other information and AI policy compliance" section,
-including how AI tools were used. The use of AI tools for auto-completion or less sophisticated tasks does not require disclosure.
+PRs must disclose AI usage, including how AI tools were used, in its description under the "Other information and AI policy compliance" section. The use of AI tools for auto-completion or less sophisticated tasks does not require disclosure.
 
 ## Prohibited Uses
 

@@ -2,6 +2,14 @@
 Changelog
 =========
 
+v0.6.0 (unreleased)
+-------------------
+Contributor to this version: Baptiste Hamon (@baptistehamon).
+
+Internal changes
+^^^^^^^^^^^^^^^^
+* *lsapy* now has guidelines in `AI_POLICY.md` and `AGENTS.md` files regarding AI-assisted contributions (issue `#174 <https://github.com/baptistehamon/lsapy/issues/174>`_, PR `#203 <https://github.com/baptistehamon/lsapy/pull/203>`_).
+
 v0.5.0 (2026-11-09)
 -------------------
 Contributor to this version: Baptiste Hamon (@baptistehamon), Akrita Agarwal (@akritaag).

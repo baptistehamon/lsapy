@@ -14,6 +14,12 @@ The `issue tracker`_ is also the place to ask questions about the library. The m
 
 Contribution Workflow
 ---------------------
+
+.. warning::
+
+    `lsapy` welcome contributions assisted by AI tools, models or services. However, the project has a strict policy regarding AI use,
+    disclosure and how AI-assisted contributions are handled. Please read the `AI_POLICY.md` and `AGENTS.md` files for more information.
+
 Below is the steps to follow for contributing to the project.
 
 #. Fork the `lsapy` repository on GitHub to your own account.

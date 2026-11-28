@@ -8,7 +8,7 @@ lsapy: Land Suitability Analysis in Python
     :width: 400px
     :alt: lsapy logo
 
-|pypi| |conda| |python-versions| |status| |testing| |coverage| |ruff| |pre-commit| |docs| |question| |preprint| |zenodo|
+|pypi| |conda| |python-versions| |status| |testing| |coverage| |ruff| |pre-commit| |docs| |question| |preprint| |zenodo| |pyopensci|
 
 *lsapy* is a highly customizable, open-source Python library designed to streamline and enhance Land Suitability Analysis (LSA) workflows.
 Its objective is to make conducting LSA in Python easier and more accessible to users. The package implements a fuzzy-logic approach and
@@ -139,6 +139,10 @@ The Python package has been created following the `pyOpenSci Guidebook`_.
 .. |zenodo| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.15015111.svg
     :target: https://doi.org/10.5281/zenodo.15015111
     :alt: Zenodo DOI
+
+.. |pyopensci| image:: https://pyopensci.org/badges/peer-reviewed.svg
+    :target: https://github.com/pyOpenSci/software-submission/issues/261
+    :alt: pyOpenSci Peer-Reviewed
 
 .. |ruff| image:: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json
     :target: https://github.com/astral-sh/ruff
